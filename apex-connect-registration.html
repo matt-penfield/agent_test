@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Connect — Registration</title>
+
+  <!-- Google Fonts: Roboto + Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <!-- Material Web Components -->
+  <script type="module">
+    import '@material/web/button/filled-button.js';
+    import '@material/web/button/outlined-button.js';
+    import '@material/web/button/text-button.js';
+    import '@material/web/icon/icon.js';
+    import '@material/web/iconbutton/icon-button.js';
+    import '@material/web/textfield/filled-text-field.js';
+    import '@material/web/checkbox/checkbox.js';
+    import '@material/web/divider/divider.js';
+  </script>
+
+  <style>
+    /* ============================================
+       M3 Design Tokens — Blue Theme (Light)
+       ============================================ */
+    :root {
+      --md-sys-color-primary: #1565c0;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #d4e3ff;
+      --md-sys-color-on-primary-container: #001c3a;
+
+      --md-sys-color-secondary: #565e71;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #dae2f9;
+      --md-sys-color-on-secondary-container: #131c2b;
+
+      --md-sys-color-tertiary: #705574;
+      --md-sys-color-on-tertiary: #ffffff;
+      --md-sys-color-tertiary-container: #fad8fd;
+      --md-sys-color-on-tertiary-container: #28132e;
+
+      --md-sys-color-error: #ba1a1a;
+      --md-sys-color-on-error: #ffffff;
+      --md-sys-color-error-container: #ffdad6;
+      --md-sys-color-on-error-container: #410002;
+
+      --md-sys-color-surface: #fafafe;
+      --md-sys-color-on-surface: #1a1c20;
+      --md-sys-color-on-surface-variant: #44474e;
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #f4f4f8;
+      --md-sys-color-surface-container: #eeeef2;
+      --md-sys-color-surface-container-high: #e8e8ec;
+      --md-sys-color-surface-container-highest: #e2e2e6;
+
+      --md-sys-color-outline: #74777f;
+      --md-sys-color-outline-variant: #c4c6d0;
+
+      --md-sys-color-inverse-surface: #2f3036;
+      --md-sys-color-inverse-on-surface: #f1f0f4;
+      --md-sys-color-inverse-primary: #a6c8ff;
+
+      --md-sys-color-background: #fafafe;
+      --md-sys-color-on-background: #1a1c20;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+
+      --md-sys-shape-corner-extra-small: 4px;
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+    }
+
+    /* ============================================
+       Base Reset
+       ============================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ============================================
+       Typography
+       ============================================ */
+    .display-small  { font-size: 36px; line-height: 44px; font-weight: 400; }
+    .headline-large { font-size: 32px; line-height: 40px; font-weight: 400; }
+    .headline-medium { font-size: 28px; line-height: 36px; font-weight: 400; }
+    .headline-small { font-size: 24px; line-height: 32px; font-weight: 400; }
+    .title-large  { font-size: 22px; line-height: 28px; font-weight: 400; }
+    .title-medium { font-size: 16px; line-height: 24px; font-weight: 500; letter-spacing: 0.15px; }
+    .title-small  { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0.1px; }
+    .body-large  { font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: 0.5px; }
+    .body-medium { font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: 0.25px; }
+    .body-small  { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.4px; }
+    .label-large { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0.1px; }
+    .label-medium { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.5px; }
+
+    /* ============================================
+       Top App Bar
+       ============================================ */
+    .top-app-bar {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      padding: 0 24px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .top-app-bar .brand {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================
+       Main Content
+       ============================================ */
+    .main-content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* ============================================
+       Stepper
+       ============================================ */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+      position: relative;
+    }
+    .step-item.clickable { cursor: pointer; }
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+    .step-item.active .step-circle {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+    .step-item.completed .step-circle {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+    .step-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      white-space: nowrap;
+      transition: color 0.25s ease;
+    }
+    .step-item.active .step-label { color: var(--md-sys-color-primary); font-weight: 600; }
+    .step-item.completed .step-label { color: var(--md-sys-color-primary); }
+    .step-connector {
+      width: 40px;
+      height: 2px;
+      background: var(--md-sys-color-outline-variant);
+      margin: 0 8px;
+      flex-shrink: 0;
+      transition: background 0.25s ease;
+    }
+    .step-connector.completed { background: var(--md-sys-color-primary); }
+
+    /* ============================================
+       Step Panels
+       ============================================ */
+    .step-panel {
+      display: none;
+      animation: fadeSlideIn 0.3s ease;
+    }
+    .step-panel.active { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-card {
+      background: var(--md-sys-color-surface-container-lowest);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      padding: 40px;
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .step-card h2 {
+      margin-bottom: 8px;
+      color: var(--md-sys-color-on-surface);
+    }
+    .step-card .step-subtitle {
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 32px;
+    }
+
+    /* ============================================
+       Form Rows
+       ============================================ */
+    .form-row {
+      margin-bottom: 24px;
+    }
+    .form-row md-filled-text-field {
+      width: 100%;
+    }
+    .form-row-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .form-row-pair md-filled-text-field { width: 100%; }
+    .form-row-triple {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .form-row-triple md-filled-text-field { width: 100%; }
+
+    .error-msg {
+      color: var(--md-sys-color-error);
+      font-size: 12px;
+      margin-top: 4px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ============================================
+       Session Grid
+       ============================================ */
+    .session-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .session-grid th {
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 2px solid var(--md-sys-color-outline-variant);
+    }
+    .session-grid td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface);
+      vertical-align: top;
+    }
+    .session-grid td:first-child {
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: default;
+      background: var(--md-sys-color-surface-container-low);
+      white-space: nowrap;
+    }
+    .session-grid td.selectable:hover {
+      background: var(--md-sys-color-primary-container);
+    }
+    .session-grid td.selectable.selected {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      font-weight: 500;
+      position: relative;
+    }
+    .session-grid td.selectable.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 12px;
+      color: var(--md-sys-color-primary);
+      font-weight: 700;
+    }
+    .session-grid-wrapper {
+      overflow-x: auto;
+      margin-bottom: 24px;
+      border-radius: var(--md-sys-shape-corner-small);
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    /* ============================================
+       Ticket Cards
+       ============================================ */
+    .ticket-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .ticket-card {
+      background: var(--md-sys-color-surface-container-low);
+      border: 2px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .ticket-card:hover {
+      border-color: var(--md-sys-color-primary);
+      box-shadow: var(--md-sys-elevation-1);
+    }
+    .ticket-card.selected {
+      border-color: var(--md-sys-color-primary);
+      background: var(--md-sys-color-primary-container);
+    }
+    .ticket-card .ticket-tier {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 4px;
+    }
+    .ticket-card .ticket-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--md-sys-color-primary);
+      margin-bottom: 12px;
+    }
+    .ticket-card .ticket-desc {
+      font-size: 13px;
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       Add-ons
+       ============================================ */
+    .addon-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .addon-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-small);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      transition: border-color 0.15s ease;
+    }
+    .addon-item:hover { border-color: var(--md-sys-color-primary); }
+    .addon-item .addon-info { flex: 1; }
+    .addon-item .addon-name { font-weight: 500; color: var(--md-sys-color-on-surface); }
+    .addon-item .addon-price { font-size: 13px; color: var(--md-sys-color-on-surface-variant); }
+
+    /* ============================================
+       Order Summary
+       ============================================ */
+    .order-summary {
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 24px;
+      margin-bottom: 32px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .order-summary h3 {
+      margin-bottom: 16px;
+      color: var(--md-sys-color-on-surface);
+    }
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface);
+    }
+    .order-line.total {
+      border-top: 2px solid var(--md-sys-color-outline-variant);
+      margin-top: 8px;
+      padding-top: 16px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    /* ============================================
+       Confirmation
+       ============================================ */
+    .confirmation-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #c8ffd4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .confirmation-icon .material-symbols-outlined {
+      font-size: 48px;
+      color: #1a6b2a;
+      font-variation-settings: 'FILL' 1;
+    }
+    .confirmation-center { text-align: center; }
+    .confirmation-details {
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 24px;
+      margin: 24px 0;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 14px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--md-sys-color-on-surface-variant); }
+    .detail-value { font-weight: 500; color: var(--md-sys-color-on-surface); text-align: right; }
+
+    /* ============================================
+       Button Row
+       ============================================ */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+    }
+    .btn-row.end { justify-content: flex-end; }
+    .btn-row.center { justify-content: center; }
+
+    /* ============================================
+       Responsive
+       ============================================ */
+    @media (max-width: 839px) {
+      .ticket-options { grid-template-columns: 1fr; gap: 12px; }
+      .step-label { display: none; }
+      .step-connector { width: 24px; margin: 0 4px; }
+      .form-row-pair { grid-template-columns: 1fr; }
+      .form-row-triple { grid-template-columns: 1fr; }
+      .step-card { padding: 28px 20px; }
+      .main-content { padding: 24px 16px 64px; }
+    }
+    @media (max-width: 599px) {
+      .top-app-bar { padding: 0 16px; }
+      .stepper { gap: 0; }
+      .step-circle { width: 32px; height: 32px; font-size: 13px; }
+      .step-connector { width: 16px; }
+      .step-card { padding: 24px 16px; border-radius: var(--md-sys-shape-corner-large); }
+      .ticket-card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="top-app-bar">
+    <span class="brand">Apex Connect</span>
+  </header>
+
+  <main class="main-content">
+    <!-- Stepper -->
+    <nav class="stepper" aria-label="Registration steps">
+      <div class="step-item active" data-step="1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Personal Info</span>
+      </div>
+      <div class="step-connector" data-connector="1"></div>
+      <div class="step-item" data-step="2">
+        <div class="step-circle">2</div>
+        <span class="step-label">Sessions</span>
+      </div>
+      <div class="step-connector" data-connector="2"></div>
+      <div class="step-item" data-step="3">
+        <div class="step-circle">3</div>
+        <span class="step-label">Tickets</span>
+      </div>
+      <div class="step-connector" data-connector="3"></div>
+      <div class="step-item" data-step="4">
+        <div class="step-circle">4</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="step-connector" data-connector="4"></div>
+      <div class="step-item" data-step="5">
+        <div class="step-circle">5</div>
+        <span class="step-label">Confirm</span>
+      </div>
+    </nav>
+
+    <!-- ==========================================
+         Step 1 — Personal Info
+         ========================================== -->
+    <section class="step-panel active" id="step1">
+      <div class="step-card">
+        <h2 class="headline-small">Personal Information</h2>
+        <p class="body-medium step-subtitle">Tell us about yourself to get started.</p>
+
+        <div class="form-row">
+          <md-filled-text-field id="fieldName" label="Full Name" required></md-filled-text-field>
+        </div>
+        <div class="form-row">
+          <md-filled-text-field id="fieldEmail" label="Email Address" type="email" required></md-filled-text-field>
+        </div>
+        <div class="form-row-pair">
+          <md-filled-text-field id="fieldCompany" label="Company / Organization" required></md-filled-text-field>
+          <md-filled-text-field id="fieldTitle" label="Job Title" required></md-filled-text-field>
+        </div>
+        <div class="form-row">
+          <md-filled-text-field id="fieldDietary" label="Dietary Restrictions" supporting-text="Optional"></md-filled-text-field>
+        </div>
+
+        <div class="btn-row end">
+          <md-filled-button id="btn1Next" onclick="goToStep(2)">
+            Next
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_forward</span>
+          </md-filled-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         Step 2 — Session Selection
+         ========================================== -->
+    <section class="step-panel" id="step2">
+      <div class="step-card">
+        <h2 class="headline-small">Select Your Sessions</h2>
+        <p class="body-medium step-subtitle">Click on sessions to add them to your schedule.</p>
+
+        <div class="session-grid-wrapper">
+          <table class="session-grid">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Track A — Research</th>
+                <th>Track B — Design</th>
+                <th>Track C — Strategy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>9:00 AM</td>
+                <td class="selectable" onclick="toggleSession(this)">Research Methods Workshop</td>
+                <td class="selectable" onclick="toggleSession(this)">Design Systems Deep Dive</td>
+                <td class="selectable" onclick="toggleSession(this)">UX Strategy Fundamentals</td>
+              </tr>
+              <tr>
+                <td>10:30 AM</td>
+                <td class="selectable" onclick="toggleSession(this)">Qualitative Data Analysis</td>
+                <td class="selectable" onclick="toggleSession(this)">Prototyping with Figma</td>
+                <td class="selectable" onclick="toggleSession(this)">Stakeholder Management</td>
+              </tr>
+              <tr>
+                <td>1:00 PM</td>
+                <td class="selectable" onclick="toggleSession(this)">AI in UX Research</td>
+                <td class="selectable" onclick="toggleSession(this)">Accessibility in Practice</td>
+                <td class="selectable" onclick="toggleSession(this)">Measuring UX Impact</td>
+              </tr>
+              <tr>
+                <td>2:30 PM</td>
+                <td class="selectable" onclick="toggleSession(this)">Participant Recruiting Strategies</td>
+                <td class="selectable" onclick="toggleSession(this)">Motion & Micro-interactions</td>
+                <td class="selectable" onclick="toggleSession(this)">Building a Research Practice</td>
+              </tr>
+              <tr>
+                <td>4:00 PM</td>
+                <td class="selectable" onclick="toggleSession(this)">Unmoderated Testing at Scale</td>
+                <td class="selectable" onclick="toggleSession(this)">Design Tokens Workshop</td>
+                <td class="selectable" onclick="toggleSession(this)">Cross-functional Collaboration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="body-small" style="color: var(--md-sys-color-on-surface-variant); margin-bottom: 8px;">
+          <span id="sessionCount">0</span> session(s) selected
+        </p>
+
+        <div class="btn-row">
+          <md-outlined-button onclick="goToStep(1)">
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_back</span>
+            Back
+          </md-outlined-button>
+          <md-filled-button onclick="goToStep(3)">
+            Next
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_forward</span>
+          </md-filled-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         Step 3 — Ticket & Add-ons
+         ========================================== -->
+    <section class="step-panel" id="step3">
+      <div class="step-card">
+        <h2 class="headline-small">Choose Your Ticket</h2>
+        <p class="body-medium step-subtitle">Select a ticket tier and any optional add-ons.</p>
+
+        <div class="ticket-options">
+          <div class="ticket-card" data-tier="student" data-price="99" onclick="selectTicket(this)">
+            <div class="ticket-tier">Student</div>
+            <div class="ticket-price">$99</div>
+            <div class="ticket-desc">General admission, all keynotes</div>
+          </div>
+          <div class="ticket-card" data-tier="standard" data-price="299" onclick="selectTicket(this)">
+            <div class="ticket-tier">Standard</div>
+            <div class="ticket-price">$299</div>
+            <div class="ticket-desc">General admission, all keynotes, lunch included</div>
+          </div>
+          <div class="ticket-card" data-tier="vip" data-price="599" onclick="selectTicket(this)">
+            <div class="ticket-tier">VIP</div>
+            <div class="ticket-price">$599</div>
+            <div class="ticket-desc">Standard + front-row seating, networking dinner, speaker meet & greet</div>
+          </div>
+        </div>
+
+        <p class="error-msg" id="ticketError">Please select a ticket tier.</p>
+
+        <md-divider></md-divider>
+
+        <h3 class="title-medium" style="margin: 24px 0 16px;">Optional Add-ons</h3>
+
+        <div class="addon-list">
+          <label class="addon-item">
+            <md-checkbox data-addon="workshop" data-price="79"></md-checkbox>
+            <div class="addon-info">
+              <div class="addon-name">Workshop Pass</div>
+              <div class="addon-price">+$79</div>
+            </div>
+          </label>
+          <label class="addon-item">
+            <md-checkbox data-addon="dinner" data-price="49"></md-checkbox>
+            <div class="addon-info">
+              <div class="addon-name">Networking Dinner (extra guest)</div>
+              <div class="addon-price">+$49</div>
+            </div>
+          </label>
+          <label class="addon-item">
+            <md-checkbox data-addon="tshirt" data-price="25"></md-checkbox>
+            <div class="addon-info">
+              <div class="addon-name">Conference T-shirt</div>
+              <div class="addon-price">+$25</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="btn-row">
+          <md-outlined-button onclick="goToStep(2)">
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_back</span>
+            Back
+          </md-outlined-button>
+          <md-filled-button onclick="goToStep(4)">
+            Next
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_forward</span>
+          </md-filled-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         Step 4 — Payment
+         ========================================== -->
+    <section class="step-panel" id="step4">
+      <div class="step-card">
+        <h2 class="headline-small">Payment Details</h2>
+        <p class="body-medium step-subtitle">Complete your registration with payment.</p>
+
+        <div id="orderSummary" class="order-summary">
+          <h3 class="title-medium">Order Summary</h3>
+          <div id="summaryLines"></div>
+        </div>
+
+        <div class="form-row">
+          <md-filled-text-field id="fieldCardName" label="Cardholder Name" required></md-filled-text-field>
+        </div>
+        <div class="form-row">
+          <md-filled-text-field id="fieldCardNumber" label="Card Number" required></md-filled-text-field>
+        </div>
+        <div class="form-row-triple">
+          <md-filled-text-field id="fieldExpiry" label="MM / YY" required></md-filled-text-field>
+          <md-filled-text-field id="fieldCVC" label="CVC" required></md-filled-text-field>
+          <md-filled-text-field id="fieldZip" label="ZIP Code" required></md-filled-text-field>
+        </div>
+
+        <md-divider style="margin: 8px 0 24px;"></md-divider>
+
+        <div class="form-row">
+          <md-filled-text-field id="fieldAddress" label="Billing Address" required></md-filled-text-field>
+        </div>
+        <div class="form-row-triple">
+          <md-filled-text-field id="fieldCity" label="City" required></md-filled-text-field>
+          <md-filled-text-field id="fieldState" label="State" required></md-filled-text-field>
+          <md-filled-text-field id="fieldBillingZip" label="ZIP Code" required></md-filled-text-field>
+        </div>
+
+        <div class="btn-row">
+          <md-outlined-button onclick="goToStep(3)">
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">arrow_back</span>
+            Back
+          </md-outlined-button>
+          <md-filled-button onclick="goToStep(5)">
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">lock</span>
+            Pay Now
+          </md-filled-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         Step 5 — Confirmation
+         ========================================== -->
+    <section class="step-panel" id="step5">
+      <div class="step-card confirmation-center">
+        <div class="confirmation-icon">
+          <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+        </div>
+        <h2 class="headline-medium">Registration Complete!</h2>
+        <p class="body-large" style="color: var(--md-sys-color-on-surface-variant); margin-top: 8px;">
+          You're all set for Apex Connect. See you there!
+        </p>
+
+        <div class="confirmation-details" id="confirmDetails"></div>
+
+        <div class="btn-row center">
+          <md-filled-button onclick="alert('Calendar event added (prototype)')">
+            <span class="material-symbols-outlined" slot="icon" aria-hidden="true">event</span>
+            Add to Calendar
+          </md-filled-button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (function() {
+    let currentStep = 1;
+    const totalSteps = 5;
+    let selectedTicket = null;
+
+    // ---- Stepper Navigation ----
+    window.goToStep = function(step) {
+      // Validate before advancing
+      if (step > currentStep) {
+        if (!validateStep(currentStep)) return;
+      }
+      // Only allow going back to completed steps
+      if (step > currentStep + 1) return;
+
+      currentStep = step;
+      updateStepper();
+      updatePanels();
+
+      // Build order summary when entering step 4
+      if (step === 4) buildOrderSummary();
+      // Build confirmation when entering step 5
+      if (step === 5) buildConfirmation();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function updateStepper() {
+      document.querySelectorAll('.step-item').forEach(function(item) {
+        var s = parseInt(item.dataset.step);
+        item.classList.remove('active', 'completed', 'clickable');
+        if (s === currentStep) {
+          item.classList.add('active');
+        } else if (s < currentStep) {
+          item.classList.add('completed', 'clickable');
+          item.querySelector('.step-circle').innerHTML = '<span class="material-symbols-outlined" style="font-size:20px" aria-hidden="true">check</span>';
+        } else {
+          item.querySelector('.step-circle').textContent = s;
+        }
+      });
+
+      document.querySelectorAll('.step-connector').forEach(function(conn) {
+        var c = parseInt(conn.dataset.connector);
+        conn.classList.toggle('completed', c < currentStep);
+      });
+
+      // Click handlers for completed steps
+      document.querySelectorAll('.step-item.clickable').forEach(function(item) {
+        item.onclick = function() { goToStep(parseInt(item.dataset.step)); };
+      });
+    }
+
+    function updatePanels() {
+      document.querySelectorAll('.step-panel').forEach(function(p, i) {
+        p.classList.toggle('active', i + 1 === currentStep);
+      });
+    }
+
+    // ---- Validation ----
+    function validateStep(step) {
+      clearErrors();
+      var valid = true;
+
+      if (step === 1) {
+        var fields = [
+          { id: 'fieldName', msg: 'Full name is required' },
+          { id: 'fieldEmail', msg: 'Email is required' },
+          { id: 'fieldCompany', msg: 'Company is required' },
+          { id: 'fieldTitle', msg: 'Job title is required' }
+        ];
+        fields.forEach(function(f) {
+          var el = document.getElementById(f.id);
+          if (!el.value || !el.value.trim()) {
+            el.error = true;
+            el.errorText = f.msg;
+            valid = false;
+          }
+        });
+      }
+
+      if (step === 3) {
+        if (!selectedTicket) {
+          document.getElementById('ticketError').classList.add('visible');
+          valid = false;
+        }
+      }
+
+      if (step === 4) {
+        var payFields = [
+          { id: 'fieldCardName', msg: 'Cardholder name is required' },
+          { id: 'fieldCardNumber', msg: 'Card number is required' },
+          { id: 'fieldExpiry', msg: 'Expiration date is required' },
+          { id: 'fieldCVC', msg: 'CVC is required' },
+          { id: 'fieldZip', msg: 'ZIP code is required' },
+          { id: 'fieldAddress', msg: 'Address is required' },
+          { id: 'fieldCity', msg: 'City is required' },
+          { id: 'fieldState', msg: 'State is required' },
+          { id: 'fieldBillingZip', msg: 'ZIP code is required' }
+        ];
+        payFields.forEach(function(f) {
+          var el = document.getElementById(f.id);
+          if (!el.value || !el.value.trim()) {
+            el.error = true;
+            el.errorText = f.msg;
+            valid = false;
+          }
+        });
+      }
+
+      return valid;
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('md-filled-text-field').forEach(function(f) {
+        f.error = false;
+        f.errorText = '';
+      });
+      document.querySelectorAll('.error-msg').forEach(function(e) {
+        e.classList.remove('visible');
+      });
+    }
+
+    // ---- Session Selection ----
+    window.toggleSession = function(cell) {
+      cell.classList.toggle('selected');
+      var count = document.querySelectorAll('.session-grid td.selected').length;
+      document.getElementById('sessionCount').textContent = count;
+    };
+
+    // ---- Ticket Selection ----
+    window.selectTicket = function(card) {
+      document.querySelectorAll('.ticket-card').forEach(function(c) { c.classList.remove('selected'); });
+      card.classList.add('selected');
+      selectedTicket = { tier: card.dataset.tier, price: parseInt(card.dataset.price) };
+      document.getElementById('ticketError').classList.remove('visible');
+    };
+
+    // ---- Order Summary ----
+    function buildOrderSummary() {
+      var lines = '';
+      var total = 0;
+
+      if (selectedTicket) {
+        var tierName = selectedTicket.tier.charAt(0).toUpperCase() + selectedTicket.tier.slice(1);
+        lines += '<div class="order-line"><span>' + tierName + ' Ticket</span><span>$' + selectedTicket.price + '</span></div>';
+        total += selectedTicket.price;
+      }
+
+      document.querySelectorAll('md-checkbox[data-addon]').forEach(function(cb) {
+        if (cb.checked) {
+          var name = cb.closest('.addon-item').querySelector('.addon-name').textContent;
+          var price = parseInt(cb.dataset.price);
+          lines += '<div class="order-line"><span>' + name + '</span><span>+$' + price + '</span></div>';
+          total += price;
+        }
+      });
+
+      lines += '<div class="order-line total"><span>Total</span><span>$' + total + '</span></div>';
+      document.getElementById('summaryLines').innerHTML = lines;
+    }
+
+    // ---- Confirmation ----
+    function buildConfirmation() {
+      var name = document.getElementById('fieldName').value || '—';
+      var email = document.getElementById('fieldEmail').value || '—';
+      var tierName = selectedTicket ? selectedTicket.tier.charAt(0).toUpperCase() + selectedTicket.tier.slice(1) : '—';
+
+      var sessions = [];
+      document.querySelectorAll('.session-grid td.selected').forEach(function(td) {
+        sessions.push(td.textContent.replace('✓', '').trim());
+      });
+      var sessionStr = sessions.length > 0 ? sessions.join(', ') : 'None selected';
+
+      var total = selectedTicket ? selectedTicket.price : 0;
+      document.querySelectorAll('md-checkbox[data-addon]').forEach(function(cb) {
+        if (cb.checked) total += parseInt(cb.dataset.price);
+      });
+
+      var html = '';
+      html += '<div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">' + name + '</span></div>';
+      html += '<div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">' + email + '</span></div>';
+      html += '<div class="detail-row"><span class="detail-label">Ticket</span><span class="detail-value">' + tierName + '</span></div>';
+      html += '<div class="detail-row"><span class="detail-label">Sessions</span><span class="detail-value" style="max-width:60%;text-align:right">' + sessionStr + '</span></div>';
+      html += '<div class="detail-row"><span class="detail-label">Total Paid</span><span class="detail-value" style="font-size:18px;color:var(--md-sys-color-primary)">$' + total + '</span></div>';
+
+      document.getElementById('confirmDetails').innerHTML = html;
+    }
+  })();
+  </script>
+
+<!-- FEEDBACK MODAL START -->
+<style>
+  .review-trigger {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    background: #6750a4;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 24px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+  }
+  .review-trigger:hover { background: #7c6aad; }
+  .review-trigger .icon { font-size: 20px; }
+
+  .review-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+  }
+  .review-overlay.active { display: flex; }
+
+  .review-modal {
+    background: #fff;
+    border-radius: 28px;
+    width: 90%;
+    max-width: 520px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: reviewSlideUp 0.25s ease;
+  }
+  @keyframes reviewSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .review-modal h2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #1c1b1f;
+    margin-bottom: 8px;
+  }
+  .review-modal .subtitle {
+    font-size: 14px;
+    color: #49454f;
+    margin-bottom: 24px;
+  }
+
+  .review-modal .reviewer-field {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #79747e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .review-modal .reviewer-field:focus {
+    border-color: #6750a4;
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+
+  .review-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .review-actions button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #cac4d0;
+    background: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: #1c1b1f;
+  }
+  .review-actions button:hover { background: #f3edf7; }
+  .review-actions button.selected-approve {
+    background: #c8ffd4;
+    border-color: #1a6b2a;
+    color: #1a6b2a;
+  }
+  .review-actions button.selected-reject {
+    background: #ffdad6;
+    border-color: #ba1a1a;
+    color: #ba1a1a;
+  }
+  .review-actions button.selected-feedback {
+    background: #eaddff;
+    border-color: #6750a4;
+    color: #6750a4;
+  }
+
+  .feedback-area {
+    display: none;
+    margin-bottom: 16px;
+  }
+  .feedback-area.visible { display: block; }
+  .feedback-area textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    border: 1px solid #79747e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .feedback-area textarea:focus {
+    border-color: #6750a4;
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+  .feedback-area label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #49454f;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .review-submit-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .review-cancel-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: #6750a4;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .review-cancel-btn:hover { background: #f3edf7; }
+  .review-submit-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 20px;
+    background: #6750a4;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .review-submit-btn:hover { background: #7c6aad; }
+  .review-submit-btn:disabled {
+    background: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+  }
+</style>
+
+<button class="review-trigger" onclick="document.getElementById('reviewOverlay').classList.add('active')" aria-label="Open review panel">
+  <span class="icon material-symbols-outlined" aria-hidden="true">rate_review</span>
+  Review
+</button>
+
+<div id="reviewOverlay" class="review-overlay" role="dialog" aria-modal="true" aria-label="Review prototype">
+  <div class="review-modal">
+    <h2>Review This Prototype</h2>
+    <p class="subtitle">Choose an action and optionally provide feedback.</p>
+
+    <input type="text" class="reviewer-field" id="reviewerName" placeholder="Your name (optional)">
+
+    <div class="review-actions">
+      <button type="button" id="btnApprove" onclick="selectReviewAction('approved')">
+        &#x2714; Approve
+      </button>
+      <button type="button" id="btnReject" onclick="selectReviewAction('rejected')">
+        &#x2718; Reject
+      </button>
+      <button type="button" id="btnFeedback" onclick="selectReviewAction('feedback')">
+        &#x270E; Feedback
+      </button>
+    </div>
+
+    <div class="feedback-area" id="feedbackArea">
+      <label for="feedbackText">Your feedback</label>
+      <textarea id="feedbackText" placeholder="Describe what should be changed..."></textarea>
+    </div>
+
+    <div class="review-submit-row">
+      <button type="button" class="review-cancel-btn" onclick="closeReviewModal()">Cancel</button>
+      <button type="button" class="review-submit-btn" id="submitReview" disabled onclick="submitReview()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  let currentAction = null;
+
+  window.selectReviewAction = function(action) {
+    currentAction = action;
+    document.getElementById('btnApprove').className = '';
+    document.getElementById('btnReject').className = '';
+    document.getElementById('btnFeedback').className = '';
+    if (action === 'approved') document.getElementById('btnApprove').className = 'selected-approve';
+    if (action === 'rejected') document.getElementById('btnReject').className = 'selected-reject';
+    if (action === 'feedback') document.getElementById('btnFeedback').className = 'selected-feedback';
+    document.getElementById('feedbackArea').classList.toggle('visible', action === 'feedback');
+    document.getElementById('submitReview').disabled = false;
+  };
+
+  window.closeReviewModal = function() {
+    document.getElementById('reviewOverlay').classList.remove('active');
+    currentAction = null;
+    document.getElementById('btnApprove').className = '';
+    document.getElementById('btnReject').className = '';
+    document.getElementById('btnFeedback').className = '';
+    document.getElementById('feedbackArea').classList.remove('visible');
+    document.getElementById('feedbackText').value = '';
+    document.getElementById('submitReview').disabled = true;
+  };
+
+  window.submitReview = function() {
+    const reviewer = document.getElementById('reviewerName').value.trim() || 'Anonymous';
+    const feedbackText = document.getElementById('feedbackText').value.trim();
+    const fileName = document.title || window.location.pathname.split('/').pop() || 'unknown';
+    const date = new Date().toISOString().split('T')[0];
+    const safeName = fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+
+    let md = '# UI Feedback Report\n\n';
+    md += '| Field | Value |\n';
+    md += '|-------|-------|\n';
+    md += '| **Status** | ' + currentAction + ' |\n';
+    md += '| **File** | ' + fileName + ' |\n';
+    md += '| **Reviewer** | ' + reviewer + ' |\n';
+    md += '| **Date** | ' + date + ' |\n\n';
+    md += '---\n\n';
+    md += '## Feedback\n\n';
+    if (currentAction === 'feedback' && feedbackText) {
+      md += feedbackText + '\n\n';
+    } else if (currentAction === 'approved') {
+      md += 'Prototype approved. No changes requested.\n\n';
+    } else if (currentAction === 'rejected') {
+      md += (feedbackText || 'Prototype rejected. See reviewer for details.') + '\n\n';
+    }
+    md += '---\n\n';
+    md += '## Action Items\n\n';
+    md += '<!-- The material-design-prototyping skill will parse this section for tasks -->\n\n';
+    if (currentAction === 'feedback' && feedbackText) {
+      feedbackText.split('\n').filter(function(l) { return l.trim(); }).forEach(function(line) {
+        md += '- [ ] ' + line.trim() + '\n';
+      });
+    } else if (currentAction === 'approved') {
+      md += '_No action items — approved._\n';
+    } else {
+      md += '- [ ] Address rejection feedback\n';
+    }
+
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = safeName + '-feedback-' + date + '.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    closeReviewModal();
+  };
+
+  document.getElementById('reviewOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeReviewModal();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('reviewOverlay').classList.contains('active')) {
+      closeReviewModal();
+    }
+  });
+})();
+</script>
+<!-- FEEDBACK MODAL END -->
+
+</body>
+</html>
