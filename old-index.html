@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage</title>
+  <style>
+    :root {
+      --blue: #1a56db;
+      --blue-dark: #1342a8;
+      --blue-light: #e8eefb;
+      --orange: #e8720c;
+      --orange-light: #fdf0e4;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.6;
+      background: #fff;
+    }
+
+    /* ---- NAV ---- */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-600);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--blue);
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 5rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      line-height: 1.15;
+      max-width: 680px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray-600);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      padding: 0.75rem 1.75rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-dark);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--blue);
+      padding: 0.75rem 1.75rem;
+      border: 2px solid var(--blue);
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--blue-light);
+    }
+
+    /* ---- FEATURES ---- */
+    .features {
+      background: var(--gray-50);
+      padding: 5rem 1.5rem;
+    }
+
+    .features-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .features-inner h2 {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--gray-900);
+    }
+
+    .features-inner > p {
+      text-align: center;
+      color: var(--gray-600);
+      margin-bottom: 3rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.4rem;
+    }
+
+    .feature-card:nth-child(2) .feature-icon {
+      background: var(--orange-light);
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--gray-900);
+    }
+
+    .feature-card p {
+      color: var(--gray-600);
+      font-size: 0.95rem;
+    }
+
+    /* ---- CTA ---- */
+    .cta {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+      text-align: center;
+    }
+
+    .cta-box {
+      background: var(--blue);
+      border-radius: 14px;
+      padding: 4rem 2rem;
+      color: #fff;
+    }
+
+    .cta-box h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-box p {
+      opacity: 0.85;
+      margin-bottom: 2rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-orange {
+      background: var(--orange);
+      color: #fff;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: filter 0.2s;
+    }
+
+    .btn-orange:hover {
+      filter: brightness(1.1);
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      border-top: 1px solid var(--gray-200);
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--gray-600);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--blue);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2rem; }
+      .cta-box { padding: 3rem 1.5rem; }
+      .nav-links { gap: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#" class="logo">Brand</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#cta">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Build something great, starting today</h1>
+    <p>A clean, modern foundation for your next project. Simple by design, powerful by nature.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">Get Started</a>
+      <a href="#" class="btn-secondary">Learn More</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="features-inner">
+      <h2>Why choose us</h2>
+      <p>Everything you need, nothing you don't.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Lightning Fast</h3>
+          <p>Optimised for speed and performance so your users never wait.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Beautiful Design</h3>
+          <p>Clean aesthetics that look great on every device out of the box.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure by Default</h3>
+          <p>Built with best practices so you can ship with confidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="cta">
+    <div class="cta-box">
+      <h2>Ready to get started?</h2>
+      <p>Join thousands of teams already building with us. No credit card required.</p>
+      <a href="#" class="btn-orange">Start Free Trial</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <span>&copy; 2026 Brand. All rights reserved.</span>
+    <ul class="footer-links">
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
