@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSTRCT — A Blog</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Condensed:wght@700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <!-- Material Web Components -->
+  <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web/"
+      }
+    }
+  </script>
+  <script type="module">
+    import '@material/web/button/filled-button.js';
+    import '@material/web/button/outlined-button.js';
+    import '@material/web/button/text-button.js';
+    import '@material/web/button/tonal-button.js';
+    import '@material/web/icon/icon.js';
+    import '@material/web/iconbutton/icon-button.js';
+    import '@material/web/iconbutton/filled-icon-button.js';
+    import '@material/web/fab/fab.js';
+    import '@material/web/chips/chip-set.js';
+    import '@material/web/chips/filter-chip.js';
+    import '@material/web/chips/assist-chip.js';
+    import '@material/web/tabs/tabs.js';
+    import '@material/web/tabs/primary-tab.js';
+    import '@material/web/textfield/outlined-text-field.js';
+    import '@material/web/checkbox/checkbox.js';
+    import '@material/web/switch/switch.js';
+    import '@material/web/divider/divider.js';
+    import '@material/web/list/list.js';
+    import '@material/web/list/list-item.js';
+    import '@material/web/dialog/dialog.js';
+    import '@material/web/progress/linear-progress.js';
+    import '@material/web/progress/circular-progress.js';
+    import '@material/web/slider/slider.js';
+    import '@material/web/select/outlined-select.js';
+    import '@material/web/select/select-option.js';
+    import '@material/web/radio/radio.js';
+  </script>
+
+  <style>
+    /* ============================================
+       M3 Design Tokens — Carson-Inspired Palette
+       Raw, high-contrast, editorial
+       ============================================ */
+    :root {
+      --md-sys-color-primary: #d81b60;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #ffd9e2;
+      --md-sys-color-on-primary-container: #3e001d;
+
+      --md-sys-color-secondary: #1a1a2e;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #e8def8;
+      --md-sys-color-on-secondary-container: #1d192b;
+
+      --md-sys-color-tertiary: #ff6d00;
+      --md-sys-color-on-tertiary: #ffffff;
+      --md-sys-color-tertiary-container: #ffe0b2;
+      --md-sys-color-on-tertiary-container: #331200;
+
+      --md-sys-color-error: #b3261e;
+      --md-sys-color-on-error: #ffffff;
+      --md-sys-color-error-container: #f9dedc;
+
+      --md-sys-color-surface: #fafafa;
+      --md-sys-color-on-surface: #0a0a0a;
+      --md-sys-color-on-surface-variant: #49454f;
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #f5f5f5;
+      --md-sys-color-surface-container: #eeeeee;
+      --md-sys-color-surface-container-high: #e0e0e0;
+      --md-sys-color-surface-container-highest: #d6d6d6;
+
+      --md-sys-color-outline: #79747e;
+      --md-sys-color-outline-variant: #cac4d0;
+      --md-sys-color-inverse-surface: #0a0a0a;
+      --md-sys-color-inverse-on-surface: #fafafa;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+
+      --md-sys-shape-corner-extra-small: 4px;
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+
+      /* Carson custom tokens */
+      --carson-accent: #d81b60;
+      --carson-dark: #0a0a0a;
+      --carson-light: #fafafa;
+      --carson-orange: #ff6d00;
+      --carson-yellow: #ffd600;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--carson-dark);
+      color: var(--carson-light);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ============================================
+       Typography — Carson-style: extreme scale,
+       condensed, overlapping, rotated
+       ============================================ */
+    .display-large  { font-size: 57px; line-height: 64px; font-weight: 400; letter-spacing: -0.25px; }
+    .display-medium { font-size: 45px; line-height: 52px; font-weight: 400; }
+    .display-small  { font-size: 36px; line-height: 44px; font-weight: 400; }
+    .headline-large  { font-size: 32px; line-height: 40px; font-weight: 400; }
+    .headline-medium { font-size: 28px; line-height: 36px; font-weight: 400; }
+    .title-large  { font-size: 22px; line-height: 28px; font-weight: 400; }
+    .title-medium { font-size: 16px; line-height: 24px; font-weight: 500; }
+    .body-large  { font-size: 16px; line-height: 24px; font-weight: 400; letter-spacing: 0.5px; }
+    .body-medium { font-size: 14px; line-height: 20px; font-weight: 400; letter-spacing: 0.25px; }
+    .label-large { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: 0.1px; }
+    .label-medium { font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.5px; }
+
+    /* Carson overrides */
+    .carson-mega {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(72px, 12vw, 180px);
+      font-weight: 900;
+      line-height: 0.85;
+      letter-spacing: -6px;
+      text-transform: uppercase;
+    }
+    .carson-headline {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+    }
+    .carson-sub {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .carson-mono {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    /* ============================================
+       TOP APP BAR — deconstructed
+       ============================================ */
+    .top-app-bar {
+      display: flex;
+      align-items: center;
+      height: 64px;
+      padding: 0 24px;
+      background: var(--carson-dark);
+      color: var(--carson-light);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .top-app-bar .logo {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+      color: var(--carson-accent);
+      flex: 1;
+    }
+    .top-app-bar .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* ============================================
+       HERO — extreme scale, overlapping text
+       ============================================ */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+    }
+    .hero-bg-text {
+      position: absolute;
+      top: -40px;
+      right: -30px;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(150px, 25vw, 400px);
+      font-weight: 900;
+      line-height: 0.8;
+      color: rgba(216, 27, 96, 0.06);
+      text-transform: uppercase;
+      pointer-events: none;
+      letter-spacing: -10px;
+    }
+    .hero-rotated-label {
+      position: absolute;
+      top: 50%;
+      left: -60px;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left center;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+    .hero-number {
+      position: absolute;
+      top: 80px;
+      right: 40px;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(60px, 10vw, 150px);
+      font-weight: 900;
+      color: var(--carson-accent);
+      opacity: 0.15;
+      line-height: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      background: var(--carson-accent);
+      color: white;
+      padding: 4px 16px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(48px, 9vw, 120px);
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -4px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--carson-accent);
+    }
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================
+       TABS — Section navigation
+       ============================================ */
+    .section-tabs {
+      position: sticky;
+      top: 64px;
+      z-index: 90;
+      background: var(--carson-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 24px;
+    }
+
+    /* ============================================
+       FEATURED GRID — asymmetric Carson layout
+       ============================================ */
+    .featured-section {
+      padding: 64px 24px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .section-header .number {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 120px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--carson-accent);
+      opacity: 0.2;
+      letter-spacing: -5px;
+    }
+    .section-header .title {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .featured-grid .card-hero {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+    .featured-grid .card-stack {
+      grid-column: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ============================================
+       CARDS — M3 tokens + Carson rawness
+       ============================================ */
+    .md-card {
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-medium);
+      overflow: hidden;
+      position: relative;
+      color: var(--md-sys-color-on-surface);
+      transition: transform 0.2s ease;
+    }
+    .md-card:hover { transform: translateY(-4px); }
+    .md-card-dark {
+      background: #1a1a2e;
+      color: var(--carson-light);
+    }
+    .md-card-accent {
+      background: var(--carson-accent);
+      color: white;
+    }
+    .md-card-outlined {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--carson-light);
+    }
+
+    .card-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #1a1a2e 0%, #3a1a4e 100%);
+    }
+    .card-image-tall {
+      aspect-ratio: 3/4;
+    }
+    .card-image-square {
+      aspect-ratio: 1;
+    }
+    .card-body { padding: 20px; }
+    .card-body-dense { padding: 16px; }
+
+    .card-category {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .card-title-large {
+      font-size: clamp(28px, 3vw, 42px);
+      letter-spacing: -2px;
+    }
+    .card-excerpt {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.8;
+      margin-bottom: 16px;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .card-footer-dark {
+      border-top-color: rgba(255,255,255,0.08);
+    }
+
+    /* ============================================
+       CHIPS SECTION — Filter bar
+       ============================================ */
+    .filter-bar {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .filter-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      white-space: nowrap;
+    }
+
+    /* ============================================
+       EDITORIAL SECTION — text-heavy, Carson layout
+       ============================================ */
+    .editorial {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 0;
+      min-height: 600px;
+    }
+    .editorial-sidebar {
+      background: var(--carson-accent);
+      color: white;
+      padding: 48px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .editorial-sidebar .pull-quote {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+    .editorial-main {
+      padding: 48px 40px;
+      background: var(--carson-light);
+      color: var(--carson-dark);
+    }
+    .editorial-main .article-title {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .editorial-main .dropcap::first-letter {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 72px;
+      font-weight: 900;
+      float: left;
+      line-height: 0.8;
+      margin-right: 8px;
+      margin-top: 6px;
+      color: var(--carson-accent);
+    }
+    .editorial-main p {
+      font-size: 16px;
+      line-height: 1.75;
+      margin-bottom: 16px;
+      color: #333;
+    }
+
+    /* ============================================
+       LIST SECTION — latest posts
+       ============================================ */
+    .list-section {
+      padding: 64px 24px;
+    }
+    .post-list-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .post-list-item:hover { background: rgba(255,255,255,0.02); }
+    .post-number {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--carson-accent);
+      opacity: 0.3;
+      text-align: center;
+      line-height: 1;
+    }
+    .post-info .post-title {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .post-info .post-meta {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    /* ============================================
+       NEWSLETTER / FORM SECTION
+       ============================================ */
+    .newsletter {
+      background: var(--carson-light);
+      color: var(--carson-dark);
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .newsletter .bg-stamp {
+      position: absolute;
+      bottom: -40px;
+      right: -20px;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(100px, 18vw, 280px);
+      font-weight: 900;
+      color: rgba(0,0,0,0.03);
+      text-transform: uppercase;
+      letter-spacing: -8px;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .newsletter-inner {
+      max-width: 640px;
+      position: relative;
+      z-index: 2;
+    }
+    .newsletter h2 {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 900;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      line-height: 0.95;
+      margin-bottom: 16px;
+    }
+    .newsletter p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 32px;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .form-row md-outlined-text-field {
+      flex: 1;
+      min-width: 200px;
+    }
+    .form-options {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin: 16px 0 24px;
+      flex-wrap: wrap;
+    }
+    .form-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #444;
+      cursor: pointer;
+    }
+
+    /* ============================================
+       COMPONENT SHOWCASE GRID
+       ============================================ */
+    .showcase {
+      padding: 64px 24px;
+      background: #111;
+    }
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .showcase-cell {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 24px;
+    }
+    .showcase-cell-title {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--carson-accent);
+      margin-bottom: 16px;
+    }
+    .showcase-cell-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    /* ============================================
+       DIALOG CTA STRIP
+       ============================================ */
+    .cta-strip {
+      background: var(--carson-accent);
+      color: white;
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .cta-strip h3 {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    /* ============================================
+       PROGRESS / STATS BAR
+       ============================================ */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+    .stat-cell {
+      padding: 32px 24px;
+      background: var(--carson-dark);
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--carson-accent);
+      line-height: 1;
+      letter-spacing: -2px;
+    }
+    .stat-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
+    }
+
+    /* ============================================
+       FOOTER — brutalist
+       ============================================ */
+    footer {
+      padding: 64px 24px 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand {
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      color: var(--carson-accent);
+      margin-bottom: 16px;
+    }
+    .footer-col h4 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 16px;
+    }
+    .footer-col a {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 4px 0;
+      transition: color 0.15s;
+    }
+    .footer-col a:hover { color: var(--carson-accent); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ============================================
+       FAB — fixed position
+       ============================================ */
+    .fab-fixed {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 200;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 839px) {
+      .featured-grid {
+        grid-template-columns: 1fr;
+      }
+      .featured-grid .card-hero { grid-column: 1; grid-row: auto; }
+      .featured-grid .card-stack { grid-column: 1; }
+      .editorial { grid-template-columns: 1fr; }
+      .editorial-sidebar { min-height: 300px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .post-list-item { grid-template-columns: 50px 1fr; }
+      .post-list-item > *:last-child { display: none; }
+    }
+    @media (max-width: 599px) {
+      .hero { min-height: 70vh; padding: 24px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .cta-strip { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== TOP APP BAR ========== -->
+  <header class="top-app-bar" role="banner">
+    <div class="logo" aria-label="DSTRCT homepage">DSTRCT</div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <md-text-button style="--md-text-button-label-text-color: rgba(255,255,255,0.7);">Stories</md-text-button>
+      <md-text-button style="--md-text-button-label-text-color: rgba(255,255,255,0.7);">Archive</md-text-button>
+      <md-text-button style="--md-text-button-label-text-color: rgba(255,255,255,0.7);">About</md-text-button>
+      <md-icon-button aria-label="Search">
+        <md-icon style="color: rgba(255,255,255,0.7);">search</md-icon>
+      </md-icon-button>
+      <md-icon-button aria-label="Menu">
+        <md-icon style="color: rgba(255,255,255,0.7);">menu</md-icon>
+      </md-icon-button>
+    </nav>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" aria-label="Featured article">
+    <div class="hero-bg-text" aria-hidden="true">DSTRCT</div>
+    <div class="hero-rotated-label" aria-hidden="true">Issue No. 047 — March 2026</div>
+    <div class="hero-number" aria-hidden="true">047</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Featured Essay</div>
+      <h1>The End<br>of <em>Legibility</em></h1>
+      <p class="body-large" style="max-width: 520px; opacity: 0.7;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+      </p>
+      <div class="hero-meta">
+        <md-filled-button style="--md-filled-button-container-color: #d81b60; --md-filled-button-label-text-color: #fff;">
+          <md-icon slot="icon">arrow_forward</md-icon>
+          Read Essay
+        </md-filled-button>
+        <md-outlined-button style="--md-outlined-button-label-text-color: rgba(255,255,255,0.8); --md-outlined-button-outline-color: rgba(255,255,255,0.2);">
+          <md-icon slot="icon">bookmark_border</md-icon>
+          Save
+        </md-outlined-button>
+        <span class="carson-mono" style="color: rgba(255,255,255,0.35);">12 min read &bull; 2.4k views</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TABS ========== -->
+  <div class="section-tabs">
+    <md-tabs aria-label="Content sections" style="--md-primary-tab-label-text-color: rgba(255,255,255,0.5); --md-primary-tab-active-label-text-color: #d81b60; --md-primary-tab-active-indicator-color: #d81b60;">
+      <md-primary-tab aria-label="Latest">Latest</md-primary-tab>
+      <md-primary-tab aria-label="Popular">Popular</md-primary-tab>
+      <md-primary-tab aria-label="Typography">Typography</md-primary-tab>
+      <md-primary-tab aria-label="Culture">Culture</md-primary-tab>
+      <md-primary-tab aria-label="Process">Process</md-primary-tab>
+    </md-tabs>
+  </div>
+
+  <!-- ========== FILTER CHIPS ========== -->
+  <div class="filter-bar" role="toolbar" aria-label="Category filters">
+    <span class="filter-label">Filter</span>
+    <md-chip-set>
+      <md-filter-chip label="All" selected></md-filter-chip>
+      <md-filter-chip label="Design"></md-filter-chip>
+      <md-filter-chip label="Typography"></md-filter-chip>
+      <md-filter-chip label="Photography"></md-filter-chip>
+      <md-filter-chip label="Culture"></md-filter-chip>
+      <md-filter-chip label="Tech"></md-filter-chip>
+      <md-filter-chip label="Interviews"></md-filter-chip>
+    </md-chip-set>
+  </div>
+
+  <!-- ========== FEATURED GRID ========== -->
+  <section class="featured-section" aria-label="Featured posts">
+    <div class="section-header">
+      <span class="number" aria-hidden="true">01</span>
+      <h2 class="title">Featured</h2>
+    </div>
+
+    <div class="featured-grid">
+      <!-- Hero card -->
+      <div class="md-card md-card-dark card-hero">
+        <div class="card-image card-image-tall" style="background: linear-gradient(160deg, #d81b60 0%, #1a1a2e 60%);" role="img" aria-label="Abstract gradient artwork"></div>
+        <div class="card-body">
+          <div class="card-category">Typography</div>
+          <h3 class="card-title card-title-large">Breaking the Grid: Why Chaos Creates Meaning</h3>
+          <p class="card-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <md-filled-button style="--md-filled-button-container-color: #d81b60;">Read</md-filled-button>
+            <md-icon-button aria-label="Share">
+              <md-icon style="color: rgba(255,255,255,0.5);">share</md-icon>
+            </md-icon-button>
+            <md-icon-button toggle aria-label="Favorite">
+              <md-icon style="color: rgba(255,255,255,0.5);">favorite_border</md-icon>
+              <md-icon slot="selected" style="color: #d81b60;">favorite</md-icon>
+            </md-icon-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stacked cards -->
+      <div class="card-stack">
+        <div class="md-card md-card-accent">
+          <div class="card-body">
+            <div class="card-category" style="opacity: 0.8;">Opinion</div>
+            <h3 class="card-title">Reject Comfort. Embrace the Unfamiliar.</h3>
+            <p class="card-excerpt" style="opacity: 0.9;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <md-text-button style="--md-text-button-label-text-color: white;">
+              Continue <md-icon slot="icon">east</md-icon>
+            </md-text-button>
+          </div>
+        </div>
+        <div class="md-card md-card-outlined">
+          <div class="card-body">
+            <div class="card-category">Interview</div>
+            <h3 class="card-title">Conversations with the Unreadable</h3>
+            <p class="card-excerpt">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim.</p>
+            <div style="display: flex; gap: 8px;">
+              <md-tonal-button>Listen</md-tonal-button>
+              <md-outlined-button style="--md-outlined-button-label-text-color: rgba(255,255,255,0.7); --md-outlined-button-outline-color: rgba(255,255,255,0.15);">Transcript</md-outlined-button>
+            </div>
+          </div>
+        </div>
+        <div class="md-card" style="background: var(--carson-orange); color: white;">
+          <div class="card-body-dense">
+            <div class="card-category" style="opacity: 0.8;">Quick Take</div>
+            <h3 class="card-title" style="font-size: 18px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do.</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS BAR ========== -->
+  <div class="stats-bar" role="group" aria-label="Blog statistics">
+    <div class="stat-cell">
+      <div class="stat-number">847</div>
+      <div class="stat-label">Articles</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">2.1M</div>
+      <div class="stat-label">Readers</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">134</div>
+      <div class="stat-label">Contributors</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-number">47</div>
+      <div class="stat-label">Issues</div>
+    </div>
+  </div>
+
+  <!-- ========== EDITORIAL SECTION ========== -->
+  <section class="editorial" aria-label="Editorial feature">
+    <aside class="editorial-sidebar">
+      <div>
+        <div class="carson-sub" style="margin-bottom: 24px;">Editor's Pick</div>
+        <p class="pull-quote">"Don't confuse legibility with communication. Just because something is legible doesn't mean it communicates."</p>
+      </div>
+      <div>
+        <md-divider style="margin: 24px 0; --md-divider-color: rgba(255,255,255,0.2);"></md-divider>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <md-filled-icon-button aria-label="Play audio" style="--md-filled-icon-button-container-color: white; --md-filled-icon-button-icon-color: #d81b60;">
+            <md-icon>play_arrow</md-icon>
+          </md-filled-icon-button>
+          <div>
+            <div class="body-medium" style="font-weight: 500;">Listen to this article</div>
+            <div class="carson-mono" style="opacity: 0.7;">18:32</div>
+          </div>
+        </div>
+        <md-linear-progress value="0.35" style="margin-top: 12px; --md-linear-progress-active-indicator-color: white; --md-linear-progress-track-color: rgba(255,255,255,0.2);"></md-linear-progress>
+      </div>
+    </aside>
+    <article class="editorial-main">
+      <div class="carson-sub" style="color: var(--carson-accent); margin-bottom: 16px;">Long Read &bull; 18 min</div>
+      <h2 class="article-title">The Destruction That Builds Meaning</h2>
+      <p class="dropcap body-large">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p class="body-large">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p class="body-large">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      <md-divider style="margin: 24px 0;"></md-divider>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <md-chip-set>
+          <md-assist-chip label="Share">
+            <md-icon slot="icon">share</md-icon>
+          </md-assist-chip>
+          <md-assist-chip label="Cite">
+            <md-icon slot="icon">format_quote</md-icon>
+          </md-assist-chip>
+          <md-assist-chip label="Print">
+            <md-icon slot="icon">print</md-icon>
+          </md-assist-chip>
+        </md-chip-set>
+      </div>
+    </article>
+  </section>
+
+  <!-- ========== LATEST POSTS LIST ========== -->
+  <section class="list-section" aria-label="Latest posts">
+    <div class="section-header">
+      <span class="number" aria-hidden="true">02</span>
+      <h2 class="title">Latest</h2>
+    </div>
+
+    <div class="post-list-item">
+      <div class="post-number" aria-hidden="true">01</div>
+      <div class="post-info">
+        <h3 class="post-title">Deconstructing the Visible: Notes on Anti-Design</h3>
+        <div class="post-meta">Culture &bull; Mar 19, 2026 &bull; 7 min read</div>
+      </div>
+      <md-icon-button aria-label="Read Deconstructing the Visible"><md-icon style="color: rgba(255,255,255,0.3);">arrow_forward</md-icon></md-icon-button>
+    </div>
+    <div class="post-list-item">
+      <div class="post-number" aria-hidden="true">02</div>
+      <div class="post-info">
+        <h3 class="post-title">The Typography of Protest</h3>
+        <div class="post-meta">Typography &bull; Mar 17, 2026 &bull; 11 min read</div>
+      </div>
+      <md-icon-button aria-label="Read The Typography of Protest"><md-icon style="color: rgba(255,255,255,0.3);">arrow_forward</md-icon></md-icon-button>
+    </div>
+    <div class="post-list-item">
+      <div class="post-number" aria-hidden="true">03</div>
+      <div class="post-info">
+        <h3 class="post-title">Color as Violence: Why Palettes Have Politics</h3>
+        <div class="post-meta">Design &bull; Mar 14, 2026 &bull; 9 min read</div>
+      </div>
+      <md-icon-button aria-label="Read Color as Violence"><md-icon style="color: rgba(255,255,255,0.3);">arrow_forward</md-icon></md-icon-button>
+    </div>
+    <div class="post-list-item">
+      <div class="post-number" aria-hidden="true">04</div>
+      <div class="post-info">
+        <h3 class="post-title">Grids Were Never Meant to Hold Us</h3>
+        <div class="post-meta">Process &bull; Mar 11, 2026 &bull; 5 min read</div>
+      </div>
+      <md-icon-button aria-label="Read Grids Were Never Meant to Hold Us"><md-icon style="color: rgba(255,255,255,0.3);">arrow_forward</md-icon></md-icon-button>
+    </div>
+    <div class="post-list-item">
+      <div class="post-number" aria-hidden="true">05</div>
+      <div class="post-info">
+        <h3 class="post-title">Interview: The New Brutalists of Web Design</h3>
+        <div class="post-meta">Interviews &bull; Mar 8, 2026 &bull; 14 min read</div>
+      </div>
+      <md-icon-button aria-label="Read Interview: The New Brutalists"><md-icon style="color: rgba(255,255,255,0.3);">arrow_forward</md-icon></md-icon-button>
+    </div>
+  </section>
+
+  <!-- ========== CTA STRIP WITH DIALOG ========== -->
+  <div class="cta-strip">
+    <h3>Want to contribute? We're looking for writers.</h3>
+    <md-filled-button id="open-dialog-btn" style="--md-filled-button-container-color: white; --md-filled-button-label-text-color: #d81b60;">
+      <md-icon slot="icon">edit</md-icon>
+      Apply Now
+    </md-filled-button>
+  </div>
+
+  <md-dialog id="apply-dialog" aria-label="Apply to contribute">
+    <div slot="headline">Become a Contributor</div>
+    <div slot="content">
+      <p style="margin-bottom: 16px; color: #555;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tell us about your perspective.</p>
+      <md-outlined-text-field label="Your Name" style="width: 100%; margin-bottom: 12px;"></md-outlined-text-field>
+      <md-outlined-text-field label="Email" type="email" style="width: 100%; margin-bottom: 12px;"></md-outlined-text-field>
+      <md-outlined-text-field label="Your pitch" type="textarea" rows="3" style="width: 100%;"></md-outlined-text-field>
+    </div>
+    <div slot="actions">
+      <md-text-button form="dialog" value="cancel">Cancel</md-text-button>
+      <md-filled-button form="dialog" value="submit" style="--md-filled-button-container-color: #d81b60;">Submit</md-filled-button>
+    </div>
+  </md-dialog>
+
+  <!-- ========== COMPONENT SHOWCASE ========== -->
+  <section class="showcase" aria-label="Component showcase">
+    <div class="section-header">
+      <span class="number" aria-hidden="true">03</span>
+      <h2 class="title">Components</h2>
+    </div>
+
+    <div class="showcase-grid">
+      <!-- Buttons -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">Buttons</div>
+        <div class="showcase-cell-content">
+          <md-filled-button style="--md-filled-button-container-color: #d81b60;">Filled</md-filled-button>
+          <md-outlined-button style="--md-outlined-button-label-text-color: rgba(255,255,255,0.8); --md-outlined-button-outline-color: rgba(255,255,255,0.2);">Outlined</md-outlined-button>
+          <md-text-button style="--md-text-button-label-text-color: #d81b60;">Text Button</md-text-button>
+          <md-tonal-button>Tonal</md-tonal-button>
+          <md-filled-button disabled>Disabled</md-filled-button>
+        </div>
+      </div>
+
+      <!-- Switches + Checkboxes + Radio -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">Selection Controls</div>
+        <div class="showcase-cell-content">
+          <label style="display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.7);">
+            <md-switch selected icons></md-switch>
+            Dark Mode
+          </label>
+          <label style="display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.7);">
+            <md-switch icons></md-switch>
+            Notifications
+          </label>
+          <md-divider style="width: 100%; --md-divider-color: rgba(255,255,255,0.08);"></md-divider>
+          <label style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7);">
+            <md-checkbox checked></md-checkbox>
+            Subscribe to newsletter
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7);">
+            <md-checkbox></md-checkbox>
+            Accept terms
+          </label>
+          <md-divider style="width: 100%; --md-divider-color: rgba(255,255,255,0.08);"></md-divider>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.7);">
+              <md-radio name="freq" value="daily" checked></md-radio> Daily
+            </label>
+            <label style="display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.7);">
+              <md-radio name="freq" value="weekly"></md-radio> Weekly
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text Fields + Select -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">Inputs</div>
+        <div class="showcase-cell-content" style="width: 100%;">
+          <md-outlined-text-field label="Username" style="width: 100%;">
+            <md-icon slot="leading-icon">person</md-icon>
+          </md-outlined-text-field>
+          <md-outlined-text-field label="Search" placeholder="Find articles..." style="width: 100%;">
+            <md-icon slot="leading-icon">search</md-icon>
+          </md-outlined-text-field>
+          <md-outlined-select label="Category" style="width: 100%;">
+            <md-select-option value="design"><div slot="headline">Design</div></md-select-option>
+            <md-select-option value="type"><div slot="headline">Typography</div></md-select-option>
+            <md-select-option value="culture"><div slot="headline">Culture</div></md-select-option>
+          </md-outlined-select>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">Slider</div>
+        <div class="showcase-cell-content" style="width: 100%;">
+          <div class="carson-mono" style="color: rgba(255,255,255,0.5); margin-bottom: 4px;">Reading font size</div>
+          <md-slider min="12" max="24" value="16" style="width: 100%;"></md-slider>
+          <md-divider style="width: 100%; --md-divider-color: rgba(255,255,255,0.08); margin: 8px 0;"></md-divider>
+          <div class="carson-mono" style="color: rgba(255,255,255,0.5); margin-bottom: 4px;">Price range</div>
+          <md-slider range value-start="10" value-end="80" min="0" max="100" style="width: 100%;"></md-slider>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">Progress</div>
+        <div class="showcase-cell-content" style="width: 100%; align-items: center;">
+          <md-circular-progress indeterminate style="--md-circular-progress-active-indicator-color: #d81b60;"></md-circular-progress>
+          <md-linear-progress value="0.65" style="width: 100%; --md-linear-progress-active-indicator-color: #d81b60; --md-linear-progress-track-color: rgba(255,255,255,0.08);"></md-linear-progress>
+          <md-linear-progress value="0.3" buffer="0.7" style="width: 100%; --md-linear-progress-active-indicator-color: #ff6d00; --md-linear-progress-track-color: rgba(255,255,255,0.08);"></md-linear-progress>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div class="showcase-cell">
+        <div class="showcase-cell-title">List</div>
+        <div class="showcase-cell-content" style="width: 100%;">
+          <md-list style="width: 100%; background: transparent; --md-list-container-color: transparent;">
+            <md-list-item headline="Recent Drafts" supporting-text="3 unpublished">
+              <md-icon slot="start" style="color: var(--carson-accent);">draft</md-icon>
+              <md-icon slot="end" style="color: rgba(255,255,255,0.3);">chevron_right</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item headline="Saved Articles" supporting-text="12 bookmarked">
+              <md-icon slot="start" style="color: var(--carson-accent);">bookmark</md-icon>
+              <md-icon slot="end" style="color: rgba(255,255,255,0.3);">chevron_right</md-icon>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item headline="Reading History" supporting-text="Updated today">
+              <md-icon slot="start" style="color: var(--carson-accent);">history</md-icon>
+              <md-icon slot="end" style="color: rgba(255,255,255,0.3);">chevron_right</md-icon>
+            </md-list-item>
+          </md-list>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== NEWSLETTER ========== -->
+  <section class="newsletter" aria-label="Newsletter signup">
+    <div class="bg-stamp" aria-hidden="true">Subscribe</div>
+    <div class="newsletter-inner">
+      <div class="carson-sub" style="color: var(--carson-accent); margin-bottom: 16px;">Newsletter</div>
+      <h2>Stay<br>Uncomfortable.</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Get raw design thinking delivered to your inbox weekly.</p>
+      <div class="form-row">
+        <md-outlined-text-field label="Email address" type="email" style="flex: 2;"></md-outlined-text-field>
+        <md-outlined-text-field label="Name (optional)" style="flex: 1;"></md-outlined-text-field>
+      </div>
+      <div class="form-options">
+        <label><md-checkbox checked></md-checkbox> Weekly digest</label>
+        <label><md-checkbox></md-checkbox> Breaking stories</label>
+        <label>
+          <md-switch></md-switch>
+          <span style="margin-left: 8px;">SMS alerts</span>
+        </label>
+      </div>
+      <md-filled-button style="--md-filled-button-container-color: #d81b60; --md-filled-button-label-text-color: white;">
+        <md-icon slot="icon">mail</md-icon>
+        Subscribe
+      </md-filled-button>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer role="contentinfo">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand" aria-hidden="true">DSTRCT</div>
+        <p class="body-medium" style="color: rgba(255,255,255,0.4); max-width: 300px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. A blog about design, typography, and the spaces between.</p>
+      </div>
+      <nav class="footer-col" aria-label="Content links">
+        <h4>Content</h4>
+        <a href="#">Latest</a>
+        <a href="#">Popular</a>
+        <a href="#">Typography</a>
+        <a href="#">Culture</a>
+        <a href="#">Interviews</a>
+      </nav>
+      <nav class="footer-col" aria-label="About links">
+        <h4>About</h4>
+        <a href="#">Mission</a>
+        <a href="#">Contributors</a>
+        <a href="#">Contact</a>
+        <a href="#">Advertise</a>
+      </nav>
+      <nav class="footer-col" aria-label="Social links">
+        <h4>Follow</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Twitter / X</a>
+        <a href="#">Threads</a>
+        <a href="#">RSS Feed</a>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 DSTRCT. All rights reserved.</span>
+      <span>Designed with controlled chaos.</span>
+    </div>
+  </footer>
+
+  <!-- ========== FAB ========== -->
+  <div class="fab-fixed">
+    <md-fab aria-label="Write new post" style="--md-fab-container-color: #d81b60; --md-fab-icon-color: white;">
+      <md-icon slot="icon">edit</md-icon>
+    </md-fab>
+  </div>
+
+  <!-- ========== DIALOG TRIGGER SCRIPT ========== -->
+  <script>
+    document.getElementById('open-dialog-btn')?.addEventListener('click', () => {
+      document.getElementById('apply-dialog').open = true;
+    });
+  </script>
+
+</body>
+</html>
