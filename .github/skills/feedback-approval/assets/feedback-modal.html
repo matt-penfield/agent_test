@@ -1,0 +1,316 @@
+<!-- FEEDBACK MODAL START -->
+<style>
+  .review-trigger {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    background: #6750a4;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 24px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s ease;
+  }
+  .review-trigger:hover { background: #7c6aad; }
+  .review-trigger .icon { font-size: 20px; }
+
+  .review-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+  }
+  .review-overlay.active { display: flex; }
+
+  .review-modal {
+    background: #fff;
+    border-radius: 28px;
+    width: 90%;
+    max-width: 520px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: reviewSlideUp 0.25s ease;
+  }
+  @keyframes reviewSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .review-modal h2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #1c1b1f;
+    margin-bottom: 8px;
+  }
+  .review-modal .subtitle {
+    font-size: 14px;
+    color: #49454f;
+    margin-bottom: 24px;
+  }
+
+  .review-modal .reviewer-field {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #79747e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .review-modal .reviewer-field:focus {
+    border-color: #6750a4;
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+
+  .review-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .review-actions button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #cac4d0;
+    background: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: #1c1b1f;
+  }
+  .review-actions button:hover { background: #f3edf7; }
+  .review-actions button.selected-approve {
+    background: #c8ffd4;
+    border-color: #1a6b2a;
+    color: #1a6b2a;
+  }
+  .review-actions button.selected-reject {
+    background: #ffdad6;
+    border-color: #ba1a1a;
+    color: #ba1a1a;
+  }
+  .review-actions button.selected-feedback {
+    background: #eaddff;
+    border-color: #6750a4;
+    color: #6750a4;
+  }
+
+  .feedback-area {
+    display: none;
+    margin-bottom: 16px;
+  }
+  .feedback-area.visible { display: block; }
+  .feedback-area textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    border: 1px solid #79747e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .feedback-area textarea:focus {
+    border-color: #6750a4;
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+  .feedback-area label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #49454f;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .review-submit-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .review-cancel-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: #6750a4;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .review-cancel-btn:hover { background: #f3edf7; }
+  .review-submit-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 20px;
+    background: #6750a4;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .review-submit-btn:hover { background: #7c6aad; }
+  .review-submit-btn:disabled {
+    background: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+  }
+</style>
+
+<button class="review-trigger" onclick="document.getElementById('reviewOverlay').classList.add('active')" aria-label="Open review panel">
+  <span class="icon material-symbols-outlined" aria-hidden="true">rate_review</span>
+  Review
+</button>
+
+<div id="reviewOverlay" class="review-overlay" role="dialog" aria-modal="true" aria-label="Review prototype">
+  <div class="review-modal">
+    <h2>Review This Prototype</h2>
+    <p class="subtitle">Choose an action and optionally provide feedback.</p>
+
+    <input type="text" class="reviewer-field" id="reviewerName" placeholder="Your name (optional)">
+
+    <div class="review-actions">
+      <button type="button" id="btnApprove" onclick="selectReviewAction('approved')">
+        &#x2714; Approve
+      </button>
+      <button type="button" id="btnReject" onclick="selectReviewAction('rejected')">
+        &#x2718; Reject
+      </button>
+      <button type="button" id="btnFeedback" onclick="selectReviewAction('feedback')">
+        &#x270E; Feedback
+      </button>
+    </div>
+
+    <div class="feedback-area" id="feedbackArea">
+      <label for="feedbackText">Your feedback</label>
+      <textarea id="feedbackText" placeholder="Describe what should be changed..."></textarea>
+    </div>
+
+    <div class="review-submit-row">
+      <button type="button" class="review-cancel-btn" onclick="closeReviewModal()">Cancel</button>
+      <button type="button" class="review-submit-btn" id="submitReview" disabled onclick="submitReview()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  let currentAction = null;
+
+  window.selectReviewAction = function(action) {
+    currentAction = action;
+    // Reset button styles
+    document.getElementById('btnApprove').className = '';
+    document.getElementById('btnReject').className = '';
+    document.getElementById('btnFeedback').className = '';
+    // Highlight selected
+    if (action === 'approved') document.getElementById('btnApprove').className = 'selected-approve';
+    if (action === 'rejected') document.getElementById('btnReject').className = 'selected-reject';
+    if (action === 'feedback') document.getElementById('btnFeedback').className = 'selected-feedback';
+    // Toggle feedback area
+    document.getElementById('feedbackArea').classList.toggle('visible', action === 'feedback');
+    // Enable submit
+    document.getElementById('submitReview').disabled = false;
+  };
+
+  window.closeReviewModal = function() {
+    document.getElementById('reviewOverlay').classList.remove('active');
+    currentAction = null;
+    document.getElementById('btnApprove').className = '';
+    document.getElementById('btnReject').className = '';
+    document.getElementById('btnFeedback').className = '';
+    document.getElementById('feedbackArea').classList.remove('visible');
+    document.getElementById('feedbackText').value = '';
+    document.getElementById('submitReview').disabled = true;
+  };
+
+  window.submitReview = function() {
+    const reviewer = document.getElementById('reviewerName').value.trim() || 'Anonymous';
+    const feedbackText = document.getElementById('feedbackText').value.trim();
+    const fileName = document.title || window.location.pathname.split('/').pop() || 'unknown';
+    const date = new Date().toISOString().split('T')[0];
+    const safeName = fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+
+    let md = '# UI Feedback Report\n\n';
+    md += '| Field | Value |\n';
+    md += '|-------|-------|\n';
+    md += '| **Status** | ' + currentAction + ' |\n';
+    md += '| **File** | ' + fileName + ' |\n';
+    md += '| **Reviewer** | ' + reviewer + ' |\n';
+    md += '| **Date** | ' + date + ' |\n\n';
+    md += '---\n\n';
+    md += '## Feedback\n\n';
+    if (currentAction === 'feedback' && feedbackText) {
+      md += feedbackText + '\n\n';
+    } else if (currentAction === 'approved') {
+      md += 'Prototype approved. No changes requested.\n\n';
+    } else if (currentAction === 'rejected') {
+      md += (feedbackText || 'Prototype rejected. See reviewer for details.') + '\n\n';
+    }
+    md += '---\n\n';
+    md += '## Action Items\n\n';
+    md += '<!-- The material-design-prototyping skill will parse this section for tasks -->\n\n';
+    if (currentAction === 'feedback' && feedbackText) {
+      feedbackText.split('\n').filter(function(l) { return l.trim(); }).forEach(function(line) {
+        md += '- [ ] ' + line.trim() + '\n';
+      });
+    } else if (currentAction === 'approved') {
+      md += '_No action items — approved._\n';
+    } else {
+      md += '- [ ] Address rejection feedback\n';
+    }
+
+    // Download the file
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = safeName + '-feedback-' + date + '.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    closeReviewModal();
+  };
+
+  // Close on overlay click
+  document.getElementById('reviewOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeReviewModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('reviewOverlay').classList.contains('active')) {
+      closeReviewModal();
+    }
+  });
+})();
+</script>
+<!-- FEEDBACK MODAL END -->
