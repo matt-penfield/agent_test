@@ -288,6 +288,21 @@
       position: absolute;
       top: 8px;
       right: 8px;
+      background: var(--md-sys-color-surface-container-lowest);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--md-sys-elevation-1);
+      color: var(--md-sys-color-on-surface-variant);
+      transition: color 0.2s ease;
+    }
+    .card-image .card-fav:hover {
+      color: var(--md-sys-color-error);
     }
     .card-body {
       padding: 16px;
@@ -461,10 +476,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
           <span class="card-badge">New</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Over-Ear</span>
@@ -484,10 +498,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">earbuds</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Earbuds</span>
@@ -508,10 +521,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">headset_mic</span>
           <span class="card-badge">Best Seller</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Gaming</span>
@@ -531,10 +543,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Over-Ear</span>
@@ -555,10 +566,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">earbuds</span>
           <span class="card-badge">Sale</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Earbuds</span>
@@ -578,10 +588,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">On-Ear</span>
@@ -601,10 +610,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">headset_mic</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Gaming</span>
@@ -625,10 +633,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
           <span class="card-badge">Premium</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Over-Ear</span>
@@ -648,10 +655,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">earbuds</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Earbuds</span>
@@ -672,10 +678,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
           <span class="card-badge">New</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Wireless</span>
@@ -696,10 +701,9 @@
         <div class="card-image">
           <span class="material-symbols-outlined">headset_mic</span>
           <span class="card-badge">Sale</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">Gaming</span>
@@ -719,10 +723,9 @@
       <div class="product-card">
         <div class="card-image">
           <span class="material-symbols-outlined">headphones</span>
-          <md-icon-button class="card-fav" aria-label="Favorite" toggle>
+          <button class="card-fav" aria-label="Favorite">
             <span class="material-symbols-outlined">favorite_border</span>
-            <span class="material-symbols-outlined" slot="selected">favorite</span>
-          </md-icon-button>
+          </button>
         </div>
         <div class="card-body">
           <span class="label-medium card-category">On-Ear</span>
