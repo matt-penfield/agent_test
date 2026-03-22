@@ -9,22 +9,23 @@ A step-by-step guide to running a UI prototyping project from requirements throu
 This workspace contains a set of Copilot skills that form an end-to-end UI prototyping pipeline. Each skill is invoked by typing its name in Copilot Chat. Together, they cover the full lifecycle of a prototype:
 
 ```
-  Define            Build            Ship            Review
-┌─────────┐    ┌─────────────┐    ┌──────┐    ┌────────────┐
-│   PRD   │ ─► │ Prototyper  │ ─► │ Git  │ ─► │  Feedback  │
-│  Skill  │    │   Skill     │    │ Push │    │   Skill    │
-└─────────┘    └─────────────┘    └──────┘    └────────────┘
-                     ▲                              │
-                     └──────── Revise ──────────────┘
+  Define          Plan           Build            Ship            Review
+┌─────────┐    ┌────────┐    ┌─────────────┐    ┌──────┐    ┌────────────┐
+│   PRD   │ ─► │  Plan  │ ─► │ Prototyper  │ ─► │ Git  │ ─► │  Feedback  │
+│  Skill  │    │ Export │    │   Skill     │    │ Push │    │   Skill    │
+└─────────┘    └────────┘    └─────────────┘    └──────┘    └────────────┘
+                                   ▲                              │
+                                   └──────── Revise ──────────────┘
 ```
 
 | Step | Skill | What It Does |
 |------|-------|--------------|
 | 1 | `/prd` | Interview → structured requirements document |
-| 2 | `/material-design-prototyping` | PRD (or freeform prompt) → interactive HTML prototype |
-| 3 | Git push | Push changes to deploy a live preview |
-| 4 | `/feedback-approval` | Inject review modal → collect approve/reject/feedback |
-| 5 | `/material-design-prototyping` | Feed the feedback file back in → apply revisions |
+| 2 | `/plan-export` | PRD → CSV task breakdown for Planner, Trello, or Jira |
+| 3 | `/material-design-prototyping` | PRD (or freeform prompt) → interactive HTML prototype |
+| 4 | Git push | Push changes to deploy a live preview |
+| 5 | `/feedback-approval` | Inject review modal → collect approve/reject/feedback |
+| 6 | `/material-design-prototyping` | Feed the feedback file back in → apply revisions |
 
 ---
 
@@ -72,7 +73,55 @@ This file is the input for the prototyping skill.
 
 ---
 
-## 2. Build a Prototype with the Prototyping Skill
+## 2. Export a Task Plan with the Plan Export Skill
+
+After creating a PRD, export it as a CSV of actionable tasks grouped into buckets (Setup, Design, Build, QA). The CSV is ready to import into Microsoft Planner, Trello, Jira, or any spreadsheet.
+
+### How to invoke
+
+Type in Copilot Chat:
+
+```
+/plan-export
+```
+
+Or point to a specific PRD:
+
+```
+/plan-export prd/my-product-prd.md
+```
+
+If you don't specify a file, the skill scans the `prd/` folder automatically.
+
+### What happens
+
+1. Copilot reads the PRD and breaks it into tasks across four buckets:
+   - **Setup** — HTML scaffold, imports, design tokens, fonts
+   - **Design** — Color palette, typography scale, shape/density
+   - **Build** — Components, sections, forms, interactions, navigation, animations
+   - **QA** — Responsive breakpoints, browser testing, accessibility
+2. Each task gets a priority (Urgent, Important, or Medium) and a description from the PRD
+3. The CSV is saved with a UTF-8 BOM so Excel opens it correctly
+
+### Output
+
+A CSV file saved to:
+
+```
+exports/<product-name>-planner-tasks.csv
+```
+
+Columns: `Task Name, Bucket, Priority, Progress, Start Date, Due Date, Notes`
+
+### Importing into Planner
+
+1. Open your Planner board in Microsoft Teams or at tasks.office.com
+2. Use **Import plan from spreadsheet** (if available in your tenant)
+3. Or create tasks manually using the CSV as your reference checklist
+
+---
+
+## 3. Build a Prototype with the Prototyping Skill
 
 The prototyping skill generates a self-contained HTML file using Material Design 3 and Material Web Components.
 
@@ -107,7 +156,7 @@ A single `.html` file that:
 
 ---
 
-## 3. Push Changes Live with Git
+## 4. Push Changes Live with Git
 
 Once your prototype looks good locally, push to your remote to deploy a live preview (e.g., via Vercel, Netlify, or GitHub Pages).
 
@@ -142,7 +191,7 @@ Vercel auto-deploys on every push to `main`. After pushing:
 
 ---
 
-## 4. Collect Feedback with the Review Tool
+## 5. Collect Feedback with the Review Tool
 
 The feedback skill injects a floating review modal into any HTML prototype so stakeholders can approve, reject, or leave comments.
 
@@ -185,7 +234,7 @@ Feedback: Change the toolbar color to red. The product cards need more spacing..
 
 ---
 
-## 5. Apply Feedback to the Prototype
+## 6. Apply Feedback to the Prototype
 
 Feedback files are designed to feed directly back into the prototyping skill, creating a revision loop.
 
@@ -223,9 +272,13 @@ Continue iterating until the reviewer approves. Each revision is a new commit, s
 | What you want to do | Command |
 |---------------------|---------|
 | Start a new project with requirements | `/prd <product name>` |
+| Export a task plan from a PRD | `/plan-export` |
 | Build a prototype from a PRD | `/material-design-prototyping build from prd/<name>-prd.md` |
 | Build a prototype from scratch | `/material-design-prototyping <description>` |
 | Add review modal to a prototype | `/feedback-approval <file.html>` |
 | Apply reviewer feedback | `/material-design-prototyping apply changes from feedback/<file>.md` |
 | Run an accessibility audit | `/accessibility-audit <file.html>` |
 | Generate a daily report | `/daily-report` |
+```
+
+
