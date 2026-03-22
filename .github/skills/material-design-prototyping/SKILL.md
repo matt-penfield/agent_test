@@ -91,6 +91,8 @@ For icons, use Material Symbols: `<md-icon>icon_name</md-icon>` or `<span class=
 
 See the full [component reference](./references/components.md) for detailed usage, attributes, and examples.
 
+> **CDN fallback:** The `esm.run` CDN can fail to resolve components with deep dependency trees (especially buttons, FABs, dialogs). If a `<md-*>` element renders as unstyled text, replace it with a native HTML element styled to M3 specs. See "Native CSS Fallback Buttons" in the [component reference](./references/components.md).
+
 ### Step 6 — Apply Typography
 
 Use the M3 type scale via CSS classes or custom properties:

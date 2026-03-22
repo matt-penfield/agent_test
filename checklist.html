@@ -22,7 +22,6 @@
     import '@material/web/checkbox/checkbox.js';
     import '@material/web/textfield/outlined-text-field.js';
     import '@material/web/button/filled-button.js';
-    import '@material/web/icon/icon.js';
   </script>
 
   <style>
@@ -119,8 +118,39 @@
       flex: 1;
     }
 
-    .add-item md-filled-button {
+    .add-item md-filled-button,
+    .add-item .m3-button {
       margin-top: 8px;
+    }
+
+    .m3-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 24px;
+      border: none;
+      border-radius: 20px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+
+    .m3-button:hover {
+      box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+    }
+
+    .m3-button:active {
+      background: #7c6bbd;
+    }
+
+    .m3-button .material-symbols-outlined {
+      font-size: 18px;
     }
   </style>
 </head>
@@ -152,7 +182,7 @@
     </div>
     <div class="add-item">
       <md-outlined-text-field id="newItemField" label="New item" placeholder="Enter a task"></md-outlined-text-field>
-      <md-filled-button id="addBtn"><span class="material-symbols-outlined" slot="icon">add</span>Add</md-filled-button>
+      <button type="button" class="m3-button" id="addBtn"><span class="material-symbols-outlined">add</span>Add</button>
     </div>
   </div>
 

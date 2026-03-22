@@ -32,6 +32,8 @@ Detailed usage for Material Web (`@material/web`) components in HTML prototypes.
 </script>
 ```
 
+> **CDN reliability warning:** The `esm.run` CDN converts npm packages on-the-fly and can intermittently fail to resolve components with deep dependency trees (buttons, FABs, dialogs). Simpler components (checkbox, text field) are more reliable. If a component fails to render, use the **native CSS fallback patterns** in the section below.
+
 ---
 
 ## Buttons
@@ -75,6 +77,99 @@ Detailed usage for Material Web (`@material/web`) components in HTML prototypes.
   Send
 </md-filled-button>
 ```
+
+### Native CSS Fallback Buttons
+
+When the CDN fails to load `<md-filled-button>` or other button components, use native `<button>` elements styled to match M3 specs. These have zero CDN dependencies and render reliably.
+
+**Filled button:**
+```html
+<style>
+  .m3-filled-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 20px;
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .m3-filled-button:hover {
+    box-shadow: var(--md-sys-elevation-1);
+  }
+  .m3-filled-button .material-symbols-outlined { font-size: 18px; }
+</style>
+
+<button class="m3-filled-button">
+  <span class="material-symbols-outlined">add</span>Add
+</button>
+```
+
+**Outlined button:**
+```html
+<style>
+  .m3-outlined-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 24px;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--md-sys-color-primary);
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .m3-outlined-button:hover {
+    background: rgba(103, 80, 164, 0.08);
+  }
+</style>
+
+<button class="m3-outlined-button">Cancel</button>
+```
+
+**Text button:**
+```html
+<style>
+  .m3-text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 12px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: var(--md-sys-color-primary);
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .m3-text-button:hover {
+    background: rgba(103, 80, 164, 0.08);
+  }
+</style>
+
+<button class="m3-text-button">Learn more</button>
+```
+
+> **When to use fallbacks:** If a `<md-*>` component renders as unstyled text instead of a proper widget, replace it with the corresponding native CSS fallback. The visual result is identical.
 
 ---
 
