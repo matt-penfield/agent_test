@@ -1,0 +1,185 @@
+﻿{
+  "planId": "9ca75128-a244-4596-877b-f24828e476e2",
+  "tasks": [
+    {
+      "title": "Set up HTML file with M3 design tokens",
+      "bucketName": "Setup",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Scaffold base HTML with Material Web imports, import map for @material/web, blue M3 tonal palette (#1565c0), Roboto font, Material Symbols, and responsive viewport meta tag.\n\nChecklist:\n\u2610 Create HTML file\n\u2610 Add import map for @material/web\n\u2610 Set blue primary color tokens (#1565c0)\n\u2610 Add Roboto and Material Symbols font links\n\u2610 Add responsive viewport meta tag\n\u2610 Set spacious density and rounded shape tokens",
+      "assignedTo": []
+    },
+    {
+      "title": "Design color theme and tonal palette",
+      "bucketName": "Design",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 5 \u2014 Derive M3 tonal palette from blue base #1565c0. Neutral mood, light theme only.\n\nChecklist:\n\u2610 Generate tonal palette from #1565c0\n\u2610 Set primary, on-primary, primary-container tokens\n\u2610 Set surface and on-surface tokens\n\u2610 Set error color tokens for validation states\n\u2610 Verify contrast ratios meet WCAG AA",
+      "assignedTo": []
+    },
+    {
+      "title": "Design typography scale",
+      "bucketName": "Design",
+      "priority": 2,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 5 \u2014 Roboto for both primary and display. Spacious density with generous padding.\n\nChecklist:\n\u2610 Set Roboto as primary and display font\n\u2610 Define headline, title, body, and label sizes\n\u2610 Apply spacious density padding values",
+      "assignedTo": []
+    },
+    {
+      "title": "Build horizontal stepper component",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 6 \u2014 Horizontal stepper showing 5 steps. Current step highlighted, completed steps show checkmark, clickable to revisit completed steps.\n\nChecklist:\n\u2610 Create stepper HTML structure with 5 steps\n\u2610 Style active, completed, and upcoming step states\n\u2610 Add checkmark icon for completed steps\n\u2610 Make completed steps clickable for navigation\n\u2610 Abbreviated labels on tablet, numbers-only on mobile",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 1 \u2014 Personal Info form",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 2/4 \u2014 Collect attendee details: full name, email, company, job title, dietary restrictions. Validation on required fields.\n\nChecklist:\n\u2610 Full name text field (required)\n\u2610 Email text field with email type (required)\n\u2610 Company / Organization text field (required)\n\u2610 Job title text field (required)\n\u2610 Dietary restrictions text field (optional)\n\u2610 Required field validation with error states\n\u2610 Next button to advance",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 2 \u2014 Session selection timeslot grid",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 2/4 \u2014 Grid/table of conference sessions across time slots and tracks. Clickable cells toggle selection with highlight.\n\nChecklist:\n\u2610 Create grid layout with time slots and tracks\n\u2610 Add placeholder session data (4+ sessions)\n\u2610 Implement click-to-toggle cell selection\n\u2610 Highlight selected cells\n\u2610 Display selected session count\n\u2610 Next and Back buttons",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 3 \u2014 Ticket tier selector",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 2/4 \u2014 Three ticket tiers (Student $99, Standard $299, VIP $599) as radio-style cards. Only one selectable at a time.\n\nChecklist:\n\u2610 Student tier card ($99)\n\u2610 Standard tier card ($299)\n\u2610 VIP tier card ($599)\n\u2610 Radio-style selection (one at a time)\n\u2610 Visual highlight on selected tier",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 3 \u2014 Add-on checkboxes",
+      "bucketName": "Build",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 4 \u2014 Optional add-ons: Workshop Pass ($79), Networking Dinner extra guest ($49), Conference T-shirt ($25). Independent toggle.\n\nChecklist:\n\u2610 Workshop Pass checkbox ($79)\n\u2610 Networking Dinner checkbox ($49)\n\u2610 Conference T-shirt checkbox ($25)\n\u2610 Price calculation display\n\u2610 Next and Back buttons",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 4 \u2014 Payment form",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 2/4 \u2014 Credit card payment form with card number, expiry, CVC, cardholder name, billing address, city, state, ZIP. All required.\n\nChecklist:\n\u2610 Card number field\n\u2610 Expiration date field\n\u2610 CVC field\n\u2610 Cardholder name field\n\u2610 Billing address field\n\u2610 City, State, ZIP fields\n\u2610 Form validation on all required fields\n\u2610 Pay Now button",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 4 \u2014 Order summary section",
+      "bucketName": "Build",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 4 \u2014 Sidebar/section showing selected ticket tier, add-ons, and total price alongside the payment form.\n\nChecklist:\n\u2610 Display selected ticket tier and price\n\u2610 List selected add-ons\n\u2610 Calculate and display total\n\u2610 Side-by-side layout on desktop, stacked on mobile",
+      "assignedTo": []
+    },
+    {
+      "title": "Build Step 5 \u2014 Confirmation page",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 2/4 \u2014 Success checkmark icon, 'Registration Complete!' headline, summary of registration details, Add to Calendar button.\n\nChecklist:\n\u2610 Success check_circle icon\n\u2610 Registration Complete headline\n\u2610 Summary card with name, email, ticket, sessions, total\n\u2610 Add to Calendar button",
+      "assignedTo": []
+    },
+    {
+      "title": "Implement step transitions and animations",
+      "bucketName": "Build",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 6 \u2014 Fade/slide transitions between steps. Hover effects on buttons, cards, and selectable cells. Stepper state change transitions.\n\nChecklist:\n\u2610 Fade/slide transition between steps\n\u2610 Hover effects on buttons and cards\n\u2610 Hover effects on session grid cells\n\u2610 Stepper state change animation",
+      "assignedTo": []
+    },
+    {
+      "title": "Implement form validation error states",
+      "bucketName": "Build",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 6 \u2014 Red outlines and error text on required fields when empty. Validate before allowing step advancement.\n\nChecklist:\n\u2610 Required field validation on Step 1\n\u2610 Required field validation on Step 4\n\u2610 Red outline + error text styling\n\u2610 Block Next/Pay Now if validation fails",
+      "assignedTo": []
+    },
+    {
+      "title": "Implement Next/Back navigation logic",
+      "bucketName": "Build",
+      "priority": 5,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 6 \u2014 Next button validates and advances. Back button returns to previous step. Linear flow Step 1 through Step 5.\n\nChecklist:\n\u2610 Next button advances with validation\n\u2610 Back button returns to previous step\n\u2610 Update stepper state on navigation\n\u2610 Hide Back on Step 1, hide Next on Step 5",
+      "assignedTo": []
+    },
+    {
+      "title": "Inject feedback review modal",
+      "bucketName": "Build",
+      "priority": 2,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 8 \u2014 Include the feedback modal overlay as specified in delivery requirements.\n\nChecklist:\n\u2610 Add feedback modal HTML/CSS/JS\n\u2610 Position Review button in bottom-right\n\u2610 Test approve/reject/feedback actions",
+      "assignedTo": []
+    },
+    {
+      "title": "Implement responsive breakpoints",
+      "bucketName": "QA",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "Section 7 \u2014 Desktop (840px+): centered card max 720px, full stepper labels. Tablet (600-839px): abbreviated labels, horizontal scroll on grid. Mobile (<600px): step numbers only, stacked fields, summary above payment form.\n\nChecklist:\n\u2610 Desktop layout \u2014 centered card, horizontal stepper with labels\n\u2610 Tablet layout \u2014 abbreviated stepper labels, grid scroll\n\u2610 Mobile layout \u2014 number-only stepper, stacked fields\n\u2610 Payment summary above form on mobile\n\u2610 Verify no content hidden on any breakpoint",
+      "assignedTo": []
+    },
+    {
+      "title": "Final review and browser testing",
+      "bucketName": "QA",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "End-to-end walkthrough of all 5 steps in Chrome, Edge, and Firefox. Verify all interactions, transitions, and responsive behavior.\n\nChecklist:\n\u2610 Test full flow in Chrome\n\u2610 Test full flow in Edge\n\u2610 Test full flow in Firefox\n\u2610 Verify all step transitions work\n\u2610 Verify form validation fires correctly\n\u2610 Verify responsive behavior at all breakpoints",
+      "assignedTo": []
+    },
+    {
+      "title": "Accessibility check",
+      "bucketName": "QA",
+      "priority": 3,
+      "progress": "notStarted",
+      "startDate": null,
+      "dueDate": null,
+      "notes": "WCAG 2.1 Level A and AA audit. Check color contrast, keyboard navigation through stepper and forms, ARIA labels, focus management on step transitions.\n\nChecklist:\n\u2610 Color contrast check (4.5:1 text, 3:1 UI)\n\u2610 Keyboard navigation through all steps\n\u2610 ARIA labels on form fields and stepper\n\u2610 Focus management on step change\n\u2610 Screen reader walkthrough",
+      "assignedTo": []
+    }
+  ]
+}

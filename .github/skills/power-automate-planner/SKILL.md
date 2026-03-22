@@ -56,7 +56,9 @@ Walk the user through building the cloud flow. Load the [flow schema reference](
    Inside the loop:
 
    a. **Condition** — bucket name exists in `bucketMap`?
-   b. **If no** → **Planner: Create a bucket** (Plan ID from payload, Name from current task) → append to `bucketMap`
+   b. **If no** → **Planner: Create a bucket** (Plan ID from payload, Name from current task)
+   b2. **Compose** (`Compose_NewBucketMap`) — Expression: `addProperty(variables('bucketMap'), items('Apply_to_each')?['bucketName'], outputs('Create_a_bucket')?['body/id'])`
+   b3. **Set variable** `bucketMap` → value: output of Compose above
    c. **Planner: Create a task** — Plan ID, Bucket ID (from `bucketMap`), Title, Priority
    d. **Planner: Update task details** — Task ID from step c, Description from `notes`
    e. **Apply to each (nested)** over `checklistItems` → **Update task details** to add each checklist entry

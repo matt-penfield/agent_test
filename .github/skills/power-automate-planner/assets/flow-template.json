@@ -50,8 +50,27 @@
           "inputs": {
             "planId": "@body('Parse_JSON')?['planId']",
             "name": "@items('For_Each_Task')?['bucketName']"
+          }
+        },
+        {
+          "step": "3b2",
+          "name": "Compose_NewBucketMap",
+          "type": "Data Operations — Compose",
+          "runIf": "Condition is false (same branch as Create_Bucket_If_New)",
+          "inputs": {
+            "expression": "addProperty(variables('bucketMap'), items('For_Each_Task')?['bucketName'], outputs('Create_a_bucket')?['body/id'])"
           },
-          "postAction": "Append bucket name and ID to bucketMap variable"
+          "note": "Compute the updated object in a Compose action first to avoid self-referencing variable error"
+        },
+        {
+          "step": "3b3",
+          "name": "Set_bucketMap",
+          "type": "Set variable",
+          "runIf": "Condition is false (same branch)",
+          "inputs": {
+            "name": "bucketMap",
+            "value": "@outputs('Compose_NewBucketMap')"
+          }
         },
         {
           "step": "3c",
