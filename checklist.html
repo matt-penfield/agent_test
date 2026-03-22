@@ -54,9 +54,17 @@
       line-height: 1.5;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
       padding: 24px;
+    }
+
+    .page-layout {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      max-width: 860px;
+      align-items: flex-start;
     }
 
     .card {
@@ -66,6 +74,58 @@
       padding: 32px;
       width: 100%;
       max-width: 480px;
+      flex-shrink: 0;
+    }
+
+    .results-panel {
+      background: var(--md-sys-color-surface);
+      border-radius: var(--md-sys-shape-corner-medium);
+      box-shadow: var(--md-sys-elevation-1);
+      padding: 32px;
+      flex: 1;
+      min-width: 240px;
+      display: none;
+    }
+
+    .results-panel.visible {
+      display: block;
+    }
+
+    .results-panel h2 {
+      font-size: 22px;
+      line-height: 28px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 16px;
+    }
+
+    .results-panel ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .results-panel li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .results-panel li .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--md-sys-color-primary);
+    }
+
+    @media (max-width: 699px) {
+      .page-layout {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .card { max-width: none; }
     }
 
     .card h1 {
@@ -123,6 +183,14 @@
       margin-top: 8px;
     }
 
+    .submit-row {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .m3-button {
       display: inline-flex;
       align-items: center;
@@ -156,6 +224,7 @@
 </head>
 <body>
 
+  <div class="page-layout">
   <div class="card">
     <h1>My Checklist</h1>
     <div class="checklist">
@@ -184,6 +253,15 @@
       <md-outlined-text-field id="newItemField" label="New item" placeholder="Enter a task"></md-outlined-text-field>
       <button type="button" class="m3-button" id="addBtn"><span class="material-symbols-outlined">add</span>Add</button>
     </div>
+    <div class="submit-row">
+      <button type="button" class="m3-button" id="submitBtn"><span class="material-symbols-outlined">check</span>Submit</button>
+    </div>
+  </div>
+
+  <div class="results-panel" id="resultsPanel">
+    <h2>Selected Items</h2>
+    <ul id="resultsList"></ul>
+  </div>
   </div>
 
   <script type="module">
@@ -206,6 +284,31 @@
 
     btn.addEventListener('click', addItem);
     field.addEventListener('keydown', (e) => { if (e.key === 'Enter') addItem(); });
+
+    const submitBtn = document.getElementById('submitBtn');
+    const resultsPanel = document.getElementById('resultsPanel');
+    const resultsList = document.getElementById('resultsList');
+
+    submitBtn.addEventListener('click', () => {
+      resultsList.innerHTML = '';
+      const items = checklist.querySelectorAll('.checklist-item');
+      let hasChecked = false;
+      items.forEach(item => {
+        const cb = item.querySelector('md-checkbox');
+        const lbl = item.querySelector('label');
+        if (cb && cb.checked && lbl) {
+          hasChecked = true;
+          const li = document.createElement('li');
+          li.innerHTML = '<span class="material-symbols-outlined">check_circle</span>' + lbl.textContent;
+          resultsList.appendChild(li);
+        }
+      });
+      if (hasChecked) {
+        resultsPanel.classList.add('visible');
+      } else {
+        resultsPanel.classList.remove('visible');
+      }
+    });
   </script>
 
 </body>
