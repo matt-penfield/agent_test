@@ -1,0 +1,5 @@
+Task Name,Bucket,Priority,Progress,Start Date,Due Date,Notes
+"Set up HTML file with M3 design tokens",Setup,Important,Not started,,,"Scaffold base HTML with Material Web imports, import map, design tokens, fonts, and viewport meta tag."
+"Design color theme and tonal palette",Design,Important,Not started,,,"Derive M3 tonal palette from primary brand color."
+"Build hero section",Build,Urgent,Not started,,,"Implement the hero/featured area with headline, description, and CTA."
+"Accessibility check",QA,Important,Not started,,,"WCAG 2.1 Level A and AA audit: contrast, keyboard nav, ARIA labels, focus management."
