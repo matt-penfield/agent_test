@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOLUME 09 — Editorial</title>
+
+  <!-- Heavy sans-serif faces + monospace for metadata -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Material Web Components (minimal — divider, chips) -->
+  <script type="importmap">
+    { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+  </script>
+  <script type="module">
+    import '@material/web/divider/divider.js';
+  </script>
+
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS — Brutalist / Industrial
+       ═══════════════════════════════════════════ */
+    :root {
+      /* Palette: stark black / white / signal red accent */
+      --clr-black: #0A0A0A;
+      --clr-white: #F5F5F0;
+      --clr-accent: #FF2D20;       /* signal red  */
+      --clr-accent-alt: #00FF87;   /* neon green  */
+      --clr-mid: #3A3A3A;
+      --clr-meta: #8A8A8A;
+      --clr-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+
+      /* Override M3 shape to 0dp */
+      --md-sys-shape-corner-extra-small: 0px;
+      --md-sys-shape-corner-small: 0px;
+      --md-sys-shape-corner-medium: 0px;
+      --md-sys-shape-corner-large: 0px;
+      --md-sys-shape-corner-extra-large: 0px;
+
+      /* Override M3 tokens to match palette */
+      --md-sys-color-primary: var(--clr-accent);
+      --md-sys-color-on-primary: var(--clr-white);
+      --md-sys-color-surface: var(--clr-white);
+      --md-sys-color-on-surface: var(--clr-black);
+      --md-sys-color-outline: var(--clr-black);
+      --md-sys-color-outline-variant: var(--clr-mid);
+
+      /* Custom type scale — extreme headers */
+      --type-massive: clamp(6rem, 14vw, 18rem);
+      --type-headline: clamp(3rem, 6vw, 7rem);
+      --type-sub: clamp(1.4rem, 2.5vw, 2.2rem);
+      --type-body: 1rem;
+      --type-meta: 0.7rem;
+      --type-micro: 0.6rem;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--clr-white);
+      color: var(--clr-black);
+      line-height: 1.45;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* Grain overlay on every section */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--clr-grain);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Utility ── */
+    .accent   { color: var(--clr-accent); }
+    .accent-bg { background: var(--clr-accent); color: var(--clr-white); }
+    .neon     { color: var(--clr-accent-alt); }
+    .mono     { font-family: 'Space Mono', monospace; }
+    .meta     { font-size: var(--type-meta); letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-meta); font-family: 'Space Mono', monospace; }
+
+    /* ═══════════════════════════════════════════
+       HERO — Massive bleed-off-canvas headline
+       ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      background: var(--clr-black);
+      color: var(--clr-white);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 clamp(24px, 5vw, 80px) 80px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: 'VOL.09';
+      position: absolute;
+      top: -6vw;
+      right: -3vw;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(18rem, 40vw, 55rem);
+      line-height: 0.85;
+      color: var(--clr-mid);
+      opacity: 0.12;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .hero__nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px clamp(24px, 5vw, 80px);
+      z-index: 2;
+    }
+    .hero__logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.25em;
+      color: var(--clr-white);
+    }
+    .hero__nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .hero__nav-links li {
+      font-size: var(--type-meta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .hero__nav-links li:hover { color: var(--clr-accent); }
+
+    .hero__issue {
+      position: absolute;
+      top: 50%;
+      right: clamp(24px, 5vw, 80px);
+      transform: translateY(-50%) rotate(90deg);
+      transform-origin: right center;
+      font-size: var(--type-meta);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+      white-space: nowrap;
+    }
+
+    .hero__content { position: relative; z-index: 2; max-width: 100%; }
+
+    .hero__kicker {
+      display: inline-block;
+      background: var(--clr-accent);
+      color: var(--clr-white);
+      padding: 4px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: var(--type-meta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero__title {
+      font-family: 'Anton', sans-serif;
+      font-size: var(--type-massive);
+      line-height: 0.88;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      margin-left: -0.04em; /* optical alignment */
+    }
+    .hero__title .outline-text {
+      -webkit-text-stroke: 2px var(--clr-white);
+      color: transparent;
+    }
+
+    .hero__meta-row {
+      display: flex;
+      gap: 40px;
+      margin-top: 32px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    /* Hard geometric accent stripe */
+    .hero__stripe {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--clr-accent) 60%, var(--clr-accent-alt) 60%);
+    }
+
+    /* ═══════════════════════════════════════════
+       DECONSTRUCTED GRID SECTION
+       ═══════════════════════════════════════════ */
+    .decon {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 0;
+      padding: clamp(60px, 10vw, 160px) 0;
+      overflow: hidden;
+    }
+
+    /* Statement text — off-axis, bleeds left */
+    .decon__statement {
+      grid-column: 1 / 5;
+      padding: 0 clamp(24px, 5vw, 80px);
+    }
+    .decon__statement h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: var(--type-headline);
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .decon__statement h2 .accent-underline {
+      text-decoration: underline;
+      text-decoration-color: var(--clr-accent);
+      text-underline-offset: 8px;
+      text-decoration-thickness: 4px;
+    }
+
+    /* Meta block — tiny and precise, shifted right */
+    .decon__meta {
+      grid-column: 5 / 7;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 clamp(24px, 5vw, 80px) 0 0;
+      gap: 12px;
+    }
+
+    /* ── Cut-out card: flat hard-edge layered shapes ── */
+    .cutout-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    .cutout-left {
+      background: var(--clr-black);
+      color: var(--clr-white);
+      padding: clamp(40px, 8vw, 120px) clamp(24px, 5vw, 80px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .cutout-left::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: -40px;
+      width: 80px;
+      height: 80px;
+      background: var(--clr-accent);
+      z-index: 2;
+    }
+    .cutout-right {
+      background: var(--clr-white);
+      padding: clamp(40px, 8vw, 120px) clamp(24px, 5vw, 80px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .cutout-right::before {
+      content: '';
+      position: absolute;
+      bottom: 12%;
+      left: -24px;
+      width: 48px;
+      height: 200px;
+      background: var(--clr-accent-alt);
+      z-index: 2;
+    }
+    .cutout-left h3, .cutout-right h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: var(--type-sub);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .cutout-left p, .cutout-right p {
+      font-size: var(--type-body);
+      line-height: 1.7;
+      max-width: 480px;
+      color: inherit;
+      opacity: 0.85;
+    }
+
+    /* ── Numbered feature strip ── */
+    .feature-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 2px solid var(--clr-black);
+      border-bottom: 2px solid var(--clr-black);
+    }
+    .feature-card {
+      padding: clamp(32px, 5vw, 64px);
+      border-right: 1px solid var(--clr-black);
+      position: relative;
+    }
+    .feature-card:last-child { border-right: none; }
+    .feature-card__number {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(5rem, 8vw, 10rem);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--clr-black);
+      position: absolute;
+      top: -0.15em;
+      right: 16px;
+      opacity: 0.2;
+    }
+    .feature-card h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--clr-mid);
+      position: relative;
+      z-index: 1;
+    }
+    /* Abstract glyph symbols instead of standard icons */
+    .glyph {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--clr-black);
+      margin-bottom: 20px;
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+    }
+    .glyph--filled {
+      background: var(--clr-accent);
+      border-color: var(--clr-accent);
+      color: var(--clr-white);
+    }
+    .glyph--stroke {
+      background: transparent;
+      color: var(--clr-black);
+    }
+    .glyph--neon {
+      background: var(--clr-accent-alt);
+      border-color: var(--clr-accent-alt);
+      color: var(--clr-black);
+    }
+
+    /* ═══════════════════════════════════════════
+       MARQUEE DIVIDER — text as graphic element
+       ═══════════════════════════════════════════ */
+    .marquee-wrap {
+      overflow: hidden;
+      background: var(--clr-accent);
+      padding: 12px 0;
+    }
+    .marquee {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 18s linear infinite;
+    }
+    .marquee span {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2rem, 4vw, 4rem);
+      text-transform: uppercase;
+      color: var(--clr-white);
+      padding: 0 48px;
+      letter-spacing: 0.15em;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════════
+       EDITORIAL BODY — asymmetric two-column
+       ═══════════════════════════════════════════ */
+    .editorial {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 0;
+      min-height: 80vh;
+    }
+    .editorial__sidebar {
+      background: var(--clr-black);
+      color: var(--clr-white);
+      padding: clamp(40px, 6vw, 100px) clamp(24px, 4vw, 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .editorial__sidebar-tag {
+      writing-mode: vertical-lr;
+      text-orientation: mixed;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      text-transform: uppercase;
+      color: var(--clr-mid);
+      opacity: 0.2;
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .editorial__sidebar h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: var(--type-sub);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .editorial__sidebar blockquote {
+      border-left: 3px solid var(--clr-accent);
+      padding-left: 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      font-style: italic;
+      opacity: 0.8;
+      margin-bottom: 40px;
+    }
+    .editorial__body {
+      padding: clamp(40px, 6vw, 100px) clamp(24px, 5vw, 80px);
+    }
+    .editorial__body .drop-cap::first-letter {
+      font-family: 'Anton', sans-serif;
+      font-size: 4.5rem;
+      float: left;
+      line-height: 0.8;
+      margin-right: 12px;
+      margin-top: 6px;
+      color: var(--clr-accent);
+    }
+    .editorial__body p {
+      font-size: var(--type-body);
+      line-height: 1.75;
+      margin-bottom: 24px;
+      max-width: 560px;
+      color: var(--clr-mid);
+    }
+    .editorial__body p strong {
+      color: var(--clr-black);
+      font-weight: 700;
+    }
+    .editorial__pull-quote {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      text-transform: uppercase;
+      margin: 48px 0;
+      padding-left: 24px;
+      border-left: 5px solid var(--clr-accent);
+      color: var(--clr-black);
+      max-width: 480px;
+    }
+
+    /* ═══════════════════════════════════════════
+       STATS ROW — industrial counters
+       ═══════════════════════════════════════════ */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 2px solid var(--clr-black);
+      border-bottom: 2px solid var(--clr-black);
+      background: var(--clr-white);
+    }
+    .stat {
+      text-align: center;
+      padding: clamp(32px, 5vw, 56px) 16px;
+      border-right: 1px solid var(--clr-black);
+    }
+    .stat:last-child { border-right: none; }
+    .stat__value {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .stat__label {
+      margin-top: 8px;
+      font-size: var(--type-meta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+    }
+
+    /* ═══════════════════════════════════════════
+       COLOPHON / FOOTER
+       ═══════════════════════════════════════════ */
+    .colophon {
+      background: var(--clr-black);
+      color: var(--clr-white);
+      padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 80px);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+    .colophon__brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+    }
+    .colophon p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--clr-meta);
+      max-width: 360px;
+    }
+    .colophon h5 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: var(--clr-white);
+    }
+    .colophon ul {
+      list-style: none;
+    }
+    .colophon li {
+      font-size: var(--type-meta);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+      padding: 6px 0;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .colophon li:hover { color: var(--clr-accent); }
+    .colophon__endmark {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--clr-mid);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .colophon__endmark span {
+      font-size: var(--type-micro);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+    }
+
+    /* ═══════════════════════════════════════════
+       md-divider override — 0 radius, black
+       ═══════════════════════════════════════════ */
+    md-divider {
+      --md-divider-color: var(--clr-black);
+      --md-divider-thickness: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE — deconstructed stacking
+       ═══════════════════════════════════════════ */
+    @media (max-width: 839px) {
+      .decon { grid-template-columns: 1fr; }
+      .decon__statement { grid-column: 1; }
+      .decon__meta { grid-column: 1; padding: 24px clamp(24px, 5vw, 80px) 0; }
+      .cutout-section { grid-template-columns: 1fr; }
+      .cutout-left::after { display: none; }
+      .cutout-right::before { display: none; }
+      .feature-strip { grid-template-columns: 1fr; }
+      .feature-card { border-right: none; border-bottom: 1px solid var(--clr-black); }
+      .editorial { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat { border-bottom: 1px solid var(--clr-black); }
+      .colophon { grid-template-columns: 1fr; }
+      .hero__nav-links { display: none; }
+      .hero__issue { display: none; }
+    }
+    @media (max-width: 599px) {
+      .stats { grid-template-columns: 1fr; }
+      .hero__title { font-size: clamp(4rem, 16vw, 8rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════ HERO ════════════════ -->
+  <section class="hero">
+    <nav class="hero__nav">
+      <div class="hero__logo">VOLUME</div>
+      <ul class="hero__nav-links">
+        <li>Archive</li>
+        <li>Features</li>
+        <li>About</li>
+        <li>Contact</li>
+      </ul>
+    </nav>
+    <div class="hero__issue">Issue No. 09 &mdash; Spring 2026</div>
+    <div class="hero__content">
+      <div class="hero__kicker">Feature Essay</div>
+      <h1 class="hero__title">
+        The<br>
+        <span class="outline-text">Invisible</span><br>
+        Grid
+      </h1>
+      <div class="hero__meta-row">
+        <span class="meta">Words &mdash; Maren Vogt</span>
+        <span class="meta">Photography &mdash; Studio Null</span>
+        <span class="meta">12 Min Read</span>
+      </div>
+    </div>
+    <div class="hero__stripe"></div>
+  </section>
+
+  <!-- ════════════════ DECONSTRUCTED STATEMENT ════════════════ -->
+  <section class="decon">
+    <div class="decon__statement">
+      <h2>Design is not<br>about <span class="accent-underline">surfaces</span>.<br>It is about<br><span class="accent">tension.</span></h2>
+    </div>
+    <div class="decon__meta">
+      <div>
+        <p class="meta">Published</p>
+        <p style="font-size:0.9rem; margin-top:4px;">March 22, 2026</p>
+      </div>
+      <div>
+        <p class="meta">Category</p>
+        <p style="font-size:0.9rem; margin-top:4px;">Visual Culture</p>
+      </div>
+      <div>
+        <p class="meta">Series</p>
+        <p style="font-size:0.9rem; margin-top:4px;">New Brutalism, Pt. III</p>
+      </div>
+    </div>
+  </section>
+
+  <md-divider></md-divider>
+
+  <!-- ════════════════ CUT-OUT SECTION ════════════════ -->
+  <section class="cutout-section">
+    <div class="cutout-left">
+      <h3>The Manifesto</h3>
+      <p>Every surface carries a decision. The weight of a typeface, the silence of a margin, the violence of a single red line cutting through whitespace. We have grown comfortable in our rounded corners and gentle gradients. This is a call to discomfort. To build interfaces that argue with the viewer, that demand attention rather than politely requesting it.</p>
+      <br>
+      <p>The grid is not a prison. It is a skeleton we choose to expose or conceal. When we break it deliberately, we reveal structure itself as content. The fracture is the message.</p>
+    </div>
+    <div class="cutout-right">
+      <h3>The Method</h3>
+      <p>Start with the heaviest typeface you can find. Set it at a size that feels wrong. Let it bleed past the edge of the container. Now step back and listen to the tension it creates against the precise, 7-pixel metadata sitting three hundred pixels away. That contrast is the entire design language.</p>
+      <br>
+      <p>Remove every element that exists out of convention rather than necessity. Navigation labels, decorative dividers, rounded avatars. If it does not earn its space through functional or emotional purpose, it is noise. Industrial design is the practice of silence made visible.</p>
+    </div>
+  </section>
+
+  <!-- ════════════════ MARQUEE ════════════════ -->
+  <div class="marquee-wrap">
+    <div class="marquee">
+      <span>Typography is architecture</span>
+      <span>&#x25CF;</span>
+      <span>Destroy the grid</span>
+      <span>&#x25CF;</span>
+      <span>Tension over comfort</span>
+      <span>&#x25CF;</span>
+      <span>Silence is form</span>
+      <span>&#x25CF;</span>
+      <span>Typography is architecture</span>
+      <span>&#x25CF;</span>
+      <span>Destroy the grid</span>
+      <span>&#x25CF;</span>
+      <span>Tension over comfort</span>
+      <span>&#x25CF;</span>
+      <span>Silence is form</span>
+      <span>&#x25CF;</span>
+    </div>
+  </div>
+
+  <!-- ════════════════ FEATURE STRIP ════════════════ -->
+  <section class="feature-strip">
+    <div class="feature-card">
+      <div class="feature-card__number">01</div>
+      <div class="glyph glyph--filled">&#x25B2;</div>
+      <h4>Extreme Scale</h4>
+      <p>Pair 180-pixel headlines with 10-pixel metadata. The cognitive distance between the two creates a visual rhythm that standard proportional type scales cannot achieve. Size is meaning.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card__number">02</div>
+      <div class="glyph glyph--stroke">&#x25C6;</div>
+      <h4>Active Whitespace</h4>
+      <p>Empty space is not absence. It is a compositional force. Push elements to the edges. Leave voids in the center. Let the negative space do the work of containment and emphasis.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-card__number">03</div>
+      <div class="glyph glyph--neon">&#x2588;</div>
+      <h4>Hard Surfaces</h4>
+      <p>Replace soft shadows with flat geometry. A red square overlapping a black field conveys more depth than any box-shadow. Layering is honest when it shows its seams.</p>
+    </div>
+  </section>
+
+  <!-- ════════════════ EDITORIAL BODY ════════════════ -->
+  <section class="editorial">
+    <aside class="editorial__sidebar">
+      <div class="editorial__sidebar-tag">Essay</div>
+      <div>
+        <h3>On Breaking Form</h3>
+        <blockquote>"The most dangerous design is the one that feels inevitable. If your layout could be generated by a template, you have surrendered the only thing that matters: a point of view."</blockquote>
+        <span class="meta">Maren Vogt, 2026</span>
+      </div>
+      <div style="margin-top: auto; padding-top: 40px;">
+        <span class="meta">Share</span>
+        <div style="display:flex; gap:16px; margin-top:12px;">
+          <div class="glyph glyph--stroke" style="width:36px; height:36px; font-size:1rem; cursor:pointer;">&#x2197;</div>
+          <div class="glyph glyph--stroke" style="width:36px; height:36px; font-size:1rem; cursor:pointer;">&#x2725;</div>
+          <div class="glyph glyph--stroke" style="width:36px; height:36px; font-size:1rem; cursor:pointer;">&#x25CE;</div>
+        </div>
+      </div>
+    </aside>
+    <article class="editorial__body">
+      <p class="drop-cap">There is a moment in every design process where the grid becomes visible. Not as a guide, but as a cage. The columns align, the spacing snaps, the type settles into its predefined slots. Everything is correct. And correctness, in this context, is the enemy of expression.</p>
+
+      <p>The new brutalism in digital design is not about ugliness. That is a misreading. It is about <strong>honesty of construction</strong>. When a building exposes its concrete frame, it is not being aggressive. It is refusing to pretend that walls are weightless. When a website uses a 200-pixel headline in a heavy sans-serif, it is not shouting. It is acknowledging that the screen is a surface with physical dimensions and that typography occupies real visual weight upon it.</p>
+
+      <div class="editorial__pull-quote">
+        "The grid is not a prison. It is a skeleton we choose to expose or conceal."
+      </div>
+
+      <p>Consider the industrial accent color. A single line of signal red cutting across a black-and-white layout. It carries the same semiotic weight as a warning stripe on factory equipment. It says: <strong>pay attention here</strong>. In a landscape of pastel gradients and rounded corners, this directness is radical.</p>
+
+      <p>The deconstructed grid works by establishing a system and then violating it. Columns exist so they can be broken. Margins exist so elements can bleed past them. The tension between structure and its disruption is where the visual energy lives. Without the underlying order, asymmetry is just chaos. With it, asymmetry becomes a deliberate act of editorial pacing.</p>
+
+      <p>Whitespace in this framework is never passive. It is measured and shaped with the same intentionality as filled space. A 300-pixel gap between a headline and the first paragraph is not wasted real estate. It is a breath. A beat. A pause that gives the headline permission to resonate before the body text arrives.</p>
+
+      <p>This is not a style. It is a posture. A willingness to let the structure of the page become its content. To treat every margin, every font-weight, every color choice as an editorial decision rather than a default. The invisible grid is the one we never questioned. Making it visible is the first act of design.</p>
+    </article>
+  </section>
+
+  <!-- ════════════════ STATS ════════════════ -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat__value accent">47</div>
+      <div class="stat__label">Contributors</div>
+    </div>
+    <div class="stat">
+      <div class="stat__value">12</div>
+      <div class="stat__label">Essays</div>
+    </div>
+    <div class="stat">
+      <div class="stat__value neon">238</div>
+      <div class="stat__label">Pages</div>
+    </div>
+    <div class="stat">
+      <div class="stat__value">09</div>
+      <div class="stat__label">Volume</div>
+    </div>
+  </section>
+
+  <!-- ════════════════ COLOPHON / FOOTER ════════════════ -->
+  <footer class="colophon">
+    <div>
+      <div class="colophon__brand">VOLUME</div>
+      <p>An independent publication on visual culture, typography, and the structures we build to contain meaning. Published quarterly from a concrete studio with no rounded corners.</p>
+    </div>
+    <div>
+      <h5>Index</h5>
+      <ul>
+        <li>Archive</li>
+        <li>Features</li>
+        <li>Contributors</li>
+        <li>Submissions</li>
+      </ul>
+    </div>
+    <div>
+      <h5>Connect</h5>
+      <ul>
+        <li>Newsletter</li>
+        <li>Instagram</li>
+        <li>Studio</li>
+        <li>Stockists</li>
+      </ul>
+    </div>
+    <div class="colophon__endmark">
+      <span>&copy; 2026 Volume. All rights reserved.</span>
+      <span>Set in Anton, Bebas Neue, Inter, Space Mono</span>
+    </div>
+  </footer>
+
+</body>
+</html>
