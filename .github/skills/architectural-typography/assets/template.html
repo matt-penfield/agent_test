@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editorial — Title</title>
+
+  <!-- Heavy sans-serif faces + monospace for metadata -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Material Web Components (minimal) -->
+  <script type="importmap">
+    { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+  </script>
+  <script type="module">
+    import '@material/web/divider/divider.js';
+  </script>
+
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS — Brutalist / Industrial
+       ═══════════════════════════════════════════ */
+    :root {
+      /* Palette — swap accents to change mood */
+      --clr-black: #0A0A0A;
+      --clr-white: #F5F5F0;
+      --clr-accent: #FF2D20;       /* signal red  */
+      --clr-accent-alt: #00FF87;   /* neon green  */
+      --clr-mid: #3A3A3A;
+      --clr-meta: #8A8A8A;
+      --clr-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+
+      /* Override M3 shape to 0dp */
+      --md-sys-shape-corner-extra-small: 0px;
+      --md-sys-shape-corner-small: 0px;
+      --md-sys-shape-corner-medium: 0px;
+      --md-sys-shape-corner-large: 0px;
+      --md-sys-shape-corner-extra-large: 0px;
+
+      /* Override M3 color tokens */
+      --md-sys-color-primary: var(--clr-accent);
+      --md-sys-color-on-primary: var(--clr-white);
+      --md-sys-color-surface: var(--clr-white);
+      --md-sys-color-on-surface: var(--clr-black);
+      --md-sys-color-outline: var(--clr-black);
+      --md-sys-color-outline-variant: var(--clr-mid);
+
+      /* Custom type scale — extreme headers */
+      --type-massive: clamp(6rem, 14vw, 18rem);
+      --type-headline: clamp(3rem, 6vw, 7rem);
+      --type-sub: clamp(1.4rem, 2.5vw, 2.2rem);
+      --type-body: 1rem;
+      --type-meta: 0.7rem;
+      --type-micro: 0.6rem;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--clr-white);
+      color: var(--clr-black);
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--clr-grain);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Utility classes ── */
+    .accent    { color: var(--clr-accent); }
+    .accent-bg { background: var(--clr-accent); color: var(--clr-white); }
+    .neon      { color: var(--clr-accent-alt); }
+    .mono      { font-family: 'Space Mono', monospace; }
+    .meta      { font-size: var(--type-meta); letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-meta); font-family: 'Space Mono', monospace; }
+
+    .outline-text {
+      -webkit-text-stroke: 2px var(--clr-white);
+      color: transparent;
+    }
+
+    .drop-cap::first-letter {
+      font-family: 'Anton', sans-serif;
+      font-size: 4.5rem;
+      float: left;
+      line-height: 0.8;
+      margin-right: 12px;
+      margin-top: 6px;
+      color: var(--clr-accent);
+    }
+
+    /* ── Glyph icons ── */
+    .glyph {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--clr-black);
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .glyph--filled { background: var(--clr-accent); border-color: var(--clr-accent); color: var(--clr-white); }
+    .glyph--stroke { background: transparent; color: var(--clr-black); }
+    .glyph--neon   { background: var(--clr-accent-alt); border-color: var(--clr-accent-alt); color: var(--clr-black); }
+
+    /* ── md-divider override ── */
+    md-divider {
+      --md-divider-color: var(--clr-black);
+      --md-divider-thickness: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════ */
+    @media (max-width: 839px) {
+      /* Add grid collapses here */
+    }
+    @media (max-width: 599px) {
+      /* Add compact overrides here */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Build sections here. See design-system.md for patterns:
+       Hero, Statement, Cut-out, Marquee, Feature Strip,
+       Editorial Body, Stats Row, Colophon -->
+
+</body>
+</html>
