@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist</title>
+
+  <!-- Google Fonts: Roboto + Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <!-- Import map required for Material Web Components -->
+  <script type="importmap">
+    {
+      "imports": {
+        "@material/web/": "https://esm.run/@material/web/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import '@material/web/checkbox/checkbox.js';
+  </script>
+
+  <style>
+    :root {
+      --md-sys-color-primary: #6750a4;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-surface: #fef7ff;
+      --md-sys-color-on-surface: #1c1b1f;
+      --md-sys-color-on-surface-variant: #49454f;
+      --md-sys-color-surface-container-low: #f7f2fa;
+      --md-sys-color-outline: #79747e;
+      --md-sys-color-outline-variant: #cac4d0;
+      --md-sys-color-background: #fef7ff;
+      --md-sys-color-on-background: #1c1b1f;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-shape-corner-medium: 12px;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--md-sys-color-surface);
+      border-radius: var(--md-sys-shape-corner-medium);
+      box-shadow: var(--md-sys-elevation-1);
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .card h1 {
+      font-size: 28px;
+      line-height: 36px;
+      font-weight: 400;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 24px;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .checklist-item:hover {
+      background: var(--md-sys-color-surface-container-low);
+    }
+
+    .checklist-item label {
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.5px;
+      color: var(--md-sys-color-on-surface);
+      cursor: pointer;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>My Checklist</h1>
+    <div class="checklist">
+      <div class="checklist-item">
+        <md-checkbox id="item1" touch-target="wrapper"></md-checkbox>
+        <label for="item1">Review project requirements</label>
+      </div>
+      <div class="checklist-item">
+        <md-checkbox id="item2" touch-target="wrapper"></md-checkbox>
+        <label for="item2">Set up development environment</label>
+      </div>
+      <div class="checklist-item">
+        <md-checkbox id="item3" touch-target="wrapper"></md-checkbox>
+        <label for="item3">Create initial wireframes</label>
+      </div>
+      <div class="checklist-item">
+        <md-checkbox id="item4" touch-target="wrapper"></md-checkbox>
+        <label for="item4">Build component library</label>
+      </div>
+      <div class="checklist-item">
+        <md-checkbox id="item5" touch-target="wrapper"></md-checkbox>
+        <label for="item5">Schedule stakeholder review</label>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
