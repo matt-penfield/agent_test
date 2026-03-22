@@ -3,341 +3,615 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checklist</title>
+  <title>Checklist — Brutalist</title>
 
-  <!-- Google Fonts: Roboto + Material Symbols -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <!-- Heavy sans-serif faces + monospace for metadata -->
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Import map required for Material Web Components -->
+  <!-- Material Web Components (checkbox + text field) -->
   <script type="importmap">
-    {
-      "imports": {
-        "@material/web/": "https://esm.run/@material/web/"
-      }
-    }
+    { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
   </script>
-
   <script type="module">
     import '@material/web/checkbox/checkbox.js';
     import '@material/web/textfield/outlined-text-field.js';
-    import '@material/web/button/filled-button.js';
+    import '@material/web/divider/divider.js';
   </script>
 
   <style>
+    /* ═══════════════════════════════════════════
+       TOKENS — Brutalist / Industrial
+       ═══════════════════════════════════════════ */
     :root {
-      --md-sys-color-primary: #6750a4;
-      --md-sys-color-on-primary: #ffffff;
-      --md-sys-color-surface: #fef7ff;
-      --md-sys-color-on-surface: #1c1b1f;
-      --md-sys-color-on-surface-variant: #49454f;
-      --md-sys-color-surface-container-low: #f7f2fa;
-      --md-sys-color-outline: #79747e;
-      --md-sys-color-outline-variant: #cac4d0;
-      --md-sys-color-background: #fef7ff;
-      --md-sys-color-on-background: #1c1b1f;
+      --clr-black: #0A0A0A;
+      --clr-white: #F5F5F0;
+      --clr-accent: #FF2D20;
+      --clr-accent-alt: #00FF87;
+      --clr-mid: #3A3A3A;
+      --clr-meta: #8A8A8A;
+      --clr-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 
-      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
-      --md-sys-shape-corner-medium: 12px;
+      /* 0dp corners everywhere */
+      --md-sys-shape-corner-extra-small: 0px;
+      --md-sys-shape-corner-small: 0px;
+      --md-sys-shape-corner-medium: 0px;
+      --md-sys-shape-corner-large: 0px;
+      --md-sys-shape-corner-extra-large: 0px;
+
+      /* M3 overrides */
+      --md-sys-color-primary: var(--clr-accent);
+      --md-sys-color-on-primary: var(--clr-white);
+      --md-sys-color-surface: var(--clr-white);
+      --md-sys-color-on-surface: var(--clr-black);
+      --md-sys-color-outline: var(--clr-black);
+      --md-sys-color-outline-variant: var(--clr-mid);
+
+      /* Type scale */
+      --type-massive: clamp(4rem, 10vw, 10rem);
+      --type-headline: clamp(2.4rem, 5vw, 5rem);
+      --type-sub: clamp(1.2rem, 2vw, 1.8rem);
+      --type-body: 1rem;
+      --type-meta: 0.7rem;
+      --type-micro: 0.6rem;
     }
 
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background: var(--md-sys-color-background);
-      color: var(--md-sys-color-on-background);
-      line-height: 1.5;
-      display: flex;
+      font-family: 'Inter', sans-serif;
+      background: var(--clr-white);
+      color: var(--clr-black);
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--clr-grain);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Utility */
+    .accent   { color: var(--clr-accent); }
+    .neon     { color: var(--clr-accent-alt); }
+    .meta     { font-size: var(--type-meta); letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-meta); font-family: 'Space Mono', monospace; }
+
+    /* Glyph icons */
+    .glyph {
+      display: inline-flex;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      padding: 24px;
-    }
-
-    .page-layout {
-      display: flex;
-      gap: 24px;
-      width: 100%;
-      max-width: 860px;
-      align-items: flex-start;
-    }
-
-    .card {
-      background: var(--md-sys-color-surface);
-      border-radius: var(--md-sys-shape-corner-medium);
-      box-shadow: var(--md-sys-elevation-1);
-      padding: 32px;
-      width: 100%;
-      max-width: 480px;
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--clr-black);
+      font-family: 'Anton', sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
       flex-shrink: 0;
     }
+    .glyph--filled { background: var(--clr-accent); border-color: var(--clr-accent); color: var(--clr-white); }
+    .glyph--stroke { background: transparent; color: var(--clr-black); }
+    .glyph--neon   { background: var(--clr-accent-alt); border-color: var(--clr-accent-alt); color: var(--clr-black); }
+    .glyph--sm     { width: 32px; height: 32px; font-size: 1rem; }
 
-    .results-panel {
-      background: var(--md-sys-color-surface);
-      border-radius: var(--md-sys-shape-corner-medium);
-      box-shadow: var(--md-sys-elevation-1);
-      padding: 32px;
-      flex: 1;
-      min-width: 240px;
-      display: none;
+    /* md-divider */
+    md-divider {
+      --md-divider-color: var(--clr-black);
+      --md-divider-thickness: 2px;
     }
 
-    .results-panel.visible {
-      display: block;
+    /* md-checkbox override */
+    md-checkbox {
+      --md-checkbox-outline-color: var(--clr-black);
+      --md-checkbox-selected-container-color: var(--clr-accent);
+      --md-checkbox-selected-icon-color: var(--clr-white);
+      --md-checkbox-container-shape: 0px;
     }
 
-    .results-panel h2 {
-      font-size: 22px;
-      line-height: 28px;
-      font-weight: 400;
-      color: var(--md-sys-color-on-surface);
-      margin-bottom: 16px;
+    /* md-outlined-text-field override */
+    md-outlined-text-field {
+      --md-outlined-text-field-outline-color: var(--clr-black);
+      --md-outlined-text-field-focus-outline-color: var(--clr-accent);
+      --md-outlined-text-field-label-text-color: var(--clr-meta);
+      --md-outlined-text-field-input-text-color: var(--clr-black);
+      --md-outlined-text-field-container-shape: 0px;
+      --md-outlined-text-field-input-text-font: 'Space Mono', monospace;
+      --md-outlined-text-field-input-text-size: 0.9rem;
+      --md-outlined-text-field-label-text-font: 'Space Mono', monospace;
+      --md-outlined-text-field-label-text-size: var(--type-meta);
     }
 
-    .results-panel ul {
-      list-style: none;
+    /* ═══════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      background: var(--clr-black);
+      color: var(--clr-white);
+      padding: clamp(60px, 10vw, 140px) clamp(24px, 5vw, 80px) clamp(48px, 6vw, 80px);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: 'TASKS';
+      position: absolute;
+      top: -4vw;
+      right: -2vw;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(14rem, 32vw, 44rem);
+      line-height: 0.85;
+      color: var(--clr-mid);
+      opacity: 0.10;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .hero__nav {
+      position: absolute;
+      top: 0; left: 0; right: 0;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px clamp(24px, 5vw, 80px);
+    }
+    .hero__logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.25em;
+    }
+    .hero__kicker {
+      display: inline-block;
+      background: var(--clr-accent);
+      color: var(--clr-white);
+      padding: 4px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: var(--type-meta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero__title {
+      font-family: 'Anton', sans-serif;
+      font-size: var(--type-massive);
+      line-height: 0.88;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+    }
+    .hero__title .outline-text {
+      -webkit-text-stroke: 2px var(--clr-white);
+      color: transparent;
+    }
+    .hero__meta-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .hero__stripe {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--clr-accent) 60%, var(--clr-accent-alt) 60%);
     }
 
-    .results-panel li {
+    /* ═══════════════════════════════════════════
+       MAIN — cut-out two-panel
+       ═══════════════════════════════════════════ */
+    .main {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      min-height: 70vh;
+    }
+
+    /* Left: Checklist */
+    .checklist-panel {
+      padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 80px);
+      position: relative;
+      border-right: 2px solid var(--clr-black);
+    }
+    .checklist-panel__header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 16px;
-      line-height: 24px;
-      color: var(--md-sys-color-on-surface);
+      gap: 16px;
+      margin-bottom: 32px;
     }
-
-    .results-panel li .material-symbols-outlined {
-      font-size: 20px;
-      color: var(--md-sys-color-primary);
+    .checklist-panel__header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: var(--type-sub);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-
-    @media (max-width: 699px) {
-      .page-layout {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .card { max-width: none; }
-    }
-
-    .card h1 {
-      font-size: 28px;
-      line-height: 36px;
-      font-weight: 400;
-      color: var(--md-sys-color-on-surface);
-      margin-bottom: 24px;
+    .checklist-panel::before {
+      content: '05';
+      position: absolute;
+      bottom: 16px;
+      right: 24px;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(8rem, 14vw, 16rem);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--clr-black);
+      opacity: 0.07;
+      pointer-events: none;
     }
 
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 0;
     }
-
     .checklist-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 8px 0;
-      border-radius: 8px;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--clr-black);
       cursor: pointer;
       transition: background 0.15s;
     }
-
-    .checklist-item:hover {
-      background: var(--md-sys-color-surface-container-low);
+    .checklist-item:first-child {
+      border-top: 1px solid var(--clr-black);
     }
-
+    .checklist-item:hover {
+      background: rgba(10,10,10,0.03);
+    }
     .checklist-item label {
-      font-size: 16px;
-      line-height: 24px;
-      letter-spacing: 0.5px;
-      color: var(--md-sys-color-on-surface);
+      font-family: 'Inter', sans-serif;
+      font-size: var(--type-body);
+      color: var(--clr-black);
       cursor: pointer;
       user-select: none;
-    }
-
-    .add-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--md-sys-color-outline-variant);
-    }
-
-    .add-item md-outlined-text-field {
       flex: 1;
     }
+    .checklist-item .item-num {
+      font-family: 'Space Mono', monospace;
+      font-size: var(--type-meta);
+      letter-spacing: 0.1em;
+      color: var(--clr-meta);
+      min-width: 28px;
+    }
 
-    .add-item md-filled-button,
-    .add-item .m3-button {
-      margin-top: 8px;
+    /* Add row */
+    .add-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 2px solid var(--clr-black);
+    }
+    .add-row md-outlined-text-field { flex: 1; }
+
+    /* Brutalist buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      padding: 0 28px;
+      border: 2px solid var(--clr-black);
+      background: var(--clr-black);
+      color: var(--clr-white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .btn:hover {
+      background: var(--clr-accent);
+      border-color: var(--clr-accent);
+    }
+    .btn:active {
+      background: var(--clr-mid);
+      border-color: var(--clr-mid);
+    }
+    .btn--accent {
+      background: var(--clr-accent);
+      border-color: var(--clr-accent);
+    }
+    .btn--accent:hover {
+      background: var(--clr-black);
+      border-color: var(--clr-black);
     }
 
     .submit-row {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--md-sys-color-outline-variant);
+      margin-top: 32px;
       display: flex;
       justify-content: flex-end;
     }
 
-    .m3-button {
-      display: inline-flex;
+    /* Right: Results */
+    .results-panel {
+      background: var(--clr-black);
+      color: var(--clr-white);
+      padding: clamp(40px, 6vw, 80px) clamp(24px, 4vw, 56px);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .results-panel::after {
+      content: '';
+      position: absolute;
+      top: 8%;
+      left: -32px;
+      width: 64px;
+      height: 64px;
+      background: var(--clr-accent);
+      z-index: 2;
+    }
+    .results-panel__tag {
+      writing-mode: vertical-lr;
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      text-transform: uppercase;
+      color: var(--clr-mid);
+      opacity: 0.15;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .results-panel__header {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 24px;
-      border: none;
-      border-radius: 20px;
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-      font-family: 'Roboto', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.1px;
-      cursor: pointer;
-      transition: box-shadow 0.2s, background 0.2s;
+      gap: 14px;
+      margin-bottom: 32px;
     }
-
-    .m3-button:hover {
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+    .results-panel__header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: var(--type-sub);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
-
-    .m3-button:active {
-      background: #7c6bbd;
+    .results-empty {
+      font-family: 'Space Mono', monospace;
+      font-size: var(--type-meta);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--clr-meta);
+      margin-top: 8px;
     }
-
-    .m3-button .material-symbols-outlined {
-      font-size: 18px;
+    .results-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
-
-    .m3-button-tonal {
-      display: inline-flex;
+    .results-list li {
+      display: flex;
       align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 24px;
-      border: none;
-      border-radius: 20px;
-      background: var(--md-sys-color-secondary-container, #e8def8);
-      color: var(--md-sys-color-on-secondary-container, #1d192b);
-      font-family: 'Roboto', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.1px;
-      cursor: pointer;
-      transition: box-shadow 0.2s;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--clr-mid);
+      font-size: var(--type-body);
+      color: var(--clr-white);
+      opacity: 0;
+      transform: translateX(-12px);
+      animation: slideIn 0.3s forwards;
+    }
+    .results-list li:first-child { border-top: 1px solid var(--clr-mid); }
+    .results-list li .glyph {
+      border-color: var(--clr-accent-alt);
+      color: var(--clr-accent-alt);
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
     }
 
-    .m3-button-tonal:hover {
-      box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .results-list li:nth-child(1) { animation-delay: 0.05s; }
+    .results-list li:nth-child(2) { animation-delay: 0.10s; }
+    .results-list li:nth-child(3) { animation-delay: 0.15s; }
+    .results-list li:nth-child(4) { animation-delay: 0.20s; }
+    .results-list li:nth-child(5) { animation-delay: 0.25s; }
+    .results-list li:nth-child(6) { animation-delay: 0.30s; }
+    .results-list li:nth-child(7) { animation-delay: 0.35s; }
+    .results-list li:nth-child(8) { animation-delay: 0.40s; }
+
+    .results-count {
+      margin-top: auto;
+      padding-top: 32px;
+    }
+    .results-count__value {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1;
+    }
+    .results-count__label {
+      font-size: var(--type-meta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
+      margin-top: 4px;
     }
 
-    .m3-button-tonal:active {
-      background: #d4c8ef;
+    /* Footer */
+    .colophon {
+      border-top: 2px solid var(--clr-black);
+      padding: 24px clamp(24px, 5vw, 80px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .colophon span {
+      font-size: var(--type-micro);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--clr-meta);
     }
 
-    .m3-button-tonal .material-symbols-outlined {
-      font-size: 18px;
+    /* Responsive */
+    @media (max-width: 839px) {
+      .main { grid-template-columns: 1fr; }
+      .checklist-panel { border-right: none; border-bottom: 2px solid var(--clr-black); }
+      .results-panel::after { display: none; }
+      .hero__title { font-size: clamp(3rem, 12vw, 6rem); }
+    }
+    @media (max-width: 599px) {
+      .hero__meta-row { gap: 16px; }
+      .add-row { flex-direction: column; align-items: stretch; }
+      .add-row .btn { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
 
-  <div class="page-layout">
-  <div class="card">
-    <h1>My Checklist</h1>
-    <div class="checklist">
-      <div class="checklist-item">
-        <md-checkbox id="item1" touch-target="wrapper"></md-checkbox>
-        <label for="item1">Review project requirements</label>
-      </div>
-      <div class="checklist-item">
-        <md-checkbox id="item2" touch-target="wrapper"></md-checkbox>
-        <label for="item2">Set up development environment</label>
-      </div>
-      <div class="checklist-item">
-        <md-checkbox id="item3" touch-target="wrapper"></md-checkbox>
-        <label for="item3">Create initial wireframes</label>
-      </div>
-      <div class="checklist-item">
-        <md-checkbox id="item4" touch-target="wrapper"></md-checkbox>
-        <label for="item4">Build component library</label>
-      </div>
-      <div class="checklist-item">
-        <md-checkbox id="item5" touch-target="wrapper"></md-checkbox>
-        <label for="item5">Schedule stakeholder review</label>
-      </div>
+  <!-- ════════════════ HERO ════════════════ -->
+  <header class="hero">
+    <nav class="hero__nav">
+      <div class="hero__logo">PROTOGEN</div>
+      <span class="meta">March 22, 2026</span>
+    </nav>
+    <div class="hero__kicker">Workflow Tool</div>
+    <h1 class="hero__title">My<br><span class="outline-text">Check</span>list</h1>
+    <div class="hero__meta-row">
+      <span class="meta">5 Items</span>
+      <span class="meta">0 Selected</span>
+      <span class="meta">Status &mdash; In Progress</span>
     </div>
-    <div class="add-item">
-      <md-outlined-text-field id="newItemField" label="New item" placeholder="Enter a task"></md-outlined-text-field>
-      <button type="button" class="m3-button" id="addBtn"><span class="material-symbols-outlined">add</span>Add</button>
-    </div>
-    <div class="submit-row">
-      <button type="button" class="m3-button-tonal" id="submitBtn"><span class="material-symbols-outlined">check</span>Submit</button>
-    </div>
-  </div>
+    <div class="hero__stripe"></div>
+  </header>
 
-  <div class="results-panel" id="resultsPanel">
-    <h2>Selected Items</h2>
-    <ul id="resultsList"></ul>
-  </div>
-  </div>
+  <!-- ════════════════ MAIN ════════════════ -->
+  <section class="main">
+    <div class="checklist-panel">
+      <div class="checklist-panel__header">
+        <div class="glyph glyph--filled">&#x25A0;</div>
+        <h2>Task Items</h2>
+      </div>
+
+      <div class="checklist" id="checklist">
+        <div class="checklist-item">
+          <span class="item-num">01</span>
+          <md-checkbox id="item1" touch-target="wrapper"></md-checkbox>
+          <label for="item1">Review project requirements</label>
+        </div>
+        <div class="checklist-item">
+          <span class="item-num">02</span>
+          <md-checkbox id="item2" touch-target="wrapper"></md-checkbox>
+          <label for="item2">Set up development environment</label>
+        </div>
+        <div class="checklist-item">
+          <span class="item-num">03</span>
+          <md-checkbox id="item3" touch-target="wrapper"></md-checkbox>
+          <label for="item3">Create initial wireframes</label>
+        </div>
+        <div class="checklist-item">
+          <span class="item-num">04</span>
+          <md-checkbox id="item4" touch-target="wrapper"></md-checkbox>
+          <label for="item4">Build component library</label>
+        </div>
+        <div class="checklist-item">
+          <span class="item-num">05</span>
+          <md-checkbox id="item5" touch-target="wrapper"></md-checkbox>
+          <label for="item5">Schedule stakeholder review</label>
+        </div>
+      </div>
+
+      <div class="add-row">
+        <md-outlined-text-field id="newItemField" label="New task" placeholder="Enter a task"></md-outlined-text-field>
+        <button type="button" class="btn" id="addBtn">&#x25B2; Add</button>
+      </div>
+
+      <div class="submit-row">
+        <button type="button" class="btn btn--accent" id="submitBtn">&#x25C6; Submit</button>
+      </div>
+    </div>
+
+    <div class="results-panel">
+      <div class="results-panel__tag">Output</div>
+      <div class="results-panel__header">
+        <div class="glyph glyph--neon glyph--sm">&#x25CE;</div>
+        <h2>Selected Items</h2>
+      </div>
+      <p class="results-empty" id="emptyMsg">No items submitted yet</p>
+      <ul class="results-list" id="resultsList"></ul>
+      <div class="results-count">
+        <div class="results-count__value neon" id="countValue">0</div>
+        <div class="results-count__label">Items Selected</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ FOOTER ════════════════ -->
+  <footer class="colophon">
+    <span>Checklist &mdash; Architectural Typography</span>
+    <span>Set in Anton, Bebas Neue, Inter, Space Mono</span>
+  </footer>
 
   <script type="module">
     const field = document.getElementById('newItemField');
-    const btn = document.getElementById('addBtn');
-    const checklist = document.querySelector('.checklist');
+    const addBtn = document.getElementById('addBtn');
+    const checklist = document.getElementById('checklist');
+    const submitBtn = document.getElementById('submitBtn');
+    const resultsList = document.getElementById('resultsList');
+    const emptyMsg = document.getElementById('emptyMsg');
+    const countValue = document.getElementById('countValue');
+    const heroMeta = document.querySelectorAll('.hero__meta-row .meta');
     let counter = 5;
+
+    function updateHeroMeta() {
+      const total = checklist.querySelectorAll('.checklist-item').length;
+      const checked = checklist.querySelectorAll('md-checkbox[checked]').length;
+      if (heroMeta[0]) heroMeta[0].textContent = total + ' Items';
+      if (heroMeta[1]) heroMeta[1].textContent = checked + ' Selected';
+      const panel = document.querySelector('.checklist-panel');
+      panel.style.setProperty('--ghost-count', '"' + String(total).padStart(2, '0') + '"');
+    }
+
+    const style = document.createElement('style');
+    style.textContent = '.checklist-panel::before { content: var(--ghost-count, "05"); }';
+    document.head.appendChild(style);
 
     function addItem() {
       const text = field.value.trim();
       if (!text) return;
       counter++;
       const id = 'item' + counter;
+      const num = String(counter).padStart(2, '0');
       const div = document.createElement('div');
       div.className = 'checklist-item';
-      div.innerHTML = `<md-checkbox id="${id}" touch-target="wrapper"></md-checkbox><label for="${id}">${text}</label>`;
+      const escapedText = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      div.innerHTML = '<span class="item-num">' + num + '</span><md-checkbox id="' + id + '" touch-target="wrapper"></md-checkbox><label for="' + id + '">' + escapedText + '</label>';
       checklist.appendChild(div);
       field.value = '';
+      updateHeroMeta();
     }
 
-    btn.addEventListener('click', addItem);
+    addBtn.addEventListener('click', addItem);
     field.addEventListener('keydown', (e) => { if (e.key === 'Enter') addItem(); });
-
-    const submitBtn = document.getElementById('submitBtn');
-    const resultsPanel = document.getElementById('resultsPanel');
-    const resultsList = document.getElementById('resultsList');
+    checklist.addEventListener('change', updateHeroMeta);
 
     submitBtn.addEventListener('click', () => {
       resultsList.innerHTML = '';
       const items = checklist.querySelectorAll('.checklist-item');
-      let hasChecked = false;
+      let count = 0;
       items.forEach(item => {
         const cb = item.querySelector('md-checkbox');
         const lbl = item.querySelector('label');
         if (cb && cb.checked && lbl) {
-          hasChecked = true;
+          count++;
           const li = document.createElement('li');
-          li.innerHTML = '<span class="material-symbols-outlined">check_circle</span>' + lbl.textContent;
+          li.style.animationDelay = ((count - 1) * 0.05) + 's';
+          li.innerHTML = '<span class="glyph">&#x220E;</span>' + lbl.textContent;
           resultsList.appendChild(li);
         }
       });
-      if (hasChecked) {
-        resultsPanel.classList.add('visible');
-      } else {
-        resultsPanel.classList.remove('visible');
-      }
+      countValue.textContent = count;
+      emptyMsg.style.display = count > 0 ? 'none' : 'block';
     });
   </script>
 
