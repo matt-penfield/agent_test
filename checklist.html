@@ -20,6 +20,8 @@
 
   <script type="module">
     import '@material/web/checkbox/checkbox.js';
+    import '@material/web/textfield/outlined-text-field.js';
+    import '@material/web/button/filled-button.js';
   </script>
 
   <style>
@@ -102,6 +104,23 @@
       cursor: pointer;
       user-select: none;
     }
+
+    .add-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    .add-item md-outlined-text-field {
+      flex: 1;
+    }
+
+    .add-item md-filled-button {
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -130,7 +149,33 @@
         <label for="item5">Schedule stakeholder review</label>
       </div>
     </div>
+    <div class="add-item">
+      <md-outlined-text-field id="newItemField" label="New item" placeholder="Enter a task"></md-outlined-text-field>
+      <md-filled-button id="addBtn">Add</md-filled-button>
+    </div>
   </div>
+
+  <script type="module">
+    const field = document.getElementById('newItemField');
+    const btn = document.getElementById('addBtn');
+    const checklist = document.querySelector('.checklist');
+    let counter = 5;
+
+    function addItem() {
+      const text = field.value.trim();
+      if (!text) return;
+      counter++;
+      const id = 'item' + counter;
+      const div = document.createElement('div');
+      div.className = 'checklist-item';
+      div.innerHTML = `<md-checkbox id="${id}" touch-target="wrapper"></md-checkbox><label for="${id}">${text}</label>`;
+      checklist.appendChild(div);
+      field.value = '';
+    }
+
+    btn.addEventListener('click', addItem);
+    field.addEventListener('keydown', (e) => { if (e.key === 'Enter') addItem(); });
+  </script>
 
 </body>
 </html>
