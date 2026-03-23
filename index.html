@@ -169,5 +169,481 @@
 
   <footer class="footer">Protogen &mdash; Built with GitHub Copilot Skills</footer>
 
+<!-- UX INDICATORS START -->
+<style>
+  /* ── UX Pill Button ── */
+  .ux-pill {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 9998;
+    background: #B71C1C;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 12px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .ux-pill:hover { background: #c62828; }
+  .ux-pill .icon { font-size: 20px; }
+
+  /* ── Issue Badge ── */
+  .ux-badge {
+    position: absolute;
+    z-index: 9997;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.15s;
+    border: 2px solid #fff;
+  }
+  .ux-badge:hover { transform: scale(1.2); }
+  .ux-badge[data-severity="Critical"] { background: #B71C1C; }
+  .ux-badge[data-severity="Major"]    { background: #E65100; }
+  .ux-badge[data-severity="Minor"]    { background: #F9A825; color: #1a1a1a; }
+  .ux-badge[data-severity="Cosmetic"] { background: #78909C; }
+
+  /* ── Popover ── */
+  .ux-popover-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+  }
+  .ux-popover-overlay.active { display: flex; }
+
+  .ux-popover {
+    background: #fff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: uxSlideUp 0.2s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  @keyframes uxSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ux-popover__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .ux-popover__num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .ux-popover__title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1c1b1f;
+  }
+
+  .ux-popover__severity {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  .ux-popover__severity[data-sev="Critical"] { background:#FFCDD2; color:#B71C1C; }
+  .ux-popover__severity[data-sev="Major"]    { background:#FFE0B2; color:#E65100; }
+  .ux-popover__severity[data-sev="Minor"]    { background:#FFF9C4; color:#F57F17; }
+  .ux-popover__severity[data-sev="Cosmetic"] { background:#ECEFF1; color:#546E7A; }
+
+  .ux-popover__problem {
+    font-size: 14px;
+    color: #49454f;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .ux-popover__location {
+    font-size: 12px;
+    color: #73777F;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ux-popover__location .material-symbols-outlined { font-size: 16px; }
+
+  .ux-popover label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #49454f;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .ux-popover textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px 16px;
+    border: 1px solid #79747e;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 16px;
+  }
+  .ux-popover textarea:focus {
+    border-color: #1565C0;
+    border-width: 2px;
+    padding: 11px 15px;
+  }
+
+  .ux-popover__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .ux-btn-cancel {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    color: #1565C0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .ux-btn-cancel:hover { background: #E3F2FD; }
+  .ux-btn-submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #1565C0;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .ux-btn-submit:hover { background: #1976D2; }
+
+  /* ── Summary Panel ── */
+  .ux-summary-panel {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 24px;
+    z-index: 9998;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    padding: 16px;
+    width: 320px;
+    max-height: 60vh;
+    overflow-y: auto;
+    font-family: 'Roboto', sans-serif;
+  }
+  .ux-summary-panel.visible { display: block; }
+  .ux-summary-panel h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #1c1b1f;
+  }
+  .ux-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 13px;
+    color: #49454f;
+    transition: background 0.1s;
+    border-radius: 6px;
+    padding-left: 6px;
+  }
+  .ux-summary-item:hover { background: #f5f5f5; }
+  .ux-summary-item:last-child { border-bottom: none; }
+  .ux-summary-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+</style>
+
+<!-- Popover overlay (shared, content swapped per issue) -->
+<div id="uxPopoverOverlay" class="ux-popover-overlay" role="dialog" aria-modal="true" aria-label="UX Issue Detail">
+  <div class="ux-popover">
+    <div class="ux-popover__header">
+      <div class="ux-popover__num" id="uxPopNum"></div>
+      <div class="ux-popover__title" id="uxPopTitle"></div>
+    </div>
+    <div class="ux-popover__severity" id="uxPopSev"></div>
+    <div class="ux-popover__problem" id="uxPopProblem"></div>
+    <div class="ux-popover__location" id="uxPopLoc">
+      <span class="material-symbols-outlined">location_on</span>
+      <span id="uxPopLocText"></span>
+    </div>
+    <label for="uxPlanFix">Plan Fix</label>
+    <textarea id="uxPlanFix" placeholder="Describe how this issue should be fixed..."></textarea>
+    <div class="ux-popover__actions">
+      <button type="button" class="ux-btn-cancel" onclick="window.__uxClosePopover()">Cancel</button>
+      <button type="button" class="ux-btn-submit" onclick="window.__uxSubmitFix()">Submit Fix Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Summary panel -->
+<div id="uxSummaryPanel" class="ux-summary-panel" role="region" aria-label="UX issues summary"></div>
+
+<script>
+(function() {
+  var issues = [];
+  var currentIssueId = null;
+  var panelOpen = false;
+
+  var sevColors = { Critical:'#B71C1C', Major:'#E65100', Minor:'#F9A825', Cosmetic:'#78909C' };
+
+  window.__uxInjectIssues = function(data) {
+    issues = data;
+    createPill();
+    createBadges();
+    buildSummaryPanel();
+    window.addEventListener('resize', repositionBadges);
+    window.addEventListener('scroll', repositionBadges);
+  };
+
+  function createPill() {
+    var pill = document.createElement('button');
+    pill.className = 'ux-pill';
+    pill.setAttribute('aria-label', 'Toggle UX issues panel');
+    pill.innerHTML = '<span class="icon material-symbols-outlined">bug_report</span> UX Issues (' + issues.length + ')';
+    pill.addEventListener('click', function() {
+      panelOpen = !panelOpen;
+      document.getElementById('uxSummaryPanel').classList.toggle('visible', panelOpen);
+    });
+    document.body.appendChild(pill);
+  }
+
+  function createBadges() {
+    issues.forEach(function(issue) {
+      var badge = document.createElement('div');
+      badge.className = 'ux-badge';
+      badge.setAttribute('data-severity', issue.severity);
+      badge.setAttribute('data-ux-id', issue.id);
+      badge.textContent = issue.id;
+      badge.title = issue.heuristic + ' \u2014 ' + issue.problem;
+      badge.addEventListener('click', function() { openPopover(issue.id); });
+      document.body.appendChild(badge);
+    });
+    repositionBadges();
+  }
+
+  function repositionBadges() {
+    issues.forEach(function(issue) {
+      var badge = document.querySelector('.ux-badge[data-ux-id="' + issue.id + '"]');
+      if (!badge) return;
+      var el = issue.selector ? document.querySelector(issue.selector) : null;
+      if (el) {
+        var rect = el.getBoundingClientRect();
+        badge.style.position = 'absolute';
+        badge.style.top  = (window.scrollY + rect.top - 14) + 'px';
+        badge.style.left = (window.scrollX + rect.right + 6) + 'px';
+      } else {
+        badge.style.position = 'relative';
+        badge.style.display  = 'inline-flex';
+        badge.style.margin   = '4px';
+      }
+    });
+  }
+
+  function buildSummaryPanel() {
+    var panel = document.getElementById('uxSummaryPanel');
+    var html = '<h3>Issues Found (' + issues.length + ')</h3>';
+    issues.forEach(function(issue) {
+      html += '<div class="ux-summary-item" onclick="window.__uxOpenPopover(' + issue.id + ')">';
+      html += '<span class="ux-summary-dot" style="background:' + (sevColors[issue.severity]||'#999') + '"></span>';
+      html += '<span><strong>#' + issue.id + '</strong> ' + issue.problem + '</span>';
+      html += '</div>';
+    });
+    panel.innerHTML = html;
+  }
+
+  window.__uxOpenPopover = function(id) { openPopover(id); };
+
+  function openPopover(id) {
+    var issue = issues.find(function(i) { return i.id === id; });
+    if (!issue) return;
+    currentIssueId = id;
+
+    var numEl = document.getElementById('uxPopNum');
+    numEl.textContent = '#' + issue.id;
+    numEl.style.background = sevColors[issue.severity] || '#999';
+
+    document.getElementById('uxPopTitle').textContent   = issue.heuristic;
+    var sevEl = document.getElementById('uxPopSev');
+    sevEl.textContent = issue.severity;
+    sevEl.setAttribute('data-sev', issue.severity);
+    document.getElementById('uxPopProblem').textContent  = issue.problem;
+    document.getElementById('uxPopLocText').textContent  = issue.locationHint || issue.selector || 'Unknown';
+    document.getElementById('uxPlanFix').value           = issue.recommendation || '';
+
+    document.getElementById('uxPopoverOverlay').classList.add('active');
+  }
+
+  window.__uxClosePopover = function() {
+    document.getElementById('uxPopoverOverlay').classList.remove('active');
+    currentIssueId = null;
+  };
+
+  window.__uxSubmitFix = function() {
+    var issue = issues.find(function(i) { return i.id === currentIssueId; });
+    if (!issue) return;
+    var planText = document.getElementById('uxPlanFix').value.trim();
+    if (!planText) { alert('Please describe the planned fix.'); return; }
+
+    var fileName = document.title || window.location.pathname.split('/').pop() || 'unknown';
+    var date = new Date().toISOString().split('T')[0];
+    var safeName = fileName.replace(/[^a-z0-9]/gi, '-').toLowerCase();
+
+    var md = '# UX Fix Plan\n\n';
+    md += '| Field | Value |\n';
+    md += '|-------|-------|\n';
+    md += '| **File** | ' + fileName + ' |\n';
+    md += '| **Date** | ' + date + ' |\n';
+    md += '| **Issue #** | ' + issue.id + ' |\n';
+    md += '| **Heuristic** | ' + issue.heuristic + ' |\n';
+    md += '| **Severity** | ' + issue.severity + ' |\n';
+    md += '| **Element** | `' + (issue.selector || issue.locationHint) + '` |\n\n';
+    md += '---\n\n';
+    md += '## Problem\n\n' + issue.problem + '\n\n';
+    md += '## Planned Fix\n\n' + planText + '\n\n';
+    md += '---\n\n';
+    md += '## Action Items\n\n';
+    md += '<!-- The material-design-prototyping skill will parse this section for tasks -->\n\n';
+    planText.split('\n').filter(function(l) { return l.trim(); }).forEach(function(line) {
+      md += '- [ ] ' + line.trim() + '\n';
+    });
+    md += '\n';
+
+    var blob = new Blob([md], { type: 'text/markdown' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url;
+    a.download = safeName + '-ux-fix-' + issue.id + '-' + date + '.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    window.__uxClosePopover();
+  };
+
+  document.getElementById('uxPopoverOverlay').addEventListener('click', function(e) {
+    if (e.target === this) window.__uxClosePopover();
+  });
+
+})();
+</script>
+
+<!-- Issue data -->
+<script>
+window.__uxInjectIssues([
+  {
+    id: 1,
+    heuristic: "H7: Flexibility & Efficiency of Use",
+    severity: "Major",
+    selector: ".project-card",
+    locationHint: "Project cards",
+    problem: "No :focus-visible state on card links \u2014 keyboard users see only the browser default outline, missing the hover elevation effect.",
+    recommendation: "Add .project-card:focus-visible { box-shadow: var(--md-sys-elevation-2); transform: translateY(-2px); outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }"
+  },
+  {
+    id: 2,
+    heuristic: "H2: Match Between System and Real World",
+    severity: "Minor",
+    selector: ".hero-meta",
+    locationHint: "Hero section",
+    problem: "Hero displays \"8 Copilot Skills\" but the project now contains 9 skills (ux-research was added). Stale count misleads users.",
+    recommendation: "Update the hero meta to read \"9 Copilot Skills\" to reflect the current skill count."
+  },
+  {
+    id: 3,
+    heuristic: "H4: Consistency & Standards",
+    severity: "Cosmetic",
+    selector: "title",
+    locationHint: "Browser tab / SEO",
+    problem: "Page title reads \"Protogen  Project Portfolio\" with a double space where an em-dash was likely intended.",
+    recommendation: "Fix the title tag to \"Protogen \u2014 Project Portfolio\" with a proper em-dash."
+  },
+  {
+    id: 4,
+    heuristic: "H8: Aesthetic & Minimalist Design",
+    severity: "Minor",
+    selector: ".card-banner",
+    locationHint: "All project cards",
+    problem: "The 6px colored banner at the top of each card is thin enough that per-card color differences barely register at a glance.",
+    recommendation: "Increase banner height to 8\u201310px, or add the accent color as a left-border or icon ring to reinforce the color signal."
+  },
+  {
+    id: 5,
+    heuristic: "H6: Recognition Rather Than Recall",
+    severity: "Minor",
+    selector: ".project-grid",
+    locationHint: "Projects section",
+    problem: "No category filters or grouping \u2014 users must scan all cards to find a specific type of project (M3 vs brutalist vs docs).",
+    recommendation: "Add filter chips above the grid (e.g. All, M3, Brutalist, Documentation) that filter cards by their chip categories."
+  },
+  {
+    id: 6,
+    heuristic: "H1: Visibility of System Status",
+    severity: "Minor",
+    selector: ".card-link",
+    locationHint: "Card CTAs",
+    problem: "\"View prototype\" text with arrow looks like a standalone link, but the entire card is the clickable <a>. No full-card visual cue beyond hover.",
+    recommendation: "Add a subtle border-color change or background tint on .project-card:hover to make the full-card clickable area obvious."
+  }
+]);
+</script>
+<!-- UX INDICATORS END -->
+
 </body>
 </html>
