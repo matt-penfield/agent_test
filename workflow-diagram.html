@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protogen — Annotated Workflow Diagram</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <!-- Material Web Components -->
+  <script type="importmap">
+    { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+  </script>
+  <script type="module">
+    import '@material/web/divider/divider.js';
+    import '@material/web/tabs/tabs.js';
+    import '@material/web/tabs/primary-tab.js';
+  </script>
+
+  <style>
+    :root {
+      --md-sys-color-primary: #1565C0;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #D1E4FF;
+      --md-sys-color-on-primary-container: #001D36;
+      --md-sys-color-secondary: #00897B;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #B2DFDB;
+      --md-sys-color-on-secondary-container: #00251A;
+      --md-sys-color-tertiary: #F4511E;
+      --md-sys-color-on-tertiary: #ffffff;
+      --md-sys-color-tertiary-container: #FFCCBC;
+      --md-sys-color-on-tertiary-container: #3E1200;
+      --md-sys-color-surface: #FAFCFF;
+      --md-sys-color-on-surface: #1A1C1E;
+      --md-sys-color-on-surface-variant: #43474E;
+      --md-sys-color-surface-container: #EEF1F6;
+      --md-sys-color-surface-container-low: #F3F6FB;
+      --md-sys-color-surface-container-high: #E8EBF0;
+      --md-sys-color-outline: #73777F;
+      --md-sys-color-outline-variant: #C3C6CF;
+      --md-sys-color-inverse-surface: #2F3033;
+      --md-sys-color-inverse-on-surface: #F1F0F4;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+
+      /* Step colors */
+      --step-1: #1565C0;
+      --step-2: #00897B;
+      --step-3: #F4511E;
+      --step-4: #6A1B9A;
+      --step-5: #EF6C00;
+      --step-6: #2E7D32;
+      --step-a: #455A64;
+      --step-b: #C62828;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.5;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      padding: 48px 32px;
+      text-align: center;
+    }
+    .top-bar h1 {
+      font-size: 32px;
+      line-height: 40px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .top-bar p {
+      font-size: 16px;
+      opacity: 0.88;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+
+    /* ════════════════════════════════════════════
+       MAIN PIPELINE — horizontal flow
+       ════════════════════════════════════════════ */
+    .pipeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      padding: 32px 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .pipe-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 140px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .pipe-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 28px;
+      box-shadow: var(--md-sys-elevation-2);
+      z-index: 2;
+      transition: transform 0.2s;
+    }
+    .pipe-icon:hover { transform: scale(1.1); }
+
+    .pipe-label {
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      color: var(--md-sys-color-on-surface);
+    }
+    .pipe-command {
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      font-family: 'Roboto Mono', monospace;
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface-variant);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-align: center;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pipe-arrow {
+      display: flex;
+      align-items: center;
+      padding-top: 18px;
+      color: var(--md-sys-color-outline);
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    /* Revision loop arrow */
+    .revision-loop {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 8px;
+      padding: 0 40px;
+    }
+    .revision-loop__line {
+      width: 72%;
+      height: 2px;
+      background: var(--step-6);
+      position: relative;
+      margin-top: 16px;
+    }
+    .revision-loop__line::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -16px;
+      width: 2px;
+      height: 16px;
+      background: var(--step-6);
+    }
+    .revision-loop__line::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -16px;
+      width: 2px;
+      height: 16px;
+      background: var(--step-6);
+    }
+    .revision-loop__label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--step-6);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ════════════════════════════════════════════
+       ANNOTATION CARDS — detailed step cards
+       ════════════════════════════════════════════ */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .anno-card {
+      background: #fff;
+      border-radius: var(--md-sys-shape-corner-medium);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .anno-card:hover {
+      box-shadow: var(--md-sys-elevation-2);
+    }
+    .anno-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 4px;
+    }
+
+    .anno-card[data-step="1"]::before { background: var(--step-1); }
+    .anno-card[data-step="2"]::before { background: var(--step-2); }
+    .anno-card[data-step="3"]::before { background: var(--step-3); }
+    .anno-card[data-step="4"]::before { background: var(--step-4); }
+    .anno-card[data-step="5"]::before { background: var(--step-5); }
+    .anno-card[data-step="6"]::before { background: var(--step-6); }
+    .anno-card[data-step="a"]::before { background: var(--step-a); }
+    .anno-card[data-step="b"]::before { background: var(--step-b); }
+
+    .anno-card__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .anno-card__badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 500;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .anno-card[data-step="1"] .anno-card__badge { background: var(--step-1); }
+    .anno-card[data-step="2"] .anno-card__badge { background: var(--step-2); }
+    .anno-card[data-step="3"] .anno-card__badge { background: var(--step-3); }
+    .anno-card[data-step="4"] .anno-card__badge { background: var(--step-4); }
+    .anno-card[data-step="5"] .anno-card__badge { background: var(--step-5); }
+    .anno-card[data-step="6"] .anno-card__badge { background: var(--step-6); }
+    .anno-card[data-step="a"] .anno-card__badge { background: var(--step-a); }
+    .anno-card[data-step="b"] .anno-card__badge { background: var(--step-b); }
+
+    .anno-card__title {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.15px;
+    }
+    .anno-card__desc {
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 16px;
+      line-height: 1.55;
+    }
+
+    .anno-card__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .meta-row .material-symbols-outlined {
+      font-size: 18px;
+      color: var(--md-sys-color-on-surface-variant);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .meta-row strong {
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+    }
+    .meta-row span {
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .anno-card code {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 12px;
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface-variant);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ════════════════════════════════════════════
+       DATA FLOW — connectors
+       ════════════════════════════════════════════ */
+    .flow-section {
+      margin-top: 40px;
+    }
+
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-small);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .flow-connector .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--md-sys-color-primary);
+    }
+    .flow-connector .arrow {
+      color: var(--md-sys-color-outline);
+      font-size: 18px;
+    }
+    .flow-connector .file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .flow-connector .step-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    /* ════════════════════════════════════════════
+       SUPPORT SKILLS — side panel
+       ════════════════════════════════════════════ */
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .support-card {
+      background: #fff;
+      border-radius: var(--md-sys-shape-corner-small);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      padding: 20px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .support-card__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .support-card__icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+    }
+    .support-card__title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .support-card__desc {
+      font-size: 13px;
+      color: var(--md-sys-color-on-surface-variant);
+      line-height: 1.5;
+    }
+
+    /* ════════════════════════════════════════════
+       LEGEND
+       ════════════════════════════════════════════ */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 12px;
+      padding: 16px 20px;
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-sys-shape-corner-small);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════
+       RESPONSIVE
+       ════════════════════════════════════════════ */
+    @media (max-width: 839px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .support-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 599px) {
+      .top-bar { padding: 32px 16px; }
+      .top-bar h1 { font-size: 24px; line-height: 32px; }
+      .container { padding: 16px 16px 48px; }
+      .pipeline { padding: 16px 0; }
+      .pipe-node { min-width: 100px; }
+      .pipe-icon { width: 48px; height: 48px; font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Top Bar ── -->
+  <header class="top-bar">
+    <h1>Protogen Workflow Diagram</h1>
+    <p>How all the skills, files, and steps connect to form an end-to-end UI prototyping pipeline.</p>
+  </header>
+
+  <div class="container">
+
+    <!-- ════════════════ LEGEND ════════════════ -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-1)"></div> Define</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-2)"></div> Plan</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-3)"></div> Build</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-4)"></div> Ship</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-5)"></div> Review</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-6)"></div> Revise</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-a)"></div> Support (audit)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--step-b)"></div> Support (report)</div>
+    </div>
+
+    <!-- ════════════════ PIPELINE ════════════════ -->
+    <div class="section-label">Main pipeline</div>
+    <div class="pipeline">
+      <!-- Step 1 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-1)">
+          <span class="material-symbols-outlined">description</span>
+        </div>
+        <div class="pipe-label">Define</div>
+        <div class="pipe-command">/prd</div>
+      </div>
+      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+
+      <!-- Step 2 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-2)">
+          <span class="material-symbols-outlined">checklist</span>
+        </div>
+        <div class="pipe-label">Plan</div>
+        <div class="pipe-command">/plan-export</div>
+      </div>
+      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+
+      <!-- Step 3 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-3)">
+          <span class="material-symbols-outlined">code</span>
+        </div>
+        <div class="pipe-label">Build</div>
+        <div class="pipe-command">/material-design-prototyping</div>
+      </div>
+      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+
+      <!-- Step 4 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-4)">
+          <span class="material-symbols-outlined">rocket_launch</span>
+        </div>
+        <div class="pipe-label">Ship</div>
+        <div class="pipe-command">git push</div>
+      </div>
+      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+
+      <!-- Step 5 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-5)">
+          <span class="material-symbols-outlined">rate_review</span>
+        </div>
+        <div class="pipe-label">Review</div>
+        <div class="pipe-command">/feedback-approval</div>
+      </div>
+      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
+
+      <!-- Step 6 -->
+      <div class="pipe-node">
+        <div class="pipe-icon" style="background:var(--step-6)">
+          <span class="material-symbols-outlined">autorenew</span>
+        </div>
+        <div class="pipe-label">Revise</div>
+        <div class="pipe-command">/material-design-prototyping</div>
+      </div>
+    </div>
+
+    <!-- Revision loop -->
+    <div class="revision-loop">
+      <div class="revision-loop__line"></div>
+      <div class="revision-loop__label">
+        <span class="material-symbols-outlined" style="font-size:16px">replay</span>
+        Loops back to Build &rarr; Ship &rarr; Review until Approved
+      </div>
+    </div>
+
+    <!-- ════════════════ DATA FLOW ════════════════ -->
+    <div class="flow-section">
+      <div class="section-label">Data flow &mdash; what files pass between steps</div>
+
+      <div class="flow-connector">
+        <span class="step-chip" style="background:var(--step-1)">1 PRD</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="file-chip"><span class="material-symbols-outlined" style="font-size:14px">draft</span> prd/&lt;name&gt;-prd.md</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="step-chip" style="background:var(--step-2)">2 Plan</span>
+        <span style="color:var(--md-sys-color-on-surface-variant); font-size:13px; margin-left:4px">+</span>
+        <span class="step-chip" style="background:var(--step-3)">3 Build</span>
+      </div>
+
+      <div class="flow-connector">
+        <span class="step-chip" style="background:var(--step-2)">2 Plan</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="file-chip"><span class="material-symbols-outlined" style="font-size:14px">table_chart</span> exports/&lt;name&gt;-planner-tasks.csv</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span style="font-size:13px; color:var(--md-sys-color-on-surface-variant)">Planner / Trello / Jira</span>
+      </div>
+
+      <div class="flow-connector">
+        <span class="step-chip" style="background:var(--step-3)">3 Build</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="file-chip"><span class="material-symbols-outlined" style="font-size:14px">html</span> &lt;name&gt;.html</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="step-chip" style="background:var(--step-4)">4 Ship</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span style="font-size:13px; color:var(--md-sys-color-on-surface-variant)">Vercel / Netlify / GH Pages</span>
+      </div>
+
+      <div class="flow-connector">
+        <span class="step-chip" style="background:var(--step-5)">5 Review</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="file-chip"><span class="material-symbols-outlined" style="font-size:14px">comment</span> feedback/&lt;name&gt;.md</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span class="step-chip" style="background:var(--step-6)">6 Revise</span>
+        <span class="arrow material-symbols-outlined">arrow_forward</span>
+        <span style="font-size:13px; color:var(--md-sys-color-on-surface-variant)">Updated .html &rarr; repeat loop</span>
+      </div>
+    </div>
+
+    <md-divider style="margin-top:40px"></md-divider>
+
+    <!-- ════════════════ ANNOTATED STEP CARDS ════════════════ -->
+    <div class="section-label">Annotated step details</div>
+    <div class="cards-grid">
+
+      <!-- Card 1: PRD -->
+      <div class="anno-card" data-step="1">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">1</div>
+          <div class="anno-card__title">Define Requirements</div>
+        </div>
+        <div class="anno-card__desc">
+          The PRD skill conducts a structured interview covering 9 question groups to capture product overview, screens, layout, components, visual design, interactions, responsive targets, and delivery preferences.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Invoke:</strong> <code>/prd &lt;product name&gt;</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> <code>prd/&lt;name&gt;-prd.md</code> &mdash; structured markdown PRD</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">person</span>
+            <span><strong>Actor:</strong> You answer questions; Copilot generates the document</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">info</span>
+            <span>Answer naturally, say "you decide" should you want defaults filled in</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Plan -->
+      <div class="anno-card" data-step="2">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">2</div>
+          <div class="anno-card__title">Export Task Plan</div>
+        </div>
+        <div class="anno-card__desc">
+          Reads the PRD and breaks it into actionable tasks across four buckets: Setup, Design, Build, and QA. Each task gets a priority and description. Output is a UTF-8 CSV ready for import.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Invoke:</strong> <code>/plan-export</code> (auto-finds PRD) or <code>/plan-export prd/name.md</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> <code>exports/&lt;name&gt;-planner-tasks.csv</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">input</span>
+            <span><strong>Input:</strong> PRD file from Step 1</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">info</span>
+            <span>Columns: Task Name, Bucket, Priority, Progress, Start Date, Due Date, Notes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Build -->
+      <div class="anno-card" data-step="3">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">3</div>
+          <div class="anno-card__title">Build Prototype</div>
+        </div>
+        <div class="anno-card__desc">
+          Generates a self-contained HTML prototype using Material Design 3 and Material Web Components via CDN. Can build from a PRD (recommended) or from a freeform description.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Invoke:</strong> <code>/material-design-prototyping build from prd/name.md</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> <code>&lt;name&gt;.html</code> &mdash; opens in any browser, no build tool</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">input</span>
+            <span><strong>Input:</strong> PRD from Step 1 <em>or</em> a text description</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">deployed_code</span>
+            <span>Includes M3 color tokens, typography scale, elevation, shape, responsive breakpoints</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Ship -->
+      <div class="anno-card" data-step="4">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">4</div>
+          <div class="anno-card__title">Ship via Git Push</div>
+        </div>
+        <div class="anno-card__desc">
+          Push the prototype to a remote repository to deploy a live preview. Vercel auto-deploys on every push to main. Stakeholders can then view the prototype at the deployed URL.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Commands:</strong> <code>git add .</code> &rarr; <code>git commit -m "..."</code> &rarr; <code>git push origin main</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> Live URL on Vercel / Netlify / GitHub Pages</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">input</span>
+            <span><strong>Input:</strong> HTML prototype from Step 3</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">info</span>
+            <span>Commit frequently for easy rollback. Each .html file gets its own URL path.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Review -->
+      <div class="anno-card" data-step="5">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">5</div>
+          <div class="anno-card__title">Collect Feedback</div>
+        </div>
+        <div class="anno-card__desc">
+          Injects a floating "Review" button into the HTML prototype. Stakeholders open the deployed URL, click Review, and submit approve/reject/feedback. A .md file downloads automatically.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Invoke:</strong> <code>/feedback-approval &lt;file.html&gt;</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> <code>feedback/&lt;name&gt;.md</code> with status, reviewer, date, comments</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">group</span>
+            <span><strong>Actors:</strong> You invoke the skill; reviewer clicks the modal in the browser</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">info</span>
+            <span>Reviewer actions: Approve, Reject, or Provide Feedback with text comments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Revise -->
+      <div class="anno-card" data-step="6">
+        <div class="anno-card__header">
+          <div class="anno-card__badge">6</div>
+          <div class="anno-card__title">Apply Feedback &amp; Revise</div>
+        </div>
+        <div class="anno-card__desc">
+          Feed the feedback .md file back into the prototyping skill. Copilot parses status and comments, applies changes to the HTML, then you push again (Step 4) and repeat until approved.
+        </div>
+        <div class="anno-card__meta">
+          <div class="meta-row">
+            <span class="material-symbols-outlined">terminal</span>
+            <span><strong>Invoke:</strong> <code>/material-design-prototyping apply changes from feedback/name.md</code></span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">input</span>
+            <span><strong>Input:</strong> Feedback file from Step 5</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">output</span>
+            <span><strong>Output:</strong> Updated HTML prototype &rarr; loops back to Step 4 (Ship)</span>
+          </div>
+          <div class="meta-row">
+            <span class="material-symbols-outlined">replay</span>
+            <span><strong>Loop:</strong> Revise &rarr; Push &rarr; Review &rarr; repeat until <strong>Approved</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <md-divider style="margin-top:40px"></md-divider>
+
+    <!-- ════════════════ SUPPORT SKILLS ════════════════ -->
+    <div class="section-label">Support skills &mdash; can be invoked at any point in the pipeline</div>
+    <div class="support-grid">
+      <div class="support-card">
+        <div class="support-card__header">
+          <div class="support-card__icon" style="background:var(--step-a)">
+            <span class="material-symbols-outlined" style="font-size:18px">accessibility_new</span>
+          </div>
+          <div class="support-card__title">Accessibility Audit</div>
+        </div>
+        <div class="support-card__desc">
+          Audits any HTML file against WCAG 2.1 Level A+AA. Run after building a prototype (Step 3) or after applying revisions (Step 6) to catch contrast, ARIA, heading, and keyboard issues.
+        </div>
+        <div class="meta-row" style="margin-top:10px">
+          <span class="material-symbols-outlined">terminal</span>
+          <span><code>/accessibility-audit &lt;file.html&gt;</code></span>
+        </div>
+      </div>
+
+      <div class="support-card">
+        <div class="support-card__header">
+          <div class="support-card__icon" style="background:var(--step-b)">
+            <span class="material-symbols-outlined" style="font-size:18px">summarize</span>
+          </div>
+          <div class="support-card__title">Daily Report</div>
+        </div>
+        <div class="support-card__desc">
+          Generates a daily project summary from git activity. Run at end-of-day to capture what was built, pushed, or revised. Useful for standups and status updates.
+        </div>
+        <div class="meta-row" style="margin-top:10px">
+          <span class="material-symbols-outlined">terminal</span>
+          <span><code>/daily-report</code></span>
+        </div>
+      </div>
+
+      <div class="support-card">
+        <div class="support-card__header">
+          <div class="support-card__icon" style="background:#5D4037">
+            <span class="material-symbols-outlined" style="font-size:18px">build</span>
+          </div>
+          <div class="support-card__title">Skill Creation</div>
+        </div>
+        <div class="support-card__desc">
+          Creates new Copilot skills with SKILL.md, scripts, references, and assets. Use to extend the pipeline with additional automation or domain-specific workflows.
+        </div>
+        <div class="meta-row" style="margin-top:10px">
+          <span class="material-symbols-outlined">terminal</span>
+          <span><code>/skill-creation</code></span>
+        </div>
+      </div>
+    </div>
+
+    <md-divider style="margin-top:40px"></md-divider>
+
+    <!-- ════════════════ FILE SYSTEM MAP ════════════════ -->
+    <div class="section-label">Project file structure &mdash; where everything lives</div>
+    <div style="background:#fff; border:1px solid var(--md-sys-color-outline-variant); border-radius:var(--md-sys-shape-corner-medium); padding:24px; font-family:'Roboto Mono',monospace; font-size:13px; line-height:2; color:var(--md-sys-color-on-surface-variant);">
+      <span style="color:var(--md-sys-color-on-surface); font-weight:500;">agent_test/</span><br>
+      &nbsp;&nbsp;<span style="color:var(--step-1)">prd/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Step 1 output (PRD markdown files)<br>
+      &nbsp;&nbsp;<span style="color:var(--step-2)">exports/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Step 2 output (CSV task plans, JSON)<br>
+      &nbsp;&nbsp;<span style="color:var(--step-3)">*.html</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Step 3 output (HTML prototypes)<br>
+      &nbsp;&nbsp;<span style="color:var(--step-5)">feedback/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Step 5 output (reviewer feedback .md)<br>
+      &nbsp;&nbsp;<span style="color:var(--step-a)">reports/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Audit reports and daily summaries<br>
+      &nbsp;&nbsp;<span style="color:var(--md-sys-color-outline)">docs/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; Workflow guide and documentation<br>
+      &nbsp;&nbsp;<span style="color:var(--md-sys-color-outline)">.github/skills/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr; All Copilot skill definitions<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-1)">prd/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md + interview template<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-2)">plan-export/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md + CSV template<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-3)">material-design-prototyping/</span>&nbsp;SKILL.md + template + component ref<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-3)">architectural-typography/</span>&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md + design system ref + template<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-5)">feedback-approval/</span>&nbsp;&nbsp;SKILL.md + modal injection<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-a)">accessibility-audit/</span>&nbsp;SKILL.md + WCAG checklist<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--step-b)">daily-report/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md + PowerShell scripts<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#5D4037">skill-creation/</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md (meta-skill)<br>
+    </div>
+
+  </div>
+
+</body>
+</html>
