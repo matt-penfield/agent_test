@@ -58,6 +58,7 @@
       --step-4: #9C4146;
       --step-5: #6750A4;
       --step-6: #386A20;
+      --step-7: #B71C1C;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,6 +228,7 @@
     .section-card[data-step="4"]::before { background: var(--step-4); }
     .section-card[data-step="5"]::before { background: var(--step-5); }
     .section-card[data-step="6"]::before { background: var(--step-6); }
+    .section-card[data-step="7"]::before { background: var(--step-7); }
 
     .section-header {
       display: flex;
@@ -253,6 +255,7 @@
     .section-card[data-step="4"] .step-badge { background: var(--step-4); }
     .section-card[data-step="5"] .step-badge { background: var(--step-5); }
     .section-card[data-step="6"] .step-badge { background: var(--step-6); }
+    .section-card[data-step="7"] .step-badge { background: var(--step-7); }
 
     .section-header h2 {
       font-family: 'Google Sans', sans-serif;
@@ -473,6 +476,13 @@
         </div>
         <span class="label">Review<br>Feedback</span>
       </div>
+      <span class="pipeline-arrow material-symbols-outlined">arrow_forward</span>
+      <div class="pipeline-step">
+        <div class="icon-circle" style="background:var(--step-7)">
+          <span class="material-symbols-outlined">bug_report</span>
+        </div>
+        <span class="label">UX<br>Research</span>
+      </div>
       <div class="pipeline-revise">
         <span class="material-symbols-outlined">subdirectory_arrow_left</span>
         Revise &amp; repeat until approved
@@ -491,6 +501,7 @@
         <tr><td>4</td><td>Git push</td><td>Push changes to deploy a live preview</td></tr>
         <tr><td>5</td><td><code>/feedback-approval</code></td><td>Inject review modal &rarr; collect approve/reject/feedback</td></tr>
         <tr><td>6</td><td><code>/material-design-prototyping</code></td><td>Feed the feedback file back in &rarr; apply revisions</td></tr>
+        <tr><td>7</td><td><code>/ux-research</code></td><td>Run UX heuristic tests &rarr; inject issue indicators &rarr; generate fix plans</td></tr>
       </tbody>
     </table>
 
@@ -698,6 +709,58 @@
       <p>Continue iterating until the reviewer approves. Each revision is a new commit, so you can always roll back.</p>
     </div>
 
+    <!-- ━━━━ STEP 7 ━━━━ -->
+    <div class="section-card" data-step="7">
+      <div class="section-header">
+        <div class="step-badge">7</div>
+        <h2>Run UX Research Tests</h2>
+      </div>
+      <p>The UX research skill runs a heuristic evaluation against Nielsen&rsquo;s 10 usability heuristics, then injects floating issue indicators directly into the page next to each problem.</p>
+
+      <h3>How to invoke</h3>
+      <div class="code-block"><span class="prompt">/ux-research</span> checklist.html</div>
+      <p>Or test multiple pages at once:</p>
+      <div class="code-block"><span class="prompt">/ux-research</span> all</div>
+
+      <h3>What happens</h3>
+      <ol>
+        <li>Copilot asks which pages to test (or you specify them upfront)</li>
+        <li>Each page is evaluated against the <strong>full heuristic checklist</strong> &mdash; visibility of status, consistency, error prevention, flexibility, aesthetics, and more</li>
+        <li>Numbered <strong>issue badges</strong> are injected into the HTML, positioned next to the actual elements that have problems</li>
+        <li>A red <strong>&ldquo;UX Issues&rdquo;</strong> pill appears at the bottom-left corner showing the total count</li>
+      </ol>
+
+      <h3>Reviewing issues in the browser</h3>
+      <ol>
+        <li>Open the page in a browser</li>
+        <li>Click any numbered badge to see the heuristic violated, severity, and problem description</li>
+        <li>Edit the <strong>Plan Fix</strong> text area (pre-filled with a recommendation)</li>
+        <li>Click <strong>Submit Fix Plan</strong> &mdash; a <code>.md</code> file downloads automatically</li>
+      </ol>
+      <p>Save the fix-plan file to:</p>
+      <div class="code-block">ux-fixes/&lt;filename&gt;-ux-fix-&lt;id&gt;.md</div>
+
+      <h3>What the fix-plan file contains</h3>
+      <div class="feedback-file-box">
+        File: checklist.html<br>
+        Issue #: 3<br>
+        Heuristic: H4: Consistency &amp; Standards<br>
+        Severity: Major<br>
+        Element: .card-title<br>
+        Problem: Card titles use inconsistent font sizes.<br>
+        Planned Fix: Set all .card-title to Title Medium (16px/500).
+      </div>
+
+      <h3>Applying fixes</h3>
+      <div class="code-block"><span class="prompt">/material-design-prototyping</span> apply UX fixes from ux-fixes/checklist-ux-fix-3-2026-03-23.md</div>
+      <p>The fix-plan file has the same <code>Action Items</code> section format as feedback files, so the prototyping skill can consume it directly.</p>
+
+      <div class="callout">
+        <span class="material-symbols-outlined">lightbulb</span>
+        <span>Run <code>/ux-research</code> after building a prototype (Step 3) or after applying revisions (Step 6) to catch usability issues before sharing with stakeholders.</span>
+      </div>
+    </div>
+
     <!-- ── Quick Reference ── -->
     <div class="quick-ref">
       <h2>
@@ -715,6 +778,8 @@
           <tr><td>Build a prototype from scratch</td><td><code>/material-design-prototyping &lt;description&gt;</code></td></tr>
           <tr><td>Add review modal to a prototype</td><td><code>/feedback-approval &lt;file.html&gt;</code></td></tr>
           <tr><td>Apply reviewer feedback</td><td><code>/material-design-prototyping apply changes from feedback/&lt;file&gt;.md</code></td></tr>
+          <tr><td>Run a UX heuristic evaluation</td><td><code>/ux-research &lt;file.html&gt;</code></td></tr>
+          <tr><td>Apply a UX fix plan</td><td><code>/material-design-prototyping apply UX fixes from ux-fixes/&lt;file&gt;.md</code></td></tr>
           <tr><td>Run an accessibility audit</td><td><code>/accessibility-audit &lt;file.html&gt;</code></td></tr>
         </tbody>
       </table>
