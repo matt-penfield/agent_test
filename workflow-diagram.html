@@ -444,9 +444,13 @@
       .top-bar { padding: 32px 16px; }
       .top-bar h1 { font-size: 24px; line-height: 32px; }
       .container { padding: 16px 16px 48px; }
-      .pipeline { padding: 16px 0; }
-      .pipe-node { min-width: 100px; }
+      .pipeline { max-width: 320px; }
+      .pipe-node { width: 90px; }
       .pipe-icon { width: 48px; height: 48px; font-size: 22px; }
+      .pipe-label { font-size: 12px; }
+      .pipe-command { font-size: 10px; max-width: 85px; }
+      .pipeline-center .material-symbols-outlined { font-size: 28px; }
+      .pipeline-center-label { font-size: 10px; }
     }
   </style>
 </head>
@@ -475,72 +479,86 @@
     <!-- ════════════════ PIPELINE ════════════════ -->
     <div class="section-label">Main pipeline</div>
     <div class="pipeline">
-      <!-- Step 1 -->
-      <div class="pipe-node">
+
+      <!-- SVG connectors -->
+      <svg class="pipeline-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ah" markerWidth="4" markerHeight="3" refX="3.5" refY="1.5" orient="auto">
+            <polygon points="0 0, 4 1.5, 0 3" fill="#73777F"/>
+          </marker>
+        </defs>
+        <!-- 1→2 Define→Plan -->
+        <line x1="56" y1="11.5" x2="80" y2="25.5" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+        <!-- 2→3 Plan→Build -->
+        <line x1="86" y1="36" x2="86" y2="64" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+        <!-- 3→4 Build→Ship -->
+        <line x1="80" y1="74.5" x2="56" y2="88.5" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+        <!-- 4→5 Ship→Review -->
+        <line x1="44" y1="88.5" x2="20" y2="74.5" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+        <!-- 5→6 Review→Revise -->
+        <line x1="14" y1="64" x2="14" y2="36" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+        <!-- 6→1 Revise→Define (loop) -->
+        <line x1="20" y1="25.5" x2="44" y2="11.5" stroke="#C3C6CF" stroke-width="0.5" marker-end="url(#ah)"/>
+      </svg>
+
+      <!-- Center label -->
+      <div class="pipeline-center">
+        <span class="material-symbols-outlined">all_inclusive</span>
+        <span class="pipeline-center-label">Continuous<br>Cycle</span>
+      </div>
+
+      <!-- Step 1: Define -->
+      <div class="pipe-node" data-pos="1">
         <div class="pipe-icon" style="background:var(--step-1)">
           <span class="material-symbols-outlined">description</span>
         </div>
         <div class="pipe-label">Define</div>
         <div class="pipe-command">/prd</div>
       </div>
-      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 
-      <!-- Step 2 -->
-      <div class="pipe-node">
+      <!-- Step 2: Plan -->
+      <div class="pipe-node" data-pos="2">
         <div class="pipe-icon" style="background:var(--step-2)">
           <span class="material-symbols-outlined">checklist</span>
         </div>
         <div class="pipe-label">Plan</div>
         <div class="pipe-command">/plan-export</div>
       </div>
-      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 
-      <!-- Step 3 -->
-      <div class="pipe-node">
+      <!-- Step 3: Build -->
+      <div class="pipe-node" data-pos="3">
         <div class="pipe-icon" style="background:var(--step-3)">
           <span class="material-symbols-outlined">code</span>
         </div>
         <div class="pipe-label">Build</div>
         <div class="pipe-command">/material-design-prototyping</div>
       </div>
-      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 
-      <!-- Step 4 -->
-      <div class="pipe-node">
+      <!-- Step 4: Ship -->
+      <div class="pipe-node" data-pos="4">
         <div class="pipe-icon" style="background:var(--step-4)">
           <span class="material-symbols-outlined">rocket_launch</span>
         </div>
         <div class="pipe-label">Ship</div>
         <div class="pipe-command">git push</div>
       </div>
-      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 
-      <!-- Step 5 -->
-      <div class="pipe-node">
+      <!-- Step 5: Review -->
+      <div class="pipe-node" data-pos="5">
         <div class="pipe-icon" style="background:var(--step-5)">
           <span class="material-symbols-outlined">rate_review</span>
         </div>
         <div class="pipe-label">Review</div>
         <div class="pipe-command">/feedback-approval</div>
       </div>
-      <div class="pipe-arrow"><span class="material-symbols-outlined">arrow_forward</span></div>
 
-      <!-- Step 6 -->
-      <div class="pipe-node">
+      <!-- Step 6: Revise -->
+      <div class="pipe-node" data-pos="6">
         <div class="pipe-icon" style="background:var(--step-6)">
           <span class="material-symbols-outlined">autorenew</span>
         </div>
         <div class="pipe-label">Revise</div>
         <div class="pipe-command">/material-design-prototyping</div>
-      </div>
-    </div>
-
-    <!-- Revision loop -->
-    <div class="revision-loop">
-      <div class="revision-loop__line"></div>
-      <div class="revision-loop__label">
-        <span class="material-symbols-outlined" style="font-size:16px">replay</span>
-        Loops back to Build &rarr; Ship &rarr; Review until Approved
       </div>
     </div>
 
