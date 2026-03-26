@@ -1,6 +1,6 @@
 Startup Routine
 
-Read all files in context/ - this is your foundation
+Read all files in skills/ - this is your foundation
 
 read MEMORY.md - this what you've learned over time
 
