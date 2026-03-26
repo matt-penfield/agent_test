@@ -485,28 +485,19 @@
 
         <md-divider style="margin: 16px 0"></md-divider>
 
-        <div class="switch-row">
-          <div class="switch-label">
-            <span>Email notifications</span>
-            <span>Receive updates about your account</span>
-          </div>
-          <md-switch id="prefEmail" selected></md-switch>
+        <div class="check-row">
+          <md-checkbox id="prefEmail" checked></md-checkbox>
+          <label for="prefEmail">Email notifications — Receive updates about your account</label>
         </div>
 
-        <div class="switch-row">
-          <div class="switch-label">
-            <span>Marketing emails</span>
-            <span>News, features, and promotional offers</span>
-          </div>
-          <md-switch id="prefMarketing"></md-switch>
+        <div class="check-row">
+          <md-checkbox id="prefMarketing"></md-checkbox>
+          <label for="prefMarketing">Marketing emails — News, features, and promotional offers</label>
         </div>
 
-        <div class="switch-row">
-          <div class="switch-label">
-            <span>Public profile</span>
-            <span>Allow others to view your profile</span>
-          </div>
-          <md-switch id="prefPublic" selected></md-switch>
+        <div class="check-row">
+          <md-checkbox id="prefPublic" checked></md-checkbox>
+          <label for="prefPublic">Public profile — Allow others to view your profile</label>
         </div>
 
         <md-divider style="margin: 16px 0"></md-divider>
@@ -669,9 +660,9 @@
       var pp = document.getElementById('prefPublic');
       var at = document.getElementById('agreeTerms');
 
-      document.getElementById('revNotif').textContent     = pe && pe.selected ? 'On' : 'Off';
-      document.getElementById('revMarketing').textContent  = pm && pm.selected ? 'On' : 'Off';
-      document.getElementById('revPublic').textContent     = pp && pp.selected ? 'On' : 'Off';
+      document.getElementById('revNotif').textContent     = pe && pe.checked ? 'Yes' : 'No';
+      document.getElementById('revMarketing').textContent  = pm && pm.checked ? 'Yes' : 'No';
+      document.getElementById('revPublic').textContent     = pp && pp.checked ? 'Yes' : 'No';
       document.getElementById('revTerms').textContent      = at && at.checked  ? 'Yes' : 'No';
     }
 
