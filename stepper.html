@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stepper Pattern — Multi-Step Form</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <script type="importmap">
+  { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+  </script>
+  <script type="module">
+    import '@material/web/textfield/outlined-text-field.js';
+    import '@material/web/checkbox/checkbox.js';
+    import '@material/web/switch/switch.js';
+    import '@material/web/divider/divider.js';
+    import '@material/web/select/outlined-select.js';
+    import '@material/web/select/select-option.js';
+  </script>
+
+  <style>
+    :root {
+      --md-sys-color-primary: #6750a4;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #eaddff;
+      --md-sys-color-on-primary-container: #21005d;
+      --md-sys-color-secondary: #625b71;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #e8def8;
+      --md-sys-color-on-secondary-container: #1d192b;
+      --md-sys-color-surface: #fef7ff;
+      --md-sys-color-on-surface: #1c1b1f;
+      --md-sys-color-on-surface-variant: #49454f;
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #f7f2fa;
+      --md-sys-color-surface-container: #f3edf7;
+      --md-sys-color-surface-container-high: #ece6f0;
+      --md-sys-color-outline: #79747e;
+      --md-sys-color-outline-variant: #cac4d0;
+      --md-sys-color-error: #b3261e;
+      --md-sys-color-inverse-surface: #313033;
+      --md-sys-color-inverse-on-surface: #f4eff4;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top App Bar ── */
+    .top-bar {
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .top-bar .material-symbols-outlined { font-size: 24px; color: var(--md-sys-color-on-surface-variant); }
+    .top-bar h1 { font-size: 22px; font-weight: 400; flex: 1; }
+    .top-bar .step-indicator {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* ── Stepper Container ── */
+    .stepper-layout {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px 120px;
+      flex: 1;
+    }
+
+    /* ── Stepper Track ── */
+    .stepper-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 40px;
+      padding: 0 16px;
+    }
+
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      position: relative;
+      min-width: 80px;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      border: 2px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .step-circle .material-symbols-outlined { font-size: 20px; }
+
+    .step-node.active .step-circle {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 4px rgba(103, 80, 164, 0.15);
+    }
+    .step-node.completed .step-circle {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+    .step-node:hover .step-circle {
+      border-color: var(--md-sys-color-primary);
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .step-node.active .step-label {
+      color: var(--md-sys-color-primary);
+      font-weight: 500;
+    }
+    .step-node.completed .step-label {
+      color: var(--md-sys-color-primary);
+    }
+
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--md-sys-color-outline-variant);
+      margin-bottom: 28px;
+      transition: background 0.3s;
+      min-width: 24px;
+      max-width: 80px;
+    }
+    .step-connector.filled {
+      background: var(--md-sys-color-primary);
+    }
+
+    /* ── Step Content Panels ── */
+    .step-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .step-panel.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-card {
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 32px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .panel-card h2 {
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .panel-card .subtitle {
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group md-outlined-text-field,
+    .form-group md-outlined-select {
+      width: 100%;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .check-row label { cursor: pointer; }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .switch-row:last-child { border-bottom: none; }
+    .switch-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .switch-label span:first-child {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+    }
+    .switch-label span:last-child {
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* ── Review Panel ── */
+    .review-section {
+      margin-bottom: 20px;
+    }
+    .review-section h3 {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--md-sys-color-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .review-section h3 .material-symbols-outlined { font-size: 18px; }
+    .review-section h3 button {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--md-sys-color-primary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Roboto', sans-serif;
+    }
+    .review-section h3 button .material-symbols-outlined { font-size: 16px; }
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      font-size: 14px;
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-row .label {
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .review-row .value {
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      text-align: right;
+    }
+
+    /* ── Bottom Nav Bar ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--md-sys-color-surface-container-lowest);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      letter-spacing: 0.1px;
+    }
+    .btn .material-symbols-outlined { font-size: 18px; }
+
+    .btn-text {
+      background: transparent;
+      color: var(--md-sys-color-primary);
+    }
+    .btn-text:hover { background: rgba(103,80,164,0.08); }
+    .btn-text:disabled { color: var(--md-sys-color-outline); cursor: not-allowed; }
+    .btn-text:disabled:hover { background: transparent; }
+
+    .btn-filled {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+    .btn-filled:hover { box-shadow: var(--md-sys-elevation-1); }
+
+    .btn-tonal {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+    .btn-tonal:hover { box-shadow: var(--md-sys-elevation-1); }
+
+    /* ── Success State ── */
+    .success-panel {
+      text-align: center;
+      padding: 48px 24px;
+    }
+    .success-panel .material-symbols-outlined {
+      font-size: 64px;
+      color: #386a20;
+      margin-bottom: 16px;
+    }
+    .success-panel h2 {
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .success-panel p {
+      font-size: 16px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 24px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 599px) {
+      .stepper-layout { padding: 24px 16px 120px; }
+      .panel-card { padding: 24px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .step-label { font-size: 11px; }
+      .step-node { min-width: 56px; }
+      .step-circle { width: 36px; height: 36px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Top Bar ── -->
+  <header class="top-bar">
+    <span class="material-symbols-outlined">assignment</span>
+    <h1>Registration</h1>
+    <span class="step-indicator" id="stepIndicator">Step 1 of 4</span>
+  </header>
+
+  <div class="stepper-layout">
+
+    <!-- ── Stepper Track ── -->
+    <div class="stepper-track" id="stepperTrack">
+      <div class="step-node active" data-step="0" onclick="goToStep(0)">
+        <div class="step-circle"><span>1</span></div>
+        <span class="step-label">Personal</span>
+      </div>
+      <div class="step-connector" data-conn="0"></div>
+      <div class="step-node" data-step="1" onclick="goToStep(1)">
+        <div class="step-circle"><span>2</span></div>
+        <span class="step-label">Contact</span>
+      </div>
+      <div class="step-connector" data-conn="1"></div>
+      <div class="step-node" data-step="2" onclick="goToStep(2)">
+        <div class="step-circle"><span>3</span></div>
+        <span class="step-label">Preferences</span>
+      </div>
+      <div class="step-connector" data-conn="2"></div>
+      <div class="step-node" data-step="3" onclick="goToStep(3)">
+        <div class="step-circle"><span>4</span></div>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+
+    <!-- ═══════ Step 1: Personal Info ═══════ -->
+    <div class="step-panel active" data-panel="0">
+      <div class="panel-card">
+        <h2>Personal Information</h2>
+        <p class="subtitle">Tell us about yourself to get started.</p>
+
+        <div class="form-group form-row">
+          <md-outlined-text-field label="First name" id="firstName" value=""></md-outlined-text-field>
+          <md-outlined-text-field label="Last name" id="lastName" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Date of birth" type="date" id="dob" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Organization" id="org" value="" supporting-text="Company, school, or team name"></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Job title" id="jobTitle" value=""></md-outlined-text-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ Step 2: Contact Details ═══════ -->
+    <div class="step-panel" data-panel="1">
+      <div class="panel-card">
+        <h2>Contact Details</h2>
+        <p class="subtitle">How can we reach you?</p>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Email address" type="email" id="email" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Phone number" type="tel" id="phone" value="" supporting-text="Include country code"></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Street address" id="address" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="form-group form-row">
+          <md-outlined-text-field label="City" id="city" value=""></md-outlined-text-field>
+          <md-outlined-text-field label="State / Province" id="state" value=""></md-outlined-text-field>
+        </div>
+
+        <div class="form-group form-row">
+          <md-outlined-text-field label="ZIP / Postal code" id="zip" value=""></md-outlined-text-field>
+          <md-outlined-text-field label="Country" id="country" value=""></md-outlined-text-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ Step 3: Preferences ═══════ -->
+    <div class="step-panel" data-panel="2">
+      <div class="panel-card">
+        <h2>Preferences</h2>
+        <p class="subtitle">Customize your experience.</p>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Display name" id="displayName" value="" supporting-text="This is how others will see you"></md-outlined-text-field>
+        </div>
+
+        <div class="form-group">
+          <md-outlined-text-field label="Bio" type="textarea" id="bio" value="" rows="3" supporting-text="A short description about yourself"></md-outlined-text-field>
+        </div>
+
+        <md-divider style="margin: 16px 0"></md-divider>
+
+        <div class="switch-row">
+          <div class="switch-label">
+            <span>Email notifications</span>
+            <span>Receive updates about your account</span>
+          </div>
+          <md-switch id="prefEmail" selected></md-switch>
+        </div>
+
+        <div class="switch-row">
+          <div class="switch-label">
+            <span>Marketing emails</span>
+            <span>News, features, and promotional offers</span>
+          </div>
+          <md-switch id="prefMarketing"></md-switch>
+        </div>
+
+        <div class="switch-row">
+          <div class="switch-label">
+            <span>Public profile</span>
+            <span>Allow others to view your profile</span>
+          </div>
+          <md-switch id="prefPublic" selected></md-switch>
+        </div>
+
+        <md-divider style="margin: 16px 0"></md-divider>
+
+        <div class="check-row">
+          <md-checkbox id="agreeTerms"></md-checkbox>
+          <label for="agreeTerms">I agree to the Terms of Service and Privacy Policy</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ Step 4: Review & Submit ═══════ -->
+    <div class="step-panel" data-panel="3">
+      <div class="panel-card" id="reviewCard">
+        <h2>Review &amp; Submit</h2>
+        <p class="subtitle">Please verify your information before submitting.</p>
+
+        <div class="review-section">
+          <h3>
+            <span class="material-symbols-outlined">person</span> Personal Information
+            <button onclick="goToStep(0)"><span class="material-symbols-outlined">edit</span> Edit</button>
+          </h3>
+          <div class="review-row"><span class="label">Name</span><span class="value" id="revName">—</span></div>
+          <div class="review-row"><span class="label">Date of birth</span><span class="value" id="revDob">—</span></div>
+          <div class="review-row"><span class="label">Organization</span><span class="value" id="revOrg">—</span></div>
+          <div class="review-row"><span class="label">Job title</span><span class="value" id="revJob">—</span></div>
+        </div>
+
+        <md-divider style="margin: 8px 0 16px"></md-divider>
+
+        <div class="review-section">
+          <h3>
+            <span class="material-symbols-outlined">contact_mail</span> Contact Details
+            <button onclick="goToStep(1)"><span class="material-symbols-outlined">edit</span> Edit</button>
+          </h3>
+          <div class="review-row"><span class="label">Email</span><span class="value" id="revEmail">—</span></div>
+          <div class="review-row"><span class="label">Phone</span><span class="value" id="revPhone">—</span></div>
+          <div class="review-row"><span class="label">Address</span><span class="value" id="revAddress">—</span></div>
+        </div>
+
+        <md-divider style="margin: 8px 0 16px"></md-divider>
+
+        <div class="review-section">
+          <h3>
+            <span class="material-symbols-outlined">tune</span> Preferences
+            <button onclick="goToStep(2)"><span class="material-symbols-outlined">edit</span> Edit</button>
+          </h3>
+          <div class="review-row"><span class="label">Display name</span><span class="value" id="revDisplay">—</span></div>
+          <div class="review-row"><span class="label">Email notifications</span><span class="value" id="revNotif">—</span></div>
+          <div class="review-row"><span class="label">Marketing emails</span><span class="value" id="revMarketing">—</span></div>
+          <div class="review-row"><span class="label">Public profile</span><span class="value" id="revPublic">—</span></div>
+          <div class="review-row"><span class="label">Terms accepted</span><span class="value" id="revTerms">—</span></div>
+        </div>
+      </div>
+
+      <!-- Success state (hidden initially) -->
+      <div class="panel-card success-panel" id="successPanel" style="display:none">
+        <span class="material-symbols-outlined">check_circle</span>
+        <h2>Registration Complete</h2>
+        <p>Your information has been submitted successfully. You'll receive a confirmation email shortly.</p>
+        <button class="btn btn-tonal" onclick="resetForm()">
+          <span class="material-symbols-outlined">restart_alt</span>
+          Start Over
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Bottom Navigation Bar ── -->
+  <div class="bottom-bar">
+    <button class="btn btn-text" id="btnPrev" onclick="prevStep()" disabled>
+      <span class="material-symbols-outlined">arrow_back</span>
+      Previous
+    </button>
+    <button class="btn btn-filled" id="btnNext" onclick="nextStep()">
+      Next
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+  </div>
+
+  <script>
+  (function() {
+    var current = 0;
+    var total = 4;
+
+    var nodes  = document.querySelectorAll('.step-node');
+    var conns  = document.querySelectorAll('.step-connector');
+    var panels = document.querySelectorAll('.step-panel');
+    var btnP   = document.getElementById('btnPrev');
+    var btnN   = document.getElementById('btnNext');
+    var indic  = document.getElementById('stepIndicator');
+
+    function render() {
+      /* Nodes */
+      nodes.forEach(function(n, i) {
+        n.classList.remove('active', 'completed');
+        var circle = n.querySelector('.step-circle span');
+        if (i < current) {
+          n.classList.add('completed');
+          circle.innerHTML = '<span class="material-symbols-outlined" style="font-size:20px">check</span>';
+        } else if (i === current) {
+          n.classList.add('active');
+          circle.textContent = i + 1;
+        } else {
+          circle.textContent = i + 1;
+        }
+      });
+
+      /* Connectors */
+      conns.forEach(function(c, i) {
+        c.classList.toggle('filled', i < current);
+      });
+
+      /* Panels */
+      panels.forEach(function(p, i) {
+        p.classList.toggle('active', i === current);
+      });
+
+      /* Buttons */
+      btnP.disabled = current === 0;
+      if (current === total - 1) {
+        btnN.innerHTML = '<span class="material-symbols-outlined">check</span> Submit';
+      } else {
+        btnN.innerHTML = 'Next <span class="material-symbols-outlined">arrow_forward</span>';
+      }
+
+      /* Indicator */
+      indic.textContent = 'Step ' + (current + 1) + ' of ' + total;
+
+      /* Populate review panel when on step 4 */
+      if (current === 3) populateReview();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function val(id) {
+      var el = document.getElementById(id);
+      if (!el) return '—';
+      return (el.value && el.value.trim()) || '—';
+    }
+
+    function populateReview() {
+      var fn = val('firstName'), ln = val('lastName');
+      document.getElementById('revName').textContent = (fn !== '—' || ln !== '—') ? fn + ' ' + ln : '—';
+      document.getElementById('revDob').textContent = val('dob');
+      document.getElementById('revOrg').textContent = val('org');
+      document.getElementById('revJob').textContent = val('jobTitle');
+      document.getElementById('revEmail').textContent = val('email');
+      document.getElementById('revPhone').textContent = val('phone');
+
+      var addr = [val('address'), val('city'), val('state'), val('zip'), val('country')]
+        .filter(function(v) { return v !== '—'; }).join(', ');
+      document.getElementById('revAddress').textContent = addr || '—';
+
+      document.getElementById('revDisplay').textContent = val('displayName');
+
+      var pe = document.getElementById('prefEmail');
+      var pm = document.getElementById('prefMarketing');
+      var pp = document.getElementById('prefPublic');
+      var at = document.getElementById('agreeTerms');
+
+      document.getElementById('revNotif').textContent     = pe && pe.selected ? 'On' : 'Off';
+      document.getElementById('revMarketing').textContent  = pm && pm.selected ? 'On' : 'Off';
+      document.getElementById('revPublic').textContent     = pp && pp.selected ? 'On' : 'Off';
+      document.getElementById('revTerms').textContent      = at && at.checked  ? 'Yes' : 'No';
+    }
+
+    window.goToStep = function(step) {
+      if (step >= 0 && step < total) {
+        current = step;
+        /* Show review card, hide success */
+        document.getElementById('reviewCard').style.display = '';
+        document.getElementById('successPanel').style.display = 'none';
+        btnN.style.display = '';
+        btnP.style.display = '';
+        render();
+      }
+    };
+
+    window.nextStep = function() {
+      if (current < total - 1) {
+        current++;
+        render();
+      } else {
+        /* Submit */
+        document.getElementById('reviewCard').style.display = 'none';
+        document.getElementById('successPanel').style.display = '';
+        btnN.style.display = 'none';
+        btnP.style.display = 'none';
+
+        /* Mark all completed */
+        nodes.forEach(function(n) {
+          n.classList.remove('active');
+          n.classList.add('completed');
+          n.querySelector('.step-circle span').innerHTML = '<span class="material-symbols-outlined" style="font-size:20px">check</span>';
+        });
+        conns.forEach(function(c) { c.classList.add('filled'); });
+        indic.textContent = 'Complete';
+      }
+    };
+
+    window.prevStep = function() {
+      if (current > 0) {
+        current--;
+        render();
+      }
+    };
+
+    window.resetForm = function() {
+      /* Reset all fields */
+      document.querySelectorAll('md-outlined-text-field').forEach(function(f) { f.value = ''; });
+      document.querySelectorAll('md-switch').forEach(function(s) { s.selected = false; });
+      document.querySelectorAll('md-checkbox').forEach(function(c) { c.checked = false; });
+      /* Reset to defaults */
+      document.getElementById('prefEmail').selected = true;
+      document.getElementById('prefPublic').selected = true;
+
+      current = 0;
+      document.getElementById('reviewCard').style.display = '';
+      document.getElementById('successPanel').style.display = 'none';
+      btnN.style.display = '';
+      btnP.style.display = '';
+      render();
+    };
+
+    render();
+  })();
+  </script>
+
+</body>
+</html>
