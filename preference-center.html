@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Preference Center &mdash; HealthBridge</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+  <script type="importmap">
+  { "imports": { "@material/web/": "https://esm.run/@material/web/" } }
+  </script>
+  <script type="module">
+    import '@material/web/textfield/outlined-text-field.js';
+    import '@material/web/checkbox/checkbox.js';
+    import '@material/web/switch/switch.js';
+    import '@material/web/divider/divider.js';
+    import '@material/web/select/outlined-select.js';
+    import '@material/web/select/select-option.js';
+    import '@material/web/tabs/tabs.js';
+    import '@material/web/tabs/primary-tab.js';
+    import '@material/web/radio/radio.js';
+  </script>
+
+  <style>
+    :root {
+      --md-sys-color-primary: #00696E;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #6FF6FE;
+      --md-sys-color-on-primary-container: #002022;
+      --md-sys-color-secondary: #4A6365;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #CCE8EA;
+      --md-sys-color-on-secondary-container: #051F21;
+      --md-sys-color-tertiary: #4C5F7C;
+      --md-sys-color-on-tertiary: #ffffff;
+      --md-sys-color-tertiary-container: #D4E3FF;
+      --md-sys-color-on-tertiary-container: #051C36;
+      --md-sys-color-error: #BA1A1A;
+      --md-sys-color-on-error: #ffffff;
+      --md-sys-color-error-container: #FFDAD6;
+      --md-sys-color-on-error-container: #410002;
+      --md-sys-color-surface: #FAFDFC;
+      --md-sys-color-on-surface: #191C1C;
+      --md-sys-color-on-surface-variant: #3F4949;
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #F4F7F6;
+      --md-sys-color-surface-container: #EEF1F0;
+      --md-sys-color-surface-container-high: #E8EBEA;
+      --md-sys-color-outline: #6F7979;
+      --md-sys-color-outline-variant: #BEC9C8;
+      --md-sys-color-inverse-surface: #2D3131;
+      --md-sys-color-inverse-on-surface: #EFF1F0;
+
+      --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+      --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+      --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+      --md-sys-shape-corner-small: 8px;
+      --md-sys-shape-corner-medium: 12px;
+      --md-sys-shape-corner-large: 16px;
+      --md-sys-shape-corner-extra-large: 28px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      background: var(--md-sys-color-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .top-bar .material-symbols-outlined { font-size: 24px; color: var(--md-sys-color-primary); }
+    .top-bar h1 { font-size: 22px; font-weight: 400; flex: 1; }
+    .top-bar .logo-mark {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* ── HIPAA Banner ── */
+    .hipaa-banner {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .hipaa-banner .material-symbols-outlined { font-size: 20px; flex-shrink: 0; }
+
+    /* ── Layout ── */
+    .page-layout {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .page-intro {
+      margin-bottom: 32px;
+    }
+    .page-intro h2 {
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 36px;
+      margin-bottom: 8px;
+    }
+    .page-intro p {
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface-variant);
+      max-width: 640px;
+    }
+
+    /* ── Tab Bar ── */
+    md-tabs {
+      --md-primary-tab-container-color: transparent;
+      margin-bottom: 32px;
+    }
+
+    /* ── Section Cards ── */
+    .section-card {
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.06);
+    }
+    .section-card h3 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-card h3 .material-symbols-outlined { font-size: 22px; color: var(--md-sys-color-primary); }
+    .section-card .section-desc {
+      font-size: 13px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── Preference rows ── */
+    .pref-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      gap: 16px;
+    }
+    .pref-row:last-child { border-bottom: none; }
+    .pref-info { flex: 1; }
+    .pref-info .pref-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+    }
+    .pref-info .pref-desc {
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-top: 2px;
+    }
+    .pref-row md-switch { flex-shrink: 0; }
+
+    /* ── Checkbox groups ── */
+    .check-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--md-sys-color-on-surface);
+    }
+    .check-item label { cursor: pointer; }
+    .check-item .sublabel {
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-left: 34px;
+      margin-top: -4px;
+    }
+
+    /* ── Radio groups ── */
+    .radio-group { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; }
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+    .radio-item label { cursor: pointer; }
+
+    /* ── PHI Notice ── */
+    .phi-notice {
+      background: var(--md-sys-color-error-container);
+      color: var(--md-sys-color-on-error-container);
+      padding: 14px 16px;
+      border-radius: var(--md-sys-shape-corner-small);
+      font-size: 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+    .phi-notice .material-symbols-outlined { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+    .consent-notice {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+      padding: 14px 16px;
+      border-radius: var(--md-sys-shape-corner-small);
+      font-size: 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+    .consent-notice .material-symbols-outlined { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Form fields ── */
+    .form-group { margin-bottom: 20px; }
+    .form-group md-outlined-text-field,
+    .form-group md-outlined-select { width: 100%; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      letter-spacing: 0.1px;
+    }
+    .btn .material-symbols-outlined { font-size: 18px; }
+    .btn-filled {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+    .btn-filled:hover { box-shadow: var(--md-sys-elevation-1); }
+    .btn-outlined {
+      background: transparent;
+      border: 1px solid var(--md-sys-color-outline);
+      color: var(--md-sys-color-primary);
+    }
+    .btn-outlined:hover { background: rgba(0,105,110,0.06); }
+    .btn-text {
+      background: transparent;
+      color: var(--md-sys-color-primary);
+      border: none;
+    }
+    .btn-text:hover { background: rgba(0,105,110,0.06); }
+
+    .action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0 0;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      margin-top: 8px;
+    }
+    .action-bar .secondary-actions { display: flex; gap: 8px; }
+
+    /* ── Tab panels ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Last-updated ── */
+    .last-updated {
+      font-size: 12px;
+      color: var(--md-sys-color-on-surface-variant);
+      text-align: center;
+      padding: 16px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 599px) {
+      .page-layout { padding: 24px 16px 64px; }
+      .section-card { padding: 20px 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .pref-row { flex-direction: column; gap: 8px; }
+      .action-bar { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Top Bar ── -->
+  <header class="top-bar">
+    <span class="material-symbols-outlined">local_hospital</span>
+    <h1>Preference Center</h1>
+    <span class="logo-mark">HealthBridge</span>
+  </header>
+
+  <!-- ── HIPAA Banner ── -->
+  <div class="hipaa-banner">
+    <span class="material-symbols-outlined">verified_user</span>
+    <span>Your data is protected under HIPAA. We never share Protected Health Information (PHI) for marketing purposes. Changes here apply only to non-clinical communications.</span>
+  </div>
+
+  <div class="page-layout">
+
+    <div class="page-intro">
+      <h2>Manage Your Preferences</h2>
+      <p>Control how HealthBridge communicates with you. Your clinical care notifications are managed separately by your provider and are not affected by these settings.</p>
+    </div>
+
+    <!-- ── Tabs ── -->
+    <md-tabs id="prefTabs">
+      <md-primary-tab data-tab="0" aria-selected="true">
+        <span class="material-symbols-outlined" slot="icon">notifications</span>
+        Communication
+      </md-primary-tab>
+      <md-primary-tab data-tab="1">
+        <span class="material-symbols-outlined" slot="icon">health_and_safety</span>
+        Health Interests
+      </md-primary-tab>
+      <md-primary-tab data-tab="2">
+        <span class="material-symbols-outlined" slot="icon">person</span>
+        Profile &amp; Consent
+      </md-primary-tab>
+    </md-tabs>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 1 — Communication Preferences
+         ═══════════════════════════════════════════ -->
+    <div class="tab-panel active" data-panel="0">
+
+      <!-- Appointment Reminders -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">event</span> Appointment Reminders</h3>
+        <p class="section-desc">Choose how you receive non-clinical appointment reminders. Clinical notifications are sent per provider policy regardless of these settings.</p>
+
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">SMS text reminders</div>
+            <div class="pref-desc">Receive appointment date, time, and location via text message</div>
+          </div>
+          <md-switch id="smsReminder" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Email reminders</div>
+            <div class="pref-desc">Get appointment confirmations and pre-visit instructions by email</div>
+          </div>
+          <md-switch id="emailReminder" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Phone call reminders</div>
+            <div class="pref-desc">Automated courtesy call 24 hours before your appointment</div>
+          </div>
+          <md-switch id="phoneReminder"></md-switch>
+        </div>
+
+        <div class="phi-notice">
+          <span class="material-symbols-outlined">info</span>
+          <span>Reminders will include appointment date, time, provider name, and location only &mdash; no diagnosis or treatment details are included in any reminder message.</span>
+        </div>
+      </div>
+
+      <!-- Wellness & Education -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">spa</span> Wellness &amp; Educational Content</h3>
+        <p class="section-desc">Opt in to receive general health tips, seasonal wellness guides, and educational newsletters. This content is non-personalized and does not reference your medical records.</p>
+
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Monthly wellness newsletter</div>
+            <div class="pref-desc">General health tips, nutrition advice, and wellness resources</div>
+          </div>
+          <md-switch id="wellnessNews" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Seasonal health alerts</div>
+            <div class="pref-desc">Flu season, allergy forecasts, and other timely health information</div>
+          </div>
+          <md-switch id="seasonalAlerts" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">New services &amp; programs</div>
+            <div class="pref-desc">Learn about new clinics, telehealth options, and community programs</div>
+          </div>
+          <md-switch id="newServices"></md-switch>
+        </div>
+      </div>
+
+      <!-- Surveys & Feedback -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">rate_review</span> Surveys &amp; Feedback</h3>
+        <p class="section-desc">Help us improve your experience. Survey responses are de-identified before analysis.</p>
+
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Post-visit satisfaction survey</div>
+            <div class="pref-desc">Brief survey sent after appointments to rate your experience</div>
+          </div>
+          <md-switch id="postVisitSurvey" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Annual experience survey</div>
+            <div class="pref-desc">Comprehensive yearly survey about overall care and services</div>
+          </div>
+          <md-switch id="annualSurvey"></md-switch>
+        </div>
+      </div>
+
+      <!-- Channel & Frequency -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">tune</span> Channel &amp; Frequency</h3>
+        <p class="section-desc">Set your preferred communication channel and how often you hear from us for non-clinical content.</p>
+
+        <div class="form-group">
+          <label style="font-size: 14px; font-weight: 500; display: block; margin-bottom: 8px;">Preferred channel</label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <md-radio id="chanEmail" name="channel" value="email" checked></md-radio>
+              <label for="chanEmail">Email</label>
+            </div>
+            <div class="radio-item">
+              <md-radio id="chanSMS" name="channel" value="sms"></md-radio>
+              <label for="chanSMS">SMS / Text message</label>
+            </div>
+            <div class="radio-item">
+              <md-radio id="chanPortal" name="channel" value="portal"></md-radio>
+              <label for="chanPortal">Patient portal inbox only</label>
+            </div>
+          </div>
+        </div>
+
+        <md-divider style="margin: 8px 0 16px"></md-divider>
+
+        <div class="form-group">
+          <label style="font-size: 14px; font-weight: 500; display: block; margin-bottom: 8px;">Email frequency cap</label>
+          <div class="radio-group">
+            <div class="radio-item">
+              <md-radio id="freqWeekly" name="frequency" value="weekly"></md-radio>
+              <label for="freqWeekly">No more than once per week</label>
+            </div>
+            <div class="radio-item">
+              <md-radio id="freqBiweekly" name="frequency" value="biweekly" checked></md-radio>
+              <label for="freqBiweekly">No more than twice per month</label>
+            </div>
+            <div class="radio-item">
+              <md-radio id="freqMonthly" name="frequency" value="monthly"></md-radio>
+              <label for="freqMonthly">Once per month maximum</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 2 — Health Interests (1st party data)
+         ═══════════════════════════════════════════ -->
+    <div class="tab-panel" data-panel="1">
+
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">favorite</span> Topics You Care About</h3>
+        <p class="section-desc">Select health topics you're interested in. We'll use this to send you relevant educational content. <strong>This is general interest data only</strong> &mdash; it does not reflect your medical history or diagnoses.</p>
+
+        <div class="consent-notice">
+          <span class="material-symbols-outlined">shield</span>
+          <span>Your topic selections are stored as first-party preference data, separate from your medical record. They are never shared with third parties or used for ad targeting.</span>
+        </div>
+
+        <md-divider style="margin: 16px 0"></md-divider>
+
+        <label style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: var(--md-sys-color-on-surface-variant); display: block; margin-bottom: 8px;">Preventive &amp; General</label>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="topicPrevScreening"></md-checkbox>
+            <label for="topicPrevScreening">Preventive screenings &amp; check-ups</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicNutrition"></md-checkbox>
+            <label for="topicNutrition">Nutrition &amp; healthy eating</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicFitness"></md-checkbox>
+            <label for="topicFitness">Exercise &amp; physical fitness</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicMentalHealth"></md-checkbox>
+            <label for="topicMentalHealth">Mental health &amp; stress management</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicSleep"></md-checkbox>
+            <label for="topicSleep">Sleep health</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicVaccinations"></md-checkbox>
+            <label for="topicVaccinations">Vaccinations &amp; immunizations</label>
+          </div>
+        </div>
+
+        <md-divider style="margin: 16px 0"></md-divider>
+
+        <label style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: var(--md-sys-color-on-surface-variant); display: block; margin-bottom: 8px;">Chronic Condition Education</label>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="topicDiabetes"></md-checkbox>
+            <label for="topicDiabetes">Diabetes management</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicHeart"></md-checkbox>
+            <label for="topicHeart">Heart health &amp; blood pressure</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicRespiratory"></md-checkbox>
+            <label for="topicRespiratory">Respiratory health (asthma, COPD)</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicArthritis"></md-checkbox>
+            <label for="topicArthritis">Joint health &amp; arthritis</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicCancerPrev"></md-checkbox>
+            <label for="topicCancerPrev">Cancer prevention &amp; awareness</label>
+          </div>
+        </div>
+
+        <md-divider style="margin: 16px 0"></md-divider>
+
+        <label style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: var(--md-sys-color-on-surface-variant); display: block; margin-bottom: 8px;">Life Stage &amp; Family</label>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="topicPrenatal"></md-checkbox>
+            <label for="topicPrenatal">Prenatal &amp; maternity care</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicPediatric"></md-checkbox>
+            <label for="topicPediatric">Pediatric health &amp; parenting</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicSenior"></md-checkbox>
+            <label for="topicSenior">Senior wellness &amp; aging</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicWomens"></md-checkbox>
+            <label for="topicWomens">Women's health</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="topicMens"></md-checkbox>
+            <label for="topicMens">Men's health</label>
+          </div>
+        </div>
+
+        <div class="phi-notice" style="margin-top: 20px;">
+          <span class="material-symbols-outlined">info</span>
+          <span>Selecting a topic does <strong>not</strong> indicate a clinical diagnosis. These preferences are used solely to personalize educational content you receive.</span>
+        </div>
+      </div>
+
+      <!-- How we reach you about these topics -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">mark_email_read</span> Content Delivery Format</h3>
+        <p class="section-desc">Tell us how you prefer to receive educational health content.</p>
+
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="fmtEmail" checked></md-checkbox>
+            <label for="fmtEmail">Email articles &amp; newsletters</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="fmtVideo"></md-checkbox>
+            <label for="fmtVideo">Video content &amp; webinar invitations</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="fmtPortal"></md-checkbox>
+            <label for="fmtPortal">Patient portal resource library</label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="fmtPrint"></md-checkbox>
+            <label for="fmtPrint">Printed materials by mail</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 3 — Profile & Consent
+         ═══════════════════════════════════════════ -->
+    <div class="tab-panel" data-panel="2">
+
+      <!-- Contact Details -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">contact_mail</span> Contact Information</h3>
+        <p class="section-desc">Keep your contact details current so we can reach you through your preferred channels. Changes here update your communication profile only &mdash; to update your medical record contact info, contact your provider's office.</p>
+
+        <div class="form-group form-row">
+          <md-outlined-text-field label="First name" id="firstName" value=""></md-outlined-text-field>
+          <md-outlined-text-field label="Last name" id="lastName" value=""></md-outlined-text-field>
+        </div>
+        <div class="form-group">
+          <md-outlined-text-field label="Email address" type="email" id="email" value=""></md-outlined-text-field>
+        </div>
+        <div class="form-group">
+          <md-outlined-text-field label="Mobile phone" type="tel" id="phone" value="" supporting-text="Used for SMS reminders if enabled"></md-outlined-text-field>
+        </div>
+        <div class="form-group form-row">
+          <md-outlined-text-field label="ZIP / Postal code" id="zip" value="" supporting-text="For localized health alerts only"></md-outlined-text-field>
+          <md-outlined-select label="Language preference" id="langPref">
+            <md-select-option selected value="en"><div slot="headline">English</div></md-select-option>
+            <md-select-option value="es"><div slot="headline">Espa&ntilde;ol</div></md-select-option>
+            <md-select-option value="zh"><div slot="headline">中文</div></md-select-option>
+            <md-select-option value="vi"><div slot="headline">Tiếng Việt</div></md-select-option>
+            <md-select-option value="ko"><div slot="headline">한국어</div></md-select-option>
+          </md-outlined-select>
+        </div>
+      </div>
+
+      <!-- Data & Consent -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">policy</span> Data Usage &amp; Consent</h3>
+        <p class="section-desc">Review and manage how your preference data is used. Your medical records and PHI are governed separately by HIPAA and your provider's privacy practices.</p>
+
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Personalize content using my topic selections</div>
+            <div class="pref-desc">Allow us to tailor newsletters and resources to your selected health interests</div>
+          </div>
+          <md-switch id="consentPersonalize" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Aggregate analytics participation</div>
+            <div class="pref-desc">Include my de-identified preference data in aggregate reports to improve content relevance</div>
+          </div>
+          <md-switch id="consentAnalytics" selected></md-switch>
+        </div>
+        <div class="pref-row">
+          <div class="pref-info">
+            <div class="pref-title">Third-party data sharing</div>
+            <div class="pref-desc">Share non-PHI preference data with approved research partners (never sold)</div>
+          </div>
+          <md-switch id="consentThirdParty"></md-switch>
+        </div>
+
+        <div class="phi-notice" style="margin-top: 16px;">
+          <span class="material-symbols-outlined">gpp_maybe</span>
+          <span><strong>PHI is never included in marketing or preference data.</strong> Only non-clinical information you explicitly provide (name, email, topic interests, communication preferences) is stored in this system.</span>
+        </div>
+
+        <md-divider style="margin: 20px 0 16px"></md-divider>
+
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="ackNotice"></md-checkbox>
+            <label for="ackNotice">I have read and acknowledge the <a href="#" style="color: var(--md-sys-color-primary);">Notice of Privacy Practices</a></label>
+          </div>
+          <div class="check-item">
+            <md-checkbox id="ackTerms"></md-checkbox>
+            <label for="ackTerms">I agree to the <a href="#" style="color: var(--md-sys-color-primary);">Terms of Use</a> for this preference center</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Rights -->
+      <div class="section-card">
+        <h3><span class="material-symbols-outlined">lock_open</span> Your Data Rights</h3>
+        <p class="section-desc">Under HIPAA and applicable state laws, you have the right to access, correct, or request deletion of your preference data at any time.</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+          <button class="btn btn-outlined">
+            <span class="material-symbols-outlined">download</span>
+            Download my data
+          </button>
+          <button class="btn btn-outlined">
+            <span class="material-symbols-outlined">delete_outline</span>
+            Request data deletion
+          </button>
+          <button class="btn btn-text">
+            <span class="material-symbols-outlined">history</span>
+            View consent history
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Action Bar ── -->
+    <div class="action-bar">
+      <div class="secondary-actions">
+        <button class="btn btn-text" onclick="resetAll()">
+          <span class="material-symbols-outlined">undo</span>
+          Reset to defaults
+        </button>
+      </div>
+      <button class="btn btn-filled" onclick="savePrefs()">
+        <span class="material-symbols-outlined">save</span>
+        Save preferences
+      </button>
+    </div>
+
+    <div class="last-updated">Last updated: March 27, 2026</div>
+  </div>
+
+  <script>
+  (function() {
+    /* ── Tab switching ── */
+    var tabs = document.getElementById('prefTabs');
+    var panels = document.querySelectorAll('.tab-panel');
+
+    if (tabs) {
+      tabs.addEventListener('change', function() {
+        var activeTab = tabs.querySelector('md-primary-tab[active]');
+        if (!activeTab) return;
+        var idx = parseInt(activeTab.dataset.tab, 10);
+        panels.forEach(function(p, i) {
+          p.classList.toggle('active', i === idx);
+        });
+      });
+    }
+
+    /* Fallback click handler for tab switching */
+    document.querySelectorAll('md-primary-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var idx = parseInt(tab.dataset.tab, 10);
+        panels.forEach(function(p, i) {
+          p.classList.toggle('active', i === idx);
+        });
+      });
+    });
+
+    /* ── Save (demo) ── */
+    window.savePrefs = function() {
+      var btn = document.querySelector('.action-bar .btn-filled');
+      var original = btn.innerHTML;
+      btn.innerHTML = '<span class="material-symbols-outlined">check</span> Saved!';
+      btn.style.background = '#386a20';
+      setTimeout(function() {
+        btn.innerHTML = original;
+        btn.style.background = '';
+      }, 2000);
+    };
+
+    /* ── Reset (demo) ── */
+    window.resetAll = function() {
+      if (confirm('Reset all preferences to their default values?')) {
+        document.querySelectorAll('md-switch').forEach(function(sw) {
+          sw.selected = false;
+        });
+        document.querySelectorAll('md-checkbox').forEach(function(cb) {
+          cb.checked = false;
+        });
+        /* Re-select defaults */
+        var defaults = ['smsReminder', 'emailReminder', 'wellnessNews', 'seasonalAlerts',
+                        'postVisitSurvey', 'consentPersonalize', 'consentAnalytics'];
+        defaults.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el && el.tagName.toLowerCase().indexOf('switch') !== -1) el.selected = true;
+          if (el && el.tagName.toLowerCase().indexOf('checkbox') !== -1) el.checked = true;
+        });
+      }
+    };
+  })();
+  </script>
+
+</body>
+</html>
