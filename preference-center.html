@@ -14,7 +14,6 @@
   <script type="module">
     import '@material/web/textfield/outlined-text-field.js';
     import '@material/web/checkbox/checkbox.js';
-    import '@material/web/switch/switch.js';
     import '@material/web/divider/divider.js';
     import '@material/web/select/outlined-select.js';
     import '@material/web/select/select-option.js';
@@ -365,26 +364,19 @@
         <h3><span class="material-symbols-outlined">event</span> Appointment Reminders</h3>
         <p class="section-desc">Choose how you receive non-clinical appointment reminders. Clinical notifications are sent per provider policy regardless of these settings.</p>
 
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">SMS text reminders</div>
-            <div class="pref-desc">Receive appointment date, time, and location via text message</div>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="smsReminder" checked></md-checkbox>
+            <label for="smsReminder">SMS text reminders &mdash; Receive appointment date, time, and location via text</label>
           </div>
-          <md-switch id="smsReminder" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Email reminders</div>
-            <div class="pref-desc">Get appointment confirmations and pre-visit instructions by email</div>
+          <div class="check-item">
+            <md-checkbox id="emailReminder" checked></md-checkbox>
+            <label for="emailReminder">Email reminders &mdash; Appointment confirmations and pre-visit instructions</label>
           </div>
-          <md-switch id="emailReminder" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Phone call reminders</div>
-            <div class="pref-desc">Automated courtesy call 24 hours before your appointment</div>
+          <div class="check-item">
+            <md-checkbox id="phoneReminder"></md-checkbox>
+            <label for="phoneReminder">Phone call reminders &mdash; Automated courtesy call 24 hours before your appointment</label>
           </div>
-          <md-switch id="phoneReminder"></md-switch>
         </div>
 
         <div class="phi-notice">
@@ -398,26 +390,19 @@
         <h3><span class="material-symbols-outlined">spa</span> Wellness &amp; Educational Content</h3>
         <p class="section-desc">Opt in to receive general health tips, seasonal wellness guides, and educational newsletters. This content is non-personalized and does not reference your medical records.</p>
 
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Monthly wellness newsletter</div>
-            <div class="pref-desc">General health tips, nutrition advice, and wellness resources</div>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="wellnessNews" checked></md-checkbox>
+            <label for="wellnessNews">Monthly wellness newsletter &mdash; Health tips, nutrition advice, and resources</label>
           </div>
-          <md-switch id="wellnessNews" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Seasonal health alerts</div>
-            <div class="pref-desc">Flu season, allergy forecasts, and other timely health information</div>
+          <div class="check-item">
+            <md-checkbox id="seasonalAlerts" checked></md-checkbox>
+            <label for="seasonalAlerts">Seasonal health alerts &mdash; Flu season, allergy forecasts, and timely info</label>
           </div>
-          <md-switch id="seasonalAlerts" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">New services &amp; programs</div>
-            <div class="pref-desc">Learn about new clinics, telehealth options, and community programs</div>
+          <div class="check-item">
+            <md-checkbox id="newServices"></md-checkbox>
+            <label for="newServices">New services &amp; programs &mdash; Clinics, telehealth options, and community programs</label>
           </div>
-          <md-switch id="newServices"></md-switch>
         </div>
       </div>
 
@@ -426,19 +411,15 @@
         <h3><span class="material-symbols-outlined">rate_review</span> Surveys &amp; Feedback</h3>
         <p class="section-desc">Help us improve your experience. Survey responses are de-identified before analysis.</p>
 
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Post-visit satisfaction survey</div>
-            <div class="pref-desc">Brief survey sent after appointments to rate your experience</div>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="postVisitSurvey" checked></md-checkbox>
+            <label for="postVisitSurvey">Post-visit satisfaction survey &mdash; Brief survey after appointments</label>
           </div>
-          <md-switch id="postVisitSurvey" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Annual experience survey</div>
-            <div class="pref-desc">Comprehensive yearly survey about overall care and services</div>
+          <div class="check-item">
+            <md-checkbox id="annualSurvey"></md-checkbox>
+            <label for="annualSurvey">Annual experience survey &mdash; Comprehensive yearly review of care and services</label>
           </div>
-          <md-switch id="annualSurvey"></md-switch>
         </div>
       </div>
 
@@ -652,26 +633,19 @@
         <h3><span class="material-symbols-outlined">policy</span> Data Usage &amp; Consent</h3>
         <p class="section-desc">Review and manage how your preference data is used. Your medical records and PHI are governed separately by HIPAA and your provider's privacy practices.</p>
 
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Personalize content using my topic selections</div>
-            <div class="pref-desc">Allow us to tailor newsletters and resources to your selected health interests</div>
+        <div class="check-group">
+          <div class="check-item">
+            <md-checkbox id="consentPersonalize" checked></md-checkbox>
+            <label for="consentPersonalize">Personalize content using my topic selections</label>
           </div>
-          <md-switch id="consentPersonalize" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Aggregate analytics participation</div>
-            <div class="pref-desc">Include my de-identified preference data in aggregate reports to improve content relevance</div>
+          <div class="check-item">
+            <md-checkbox id="consentAnalytics" checked></md-checkbox>
+            <label for="consentAnalytics">Aggregate analytics participation &mdash; Include de-identified data in reports</label>
           </div>
-          <md-switch id="consentAnalytics" selected></md-switch>
-        </div>
-        <div class="pref-row">
-          <div class="pref-info">
-            <div class="pref-title">Third-party data sharing</div>
-            <div class="pref-desc">Share non-PHI preference data with approved research partners (never sold)</div>
+          <div class="check-item">
+            <md-checkbox id="consentThirdParty"></md-checkbox>
+            <label for="consentThirdParty">Third-party data sharing &mdash; Share non-PHI data with approved research partners</label>
           </div>
-          <md-switch id="consentThirdParty"></md-switch>
         </div>
 
         <div class="phi-notice" style="margin-top: 16px;">
@@ -774,19 +748,15 @@
     /* ── Reset (demo) ── */
     window.resetAll = function() {
       if (confirm('Reset all preferences to their default values?')) {
-        document.querySelectorAll('md-switch').forEach(function(sw) {
-          sw.selected = false;
-        });
         document.querySelectorAll('md-checkbox').forEach(function(cb) {
           cb.checked = false;
         });
         /* Re-select defaults */
         var defaults = ['smsReminder', 'emailReminder', 'wellnessNews', 'seasonalAlerts',
-                        'postVisitSurvey', 'consentPersonalize', 'consentAnalytics'];
+                        'postVisitSurvey', 'consentPersonalize', 'consentAnalytics', 'fmtEmail'];
         defaults.forEach(function(id) {
           var el = document.getElementById(id);
-          if (el && el.tagName.toLowerCase().indexOf('switch') !== -1) el.selected = true;
-          if (el && el.tagName.toLowerCase().indexOf('checkbox') !== -1) el.checked = true;
+          if (el) el.checked = true;
         });
       }
     };
