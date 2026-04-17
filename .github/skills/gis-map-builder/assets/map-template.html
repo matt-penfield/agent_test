@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Map Prototype</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Optional: Marker Cluster CSS (uncomment if using clusters) -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" /> -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" /> -->
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', 'Roboto', system-ui, sans-serif; }
+    #map { height: 100%; width: 100%; }
+
+    /* Legend */
+    .legend {
+      background: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 200px;
+    }
+    .legend h4 { margin: 0 0 8px; font-size: 14px; font-weight: 600; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-swatch {
+      width: 18px; height: 18px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Info panel */
+    .info-panel {
+      background: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 180px;
+    }
+    .info-panel h4 { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+
+    /* Loading indicator */
+    .loading-indicator {
+      background: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Optional: Marker Cluster (uncomment if using clusters) -->
+  <!-- <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script> -->
+
+  <!-- Optional: Heatmap (uncomment if using heatmaps) -->
+  <!-- <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script> -->
+
+  <!-- Optional: TopoJSON client (uncomment if loading TopoJSON data) -->
+  <!-- <script src="https://unpkg.com/topojson-client@3/dist/topojson-client.min.js"></script> -->
+
+  <script>
+    // Initialize map — adjust center and zoom for your prototype
+    const map = L.map('map').setView([39.8, -98.6], 4);
+
+    // Base tile layer — swap URL for different styles (see SKILL.md Step 4)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Scale bar
+    L.control.scale({ imperial: true, metric: true }).addTo(map);
+
+    // ── ADD YOUR DATA LAYERS BELOW ──────────────────────────────
+    // Example: Load GeoJSON
+    // fetch('data.geojson')
+    //   .then(r => r.json())
+    //   .then(data => {
+    //     L.geoJSON(data, {
+    //       style: feature => ({ fillColor: '#6750A4', weight: 1, color: '#fff', fillOpacity: 0.7 }),
+    //       onEachFeature: (feature, layer) => {
+    //         layer.bindPopup(`<strong>${feature.properties.name}</strong>`);
+    //       }
+    //     }).addTo(map);
+    //   });
+  </script>
+</body>
+</html>

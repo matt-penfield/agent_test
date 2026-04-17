@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Angeles Air Quality Index Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: 'Inter', 'Roboto', system-ui, sans-serif; }
+
+    .map-layout { display: flex; height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 340px;
+      background: #fafafa;
+      border-right: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fff;
+    }
+    .sidebar-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+    .sidebar-header p {
+      font-size: 12px;
+      color: #777;
+    }
+    .sidebar-header .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1B9E77;
+      margin-top: 8px;
+    }
+    .live-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: #1B9E77;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .station-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px;
+    }
+    .station-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: 1px solid transparent;
+    }
+    .station-card:hover {
+      background: #fff;
+      border-color: #e0e0e0;
+    }
+    .station-card.active {
+      background: #fff;
+      border-color: #6750A4;
+      box-shadow: 0 1px 4px rgba(103,80,164,0.15);
+    }
+    .aqi-badge {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .station-info h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 2px;
+    }
+    .station-info p {
+      font-size: 11px;
+      color: #888;
+    }
+    .station-info .aqi-label {
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Legend in sidebar */
+    .sidebar-legend {
+      padding: 14px 20px;
+      border-top: 1px solid #e0e0e0;
+      background: #fff;
+    }
+    .sidebar-legend h4 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .legend-row {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+    .legend-block {
+      flex: 1;
+      height: 8px;
+      border-radius: 2px;
+    }
+    .legend-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #999;
+    }
+
+    /* Map */
+    #map { flex: 1; }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 12px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      font-size: 13px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #6750A4;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Info panel on map */
+    .info-panel {
+      background: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 200px;
+    }
+    .info-panel h4 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .info-panel .aqi-reading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0 4px;
+    }
+    .info-panel .aqi-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .info-panel .aqi-number {
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .info-panel .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      padding: 3px 0;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    /* Popup styles */
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    }
+    .leaflet-popup-content { margin: 12px 16px; font-family: 'Inter', system-ui, sans-serif; }
+    .popup-aqi { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .popup-aqi .badge {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 20px;
+    }
+    .popup-aqi .text h3 { font-size: 14px; font-weight: 600; margin: 0; }
+    .popup-aqi .text p { font-size: 11px; color: #888; margin: 2px 0 0; }
+    .popup-details { font-size: 12px; color: #555; }
+    .popup-details dt { font-weight: 600; color: #333; display: inline; }
+    .popup-details dd { display: inline; margin: 0 0 0 4px; }
+    .popup-details .row { padding: 3px 0; border-top: 1px solid #f0f0f0; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .map-layout { flex-direction: column-reverse; }
+      .sidebar { width: 100%; height: 45vh; border-right: none; border-top: 1px solid #e0e0e0; }
+      #map { height: 55vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="map-layout">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1>LA Air Quality</h1>
+        <p>Real-time AQI from monitoring stations</p>
+        <div class="live-badge" id="status-badge">Fetching data…</div>
+      </div>
+      <div class="station-list" id="station-list"></div>
+      <div class="sidebar-legend">
+        <h4>AQI Scale</h4>
+        <div class="legend-row">
+          <div class="legend-block" style="background:#00E400"></div>
+          <div class="legend-block" style="background:#FFFF00"></div>
+          <div class="legend-block" style="background:#FF7E00"></div>
+          <div class="legend-block" style="background:#FF0000"></div>
+          <div class="legend-block" style="background:#8F3F97"></div>
+          <div class="legend-block" style="background:#7E0023"></div>
+        </div>
+        <div class="legend-labels">
+          <span>0 Good</span>
+          <span>100</span>
+          <span>200</span>
+          <span>300+</span>
+        </div>
+      </div>
+    </aside>
+    <div id="map"></div>
+  </div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    Loading AQI data…
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // ── AQI Color System (EPA Breakpoints) ──────────────────────
+    const AQI_LEVELS = [
+      { max: 50,  label: 'Good',                        color: '#00E400', textColor: '#1a1a1a' },
+      { max: 100, label: 'Moderate',                     color: '#FFFF00', textColor: '#1a1a1a' },
+      { max: 150, label: 'Unhealthy for Sensitive Groups', color: '#FF7E00', textColor: '#fff' },
+      { max: 200, label: 'Unhealthy',                    color: '#FF0000', textColor: '#fff' },
+      { max: 300, label: 'Very Unhealthy',               color: '#8F3F97', textColor: '#fff' },
+      { max: 500, label: 'Hazardous',                    color: '#7E0023', textColor: '#fff' }
+    ];
+
+    function getAqiLevel(aqi) {
+      return AQI_LEVELS.find(l => aqi <= l.max) || AQI_LEVELS[AQI_LEVELS.length - 1];
+    }
+
+    // ── Initialize Map ──────────────────────────────────────────
+    const map = L.map('map', { zoomControl: false }).setView([34.05, -118.35], 10);
+
+    // Zoom control top-right
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Light base tiles — keeps AQI colors readable
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    L.control.scale({ position: 'bottomright', imperial: true, metric: false }).addTo(map);
+
+    // ── Fallback Sample Data ────────────────────────────────────
+    // Realistic LA-area monitoring stations with plausible AQI values
+    const FALLBACK_STATIONS = [
+      { name: 'Los Angeles — North Main St', lat: 34.0663, lng: -118.2268, aqi: 72, param: 'PM2.5', unit: 'µg/m³', raw: 21.5 },
+      { name: 'Burbank', lat: 34.1759, lng: -118.3170, aqi: 68, param: 'PM2.5', unit: 'µg/m³', raw: 19.8 },
+      { name: 'Pasadena', lat: 34.1336, lng: -118.1271, aqi: 55, param: 'PM2.5', unit: 'µg/m³', raw: 14.2 },
+      { name: 'Glendora', lat: 34.1362, lng: -117.8600, aqi: 83, param: 'PM2.5', unit: 'µg/m³', raw: 25.7 },
+      { name: 'Azusa', lat: 34.1336, lng: -117.9076, aqi: 78, param: 'PM2.5', unit: 'µg/m³', raw: 23.1 },
+      { name: 'Pomona', lat: 34.0663, lng: -117.7512, aqi: 91, param: 'PM2.5', unit: 'µg/m³', raw: 30.2 },
+      { name: 'Compton', lat: 33.8959, lng: -118.2201, aqi: 65, param: 'PM2.5', unit: 'µg/m³', raw: 17.6 },
+      { name: 'Long Beach (Signal Hill)', lat: 33.8017, lng: -118.1853, aqi: 58, param: 'PM2.5', unit: 'µg/m³', raw: 15.0 },
+      { name: 'Long Beach (Route 710)', lat: 33.8274, lng: -118.2117, aqi: 81, param: 'PM2.5', unit: 'µg/m³', raw: 24.6 },
+      { name: 'Pico Rivera', lat: 33.9831, lng: -118.0967, aqi: 74, param: 'PM2.5', unit: 'µg/m³', raw: 22.0 },
+      { name: 'Santa Clarita', lat: 34.3831, lng: -118.5285, aqi: 45, param: 'PM2.5', unit: 'µg/m³', raw: 11.0 },
+      { name: 'Reseda', lat: 34.1987, lng: -118.5339, aqi: 62, param: 'PM2.5', unit: 'µg/m³', raw: 16.8 },
+      { name: 'LAX / Westchester', lat: 33.9592, lng: -118.4148, aqi: 51, param: 'PM2.5', unit: 'µg/m³', raw: 12.5 },
+      { name: 'Santa Monica', lat: 34.0259, lng: -118.4965, aqi: 38, param: 'PM2.5', unit: 'µg/m³', raw: 9.1 },
+      { name: 'Malibu', lat: 34.0353, lng: -118.6901, aqi: 29, param: 'PM2.5', unit: 'µg/m³', raw: 6.8 },
+      { name: 'Torrance', lat: 33.8358, lng: -118.3406, aqi: 54, param: 'PM2.5', unit: 'µg/m³', raw: 13.8 },
+      { name: 'Hawthorne', lat: 33.9164, lng: -118.3526, aqi: 60, param: 'PM2.5', unit: 'µg/m³', raw: 16.0 },
+      { name: 'Covina', lat: 34.0901, lng: -117.8904, aqi: 86, param: 'PM2.5', unit: 'µg/m³', raw: 27.3 },
+      { name: 'El Monte', lat: 34.0686, lng: -118.0276, aqi: 77, param: 'PM2.5', unit: 'µg/m³', raw: 22.8 },
+      { name: 'Inglewood', lat: 33.9617, lng: -118.3531, aqi: 63, param: 'PM2.5', unit: 'µg/m³', raw: 17.1 },
+    ];
+
+    // ── Fetch AQI Data ──────────────────────────────────────────
+    let activeMarker = null;
+    let markerMap = new Map();
+
+    async function loadAqiData() {
+      const loadingEl = document.getElementById('loading');
+      const badgeEl = document.getElementById('status-badge');
+      let stations = [];
+      let dataSource = 'fallback';
+
+      try {
+        // OpenAQ v2 — free, no API key, CORS-enabled
+        const bbox = '-118.8,33.6,-117.6,34.5'; // west,south,east,north
+        const url = `https://api.openaq.org/v2/latest?coordinates=34.05,-118.35&radius=50000&parameter=pm25&limit=50`;
+        const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (data.results && data.results.length > 3) {
+          stations = data.results
+            .filter(r => r.measurements && r.measurements.length > 0)
+            .map(r => {
+              const m = r.measurements.find(m => m.parameter === 'pm25') || r.measurements[0];
+              return {
+                name: r.location,
+                lat: r.coordinates.latitude,
+                lng: r.coordinates.longitude,
+                aqi: pm25ToAqi(m.value),
+                param: m.parameter.toUpperCase(),
+                unit: m.unit,
+                raw: m.value,
+                lastUpdated: m.lastUpdated
+              };
+            })
+            .filter(s => s.aqi >= 0 && s.aqi <= 500);
+          dataSource = 'live';
+        } else {
+          throw new Error('Insufficient data from API');
+        }
+      } catch (err) {
+        console.warn('OpenAQ fetch failed, using fallback data:', err.message);
+        stations = FALLBACK_STATIONS;
+        dataSource = 'fallback';
+      }
+
+      loadingEl.remove();
+
+      if (dataSource === 'live') {
+        badgeEl.textContent = `Live — ${stations.length} stations`;
+        badgeEl.style.color = '#1B9E77';
+      } else {
+        badgeEl.textContent = `Sample data — ${stations.length} stations`;
+        badgeEl.style.color = '#999';
+      }
+
+      // Sort by AQI descending (worst first)
+      stations.sort((a, b) => b.aqi - a.aqi);
+      renderStations(stations);
+    }
+
+    // ── PM2.5 (µg/m³) → AQI Conversion (EPA Breakpoints) ──────
+    function pm25ToAqi(conc) {
+      const bp = [
+        { cLo: 0,    cHi: 12,    iLo: 0,   iHi: 50  },
+        { cLo: 12.1, cHi: 35.4,  iLo: 51,  iHi: 100 },
+        { cLo: 35.5, cHi: 55.4,  iLo: 101, iHi: 150 },
+        { cLo: 55.5, cHi: 150.4, iLo: 151, iHi: 200 },
+        { cLo: 150.5,cHi: 250.4, iLo: 201, iHi: 300 },
+        { cLo: 250.5,cHi: 350.4, iLo: 301, iHi: 400 },
+        { cLo: 350.5,cHi: 500.4, iLo: 401, iHi: 500 },
+      ];
+      const c = Math.round(conc * 10) / 10;
+      for (const b of bp) {
+        if (c <= b.cHi) {
+          return Math.round(((b.iHi - b.iLo) / (b.cHi - b.cLo)) * (c - b.cLo) + b.iLo);
+        }
+      }
+      return 500;
+    }
+
+    // ── Render Stations on Map + Sidebar ────────────────────────
+    function renderStations(stations) {
+      const listEl = document.getElementById('station-list');
+      listEl.innerHTML = '';
+
+      stations.forEach((s, idx) => {
+        const level = getAqiLevel(s.aqi);
+
+        // Map marker
+        const marker = L.circleMarker([s.lat, s.lng], {
+          radius: 12,
+          fillColor: level.color,
+          color: '#fff',
+          weight: 2.5,
+          fillOpacity: 0.9
+        }).addTo(map);
+
+        // AQI number label
+        const label = L.marker([s.lat, s.lng], {
+          icon: L.divIcon({
+            className: 'aqi-label-icon',
+            html: `<span style="
+              font-family: Inter, system-ui, sans-serif;
+              font-size: 11px;
+              font-weight: 700;
+              color: ${level.textColor};
+              text-shadow: ${level.textColor === '#fff' ? '0 1px 2px rgba(0,0,0,0.4)' : 'none'};
+              pointer-events: none;
+            ">${s.aqi}</span>`,
+            iconSize: [24, 14],
+            iconAnchor: [12, 7]
+          }),
+          interactive: false
+        }).addTo(map);
+
+        // Popup
+        const updatedStr = s.lastUpdated
+          ? `<div class="row"><dt>Updated</dt><dd>${new Date(s.lastUpdated).toLocaleString()}</dd></div>`
+          : '';
+        marker.bindPopup(`
+          <div class="popup-aqi">
+            <div class="badge" style="background:${level.color}; color:${level.textColor}">${s.aqi}</div>
+            <div class="text">
+              <h3>${escapeHtml(s.name)}</h3>
+              <p>${level.label}</p>
+            </div>
+          </div>
+          <div class="popup-details">
+            <div class="row"><dt>Parameter</dt><dd>${escapeHtml(s.param)}</dd></div>
+            <div class="row"><dt>Concentration</dt><dd>${s.raw} ${escapeHtml(s.unit)}</dd></div>
+            ${updatedStr}
+          </div>
+        `, { maxWidth: 280 });
+
+        marker.bindTooltip(`${escapeHtml(s.name)}: AQI ${s.aqi}`, { direction: 'top', offset: [0, -10] });
+        markerMap.set(idx, marker);
+
+        // Sidebar card
+        const card = document.createElement('div');
+        card.className = 'station-card';
+        card.innerHTML = `
+          <div class="aqi-badge" style="background:${level.color}; color:${level.textColor}">${s.aqi}</div>
+          <div class="station-info">
+            <h3>${escapeHtml(s.name)}</h3>
+            <p>${escapeHtml(s.param)} · ${s.raw} ${escapeHtml(s.unit)}</p>
+            <div class="aqi-label" style="color:${level.color}">${level.label}</div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          // Deactivate previous
+          document.querySelectorAll('.station-card.active').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          map.flyTo([s.lat, s.lng], 13, { duration: 0.8 });
+          marker.openPopup();
+        });
+
+        listEl.appendChild(card);
+      });
+
+      // Fit map to all station bounds
+      if (stations.length > 0) {
+        const bounds = L.latLngBounds(stations.map(s => [s.lat, s.lng]));
+        map.fitBounds(bounds.pad(0.15));
+      }
+    }
+
+    // ── Utilities ───────────────────────────────────────────────
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ── Boot ────────────────────────────────────────────────────
+    loadAqiData();
+  </script>
+</body>
+</html>
