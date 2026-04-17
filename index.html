@@ -593,7 +593,7 @@ window.__uxInjectIssues([
     severity: "Major",
     selector: ".project-card",
     locationHint: "Project cards",
-    problem: "No :focus-visible state on card links \u2014 keyboard users see only the browser default outline, missing the hover elevation effect.",
+    problem: "No :focus-visible style on card links \u2014 keyboard users get only the browser default outline, missing the hover elevation effect.",
     recommendation: "Add .project-card:focus-visible { box-shadow: var(--md-sys-elevation-2); transform: translateY(-2px); outline: 2px solid var(--md-sys-color-primary); outline-offset: 2px; }"
   },
   {
@@ -601,9 +601,9 @@ window.__uxInjectIssues([
     heuristic: "H2: Match Between System and Real World",
     severity: "Minor",
     selector: ".hero-meta",
-    locationHint: "Hero section",
-    problem: "Hero displays \"8 Copilot Skills\" but the project now contains 9 skills (ux-research was added). Stale count misleads users.",
-    recommendation: "Update the hero meta to read \"9 Copilot Skills\" to reflect the current skill count."
+    locationHint: "Hero section \u2014 skill count",
+    problem: "Hero displays \u201c9 Copilot Skills\u201d but the workspace now contains 10 skill folders (gis-map-builder was added). Stale count misleads users.",
+    recommendation: "Update the hero meta to read \u201c10 Copilot Skills\u201d to match the current skill count in .github/skills/."
   },
   {
     id: 3,
@@ -611,35 +611,44 @@ window.__uxInjectIssues([
     severity: "Cosmetic",
     selector: "title",
     locationHint: "Browser tab / SEO",
-    problem: "Page title reads \"Protogen  Project Portfolio\" with a double space where an em-dash was likely intended.",
-    recommendation: "Fix the title tag to \"Protogen \u2014 Project Portfolio\" with a proper em-dash."
+    problem: "Page <title> reads \u201cProtogen  Project Portfolio\u201d with a double space where an em-dash or single space was intended.",
+    recommendation: "Change the <title> tag to \u201cProtogen \u2014 Project Portfolio\u201d with a proper em-dash and no double space."
   },
   {
     id: 4,
     heuristic: "H8: Aesthetic & Minimalist Design",
     severity: "Minor",
     selector: ".card-banner",
-    locationHint: "All project cards",
-    problem: "The 6px colored banner at the top of each card is thin enough that per-card color differences barely register at a glance.",
-    recommendation: "Increase banner height to 8\u201310px, or add the accent color as a left-border or icon ring to reinforce the color signal."
+    locationHint: "All project cards \u2014 top color strip",
+    problem: "The 6px colored banner at the top of each card is too thin for users to distinguish per-card accent colors at a glance.",
+    recommendation: "Increase banner height to 8\u201310px, or reinforce the accent color via a left border or colored icon ring."
   },
   {
     id: 5,
     heuristic: "H6: Recognition Rather Than Recall",
     severity: "Minor",
     selector: ".project-grid",
-    locationHint: "Projects section",
-    problem: "No category filters or grouping \u2014 users must scan all cards to find a specific type of project (M3 vs brutalist vs docs).",
-    recommendation: "Add filter chips above the grid (e.g. All, M3, Brutalist, Documentation) that filter cards by their chip categories."
+    locationHint: "Projects section \u2014 above grid",
+    problem: "No category filters or grouping \u2014 users must scan all 6 cards to find a specific project type (M3, Brutalist, GIS, Docs).",
+    recommendation: "Add filter chips above the grid (All | M3 | Brutalist | GIS | Docs) that show/hide cards by their chip categories."
   },
   {
     id: 6,
     heuristic: "H1: Visibility of System Status",
     severity: "Minor",
     selector: ".card-link",
-    locationHint: "Card CTAs",
-    problem: "\"View prototype\" text with arrow looks like a standalone link, but the entire card is the clickable <a>. No full-card visual cue beyond hover.",
-    recommendation: "Add a subtle border-color change or background tint on .project-card:hover to make the full-card clickable area obvious."
+    locationHint: "Card CTA rows",
+    problem: "\u201cView prototype\u201d text with arrow icon suggests a standalone link, but the entire <a> card is clickable. No full-card hover cue beyond a subtle shadow lift.",
+    recommendation: "Add a border-color change on .project-card:hover (e.g. border-color: var(--md-sys-color-primary)) to signal the full card is the click target."
+  },
+  {
+    id: 7,
+    heuristic: "H4: Consistency & Standards",
+    severity: "Cosmetic",
+    selector: "script[type='module']",
+    locationHint: "Head \u2014 import map / module script",
+    problem: "The page imports @material/web/divider/divider.js via CDN but never uses an <md-divider> element anywhere. Unused dependency adds page weight.",
+    recommendation: "Remove the import map and the module script importing divider.js, since no Material Web Components are used on this page."
   }
 ]);
 </script>
